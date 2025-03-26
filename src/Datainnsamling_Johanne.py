@@ -1,6 +1,11 @@
 import requests
-from dotenv import load_dotenv 
+import csv
 import os
+from datetime import datetime
+import pytz
+import pandas as pd
+from pandasql import sqldf
+from dotenv import load_dotenv
 
 # Henter User-Agent fra api.env
 load_dotenv('api.env')
@@ -30,11 +35,22 @@ def hent_temperaturer(data):
         temperaturer.append((tid, temp))
     return temperaturer
 
+# Lagrer data til CSV
+def lagre_til_csv(data, filnavn):
+    os.makedirs('data', exist_ok=True)  # Lager data-mappe hvis den ikke finnes
+    with open(f'data/{filnavn}', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['tidspunkt', 'temperatur'])
+        writer.writerows(data)
+    print(f'Data lagret i data/{filnavn}')
 
 if __name__ == "__main__":
     # Koordinater for Gløshaugen, Trondheim
     lat, lon = 63.4195, 10.4065
-
     weather_data = hent_weather_data(lat, lon)
+
+    if weather_data:
+        temperaturer = hent_temperaturer(weather_data)
+        lagre_til_csv(temperaturer, 'gloshaugen_temperaturer.csv')
     
   

@@ -5,7 +5,7 @@ import os
     # Finne CSV og definere ; som seperator, df = dataframe/tabell i pandas, .. fordi den ligger i mappen over
 base_path = os.path.dirname(__file__)
 file_path = os.path.join(base_path, "../data/klimagassutslipp.csv")
-df = pd.read_csv(file_path, sep=";", encoding="latin1", skiprows=1)
+df = pd.read_csv(file_path, sep=";", encoding="utf-8", skiprows=2)
 df.columns = df.columns.str.replace('"', '').str.strip()        # Fjerner "" rundt kolonnenavnene i CSV filen
 
     # Definere at vi kun vil se "0 Alle kilder" og "Klimagasser i alt" fra CSVen, kan endres

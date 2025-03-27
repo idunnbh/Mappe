@@ -1,0 +1,309 @@
+"13931: Klimagasser AR5, etter kilde (aktivitet), komponent, år og statistikkvariabel"
+
+"kilde (aktivitet)";"komponent";"år";"Utslipp til luft (1 000 tonn CO2-ekvivalenter, AR5)"
+"0 Alle kilder";"Klimagasser i alt";"1990";51348
+"0 Alle kilder";"Klimagasser i alt";"1991";48987
+"0 Alle kilder";"Klimagasser i alt";"1992";47450
+"0 Alle kilder";"Klimagasser i alt";"1993";49379
+"0 Alle kilder";"Klimagasser i alt";"1994";51331
+"0 Alle kilder";"Klimagasser i alt";"1995";51741
+"0 Alle kilder";"Klimagasser i alt";"1996";54642
+"0 Alle kilder";"Klimagasser i alt";"1997";54619
+"0 Alle kilder";"Klimagasser i alt";"1998";54694
+"0 Alle kilder";"Klimagasser i alt";"1999";55698
+"0 Alle kilder";"Klimagasser i alt";"2000";55092
+"0 Alle kilder";"Klimagasser i alt";"2001";56344
+"0 Alle kilder";"Klimagasser i alt";"2002";55034
+"0 Alle kilder";"Klimagasser i alt";"2003";55655
+"0 Alle kilder";"Klimagasser i alt";"2004";56028
+"0 Alle kilder";"Klimagasser i alt";"2005";54897
+"0 Alle kilder";"Klimagasser i alt";"2006";54870
+"0 Alle kilder";"Klimagasser i alt";"2007";56548
+"0 Alle kilder";"Klimagasser i alt";"2008";55026
+"0 Alle kilder";"Klimagasser i alt";"2009";52541
+"0 Alle kilder";"Klimagasser i alt";"2010";54855
+"0 Alle kilder";"Klimagasser i alt";"2011";53848
+"0 Alle kilder";"Klimagasser i alt";"2012";53258
+"0 Alle kilder";"Klimagasser i alt";"2013";53481
+"0 Alle kilder";"Klimagasser i alt";"2014";53878
+"0 Alle kilder";"Klimagasser i alt";"2015";54417
+"0 Alle kilder";"Klimagasser i alt";"2016";53533
+"0 Alle kilder";"Klimagasser i alt";"2017";52838
+"0 Alle kilder";"Klimagasser i alt";"2018";52991
+"0 Alle kilder";"Klimagasser i alt";"2019";51223
+"0 Alle kilder";"Klimagasser i alt";"2020";49499
+"0 Alle kilder";"Klimagasser i alt";"2021";49325
+"0 Alle kilder";"Klimagasser i alt";"2022";48973
+"0 Alle kilder";"Klimagasser i alt";"2023";46654
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1990";8254
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1991";8127
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1992";8728
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1993";9257
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1994";10053
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1995";10237
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1996";11139
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1997";11641
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1998";11308
+"1 Olje- og gassutvinning";"Klimagasser i alt";"1999";11829
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2000";13172
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2001";14140
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2002";13809
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2003";13942
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2004";14169
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2005";14108
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2006";13706
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2007";15165
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2008";14810
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2009";13683
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2010";13786
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2011";13472
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2012";13575
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2013";13543
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2014";14231
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2015";14770
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2016";14472
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2017";14206
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2018";14055
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2019";13888
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2020";13162
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2021";12122
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2022";12085
+"1 Olje- og gassutvinning";"Klimagasser i alt";"2023";11561
+"2 Industri og bergverk";"Klimagasser i alt";"1990";19140
+"2 Industri og bergverk";"Klimagasser i alt";"1991";17620
+"2 Industri og bergverk";"Klimagasser i alt";"1992";15377
+"2 Industri og bergverk";"Klimagasser i alt";"1993";16325
+"2 Industri og bergverk";"Klimagasser i alt";"1994";17275
+"2 Industri og bergverk";"Klimagasser i alt";"1995";16556
+"2 Industri og bergverk";"Klimagasser i alt";"1996";17165
+"2 Industri og bergverk";"Klimagasser i alt";"1997";16854
+"2 Industri og bergverk";"Klimagasser i alt";"1998";17168
+"2 Industri og bergverk";"Klimagasser i alt";"1999";16960
+"2 Industri og bergverk";"Klimagasser i alt";"2000";16823
+"2 Industri og bergverk";"Klimagasser i alt";"2001";16301
+"2 Industri og bergverk";"Klimagasser i alt";"2002";15220
+"2 Industri og bergverk";"Klimagasser i alt";"2003";15083
+"2 Industri og bergverk";"Klimagasser i alt";"2004";15338
+"2 Industri og bergverk";"Klimagasser i alt";"2005";14876
+"2 Industri og bergverk";"Klimagasser i alt";"2006";14484
+"2 Industri og bergverk";"Klimagasser i alt";"2007";14161
+"2 Industri og bergverk";"Klimagasser i alt";"2008";13718
+"2 Industri og bergverk";"Klimagasser i alt";"2009";11231
+"2 Industri og bergverk";"Klimagasser i alt";"2010";12025
+"2 Industri og bergverk";"Klimagasser i alt";"2011";12034
+"2 Industri og bergverk";"Klimagasser i alt";"2012";11741
+"2 Industri og bergverk";"Klimagasser i alt";"2013";11783
+"2 Industri og bergverk";"Klimagasser i alt";"2014";11435
+"2 Industri og bergverk";"Klimagasser i alt";"2015";11717
+"2 Industri og bergverk";"Klimagasser i alt";"2016";11388
+"2 Industri og bergverk";"Klimagasser i alt";"2017";11797
+"2 Industri og bergverk";"Klimagasser i alt";"2018";11820
+"2 Industri og bergverk";"Klimagasser i alt";"2019";11372
+"2 Industri og bergverk";"Klimagasser i alt";"2020";11252
+"2 Industri og bergverk";"Klimagasser i alt";"2021";11638
+"2 Industri og bergverk";"Klimagasser i alt";"2022";11506
+"2 Industri og bergverk";"Klimagasser i alt";"2023";10812
+"3 Energiforsyning";"Klimagasser i alt";"1990";341
+"3 Energiforsyning";"Klimagasser i alt";"1991";396
+"3 Energiforsyning";"Klimagasser i alt";"1992";390
+"3 Energiforsyning";"Klimagasser i alt";"1993";409
+"3 Energiforsyning";"Klimagasser i alt";"1994";466
+"3 Energiforsyning";"Klimagasser i alt";"1995";468
+"3 Energiforsyning";"Klimagasser i alt";"1996";560
+"3 Energiforsyning";"Klimagasser i alt";"1997";493
+"3 Energiforsyning";"Klimagasser i alt";"1998";538
+"3 Energiforsyning";"Klimagasser i alt";"1999";523
+"3 Energiforsyning";"Klimagasser i alt";"2000";485
+"3 Energiforsyning";"Klimagasser i alt";"2001";541
+"3 Energiforsyning";"Klimagasser i alt";"2002";583
+"3 Energiforsyning";"Klimagasser i alt";"2003";715
+"3 Energiforsyning";"Klimagasser i alt";"2004";607
+"3 Energiforsyning";"Klimagasser i alt";"2005";591
+"3 Energiforsyning";"Klimagasser i alt";"2006";648
+"3 Energiforsyning";"Klimagasser i alt";"2007";948
+"3 Energiforsyning";"Klimagasser i alt";"2008";803
+"3 Energiforsyning";"Klimagasser i alt";"2009";2016
+"3 Energiforsyning";"Klimagasser i alt";"2010";2454
+"3 Energiforsyning";"Klimagasser i alt";"2011";2237
+"3 Energiforsyning";"Klimagasser i alt";"2012";1723
+"3 Energiforsyning";"Klimagasser i alt";"2013";1770
+"3 Energiforsyning";"Klimagasser i alt";"2014";1767
+"3 Energiforsyning";"Klimagasser i alt";"2015";1765
+"3 Energiforsyning";"Klimagasser i alt";"2016";1749
+"3 Energiforsyning";"Klimagasser i alt";"2017";1906
+"3 Energiforsyning";"Klimagasser i alt";"2018";1901
+"3 Energiforsyning";"Klimagasser i alt";"2019";1794
+"3 Energiforsyning";"Klimagasser i alt";"2020";1732
+"3 Energiforsyning";"Klimagasser i alt";"2021";1764
+"3 Energiforsyning";"Klimagasser i alt";"2022";1493
+"3 Energiforsyning";"Klimagasser i alt";"2023";1241
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1990";2755
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1991";2490
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1992";2276
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1993";2308
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1994";2329
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1995";2369
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1996";2905
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1997";2469
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1998";2237
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"1999";2478
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2000";1932
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2001";2150
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2002";2344
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2003";2738
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2004";2347
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2005";1862
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2006";1960
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2007";1751
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2008";1570
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2009";1707
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2010";2010
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2011";1468
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2012";1342
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2013";1276
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2014";1052
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2015";947
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2016";1045
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2017";922
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2018";797
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2019";600
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2020";522
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2021";545
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2022";568
+"4 Oppvarming i andre n�ringer og husholdninger";"Klimagasser i alt";"2023";640
+"5 Veitrafikk";"Klimagasser i alt";"1990";7426
+"5 Veitrafikk";"Klimagasser i alt";"1991";7307
+"5 Veitrafikk";"Klimagasser i alt";"1992";7338
+"5 Veitrafikk";"Klimagasser i alt";"1993";7511
+"5 Veitrafikk";"Klimagasser i alt";"1994";7408
+"5 Veitrafikk";"Klimagasser i alt";"1995";7527
+"5 Veitrafikk";"Klimagasser i alt";"1996";7902
+"5 Veitrafikk";"Klimagasser i alt";"1997";7887
+"5 Veitrafikk";"Klimagasser i alt";"1998";8116
+"5 Veitrafikk";"Klimagasser i alt";"1999";8543
+"5 Veitrafikk";"Klimagasser i alt";"2000";8370
+"5 Veitrafikk";"Klimagasser i alt";"2001";8871
+"5 Veitrafikk";"Klimagasser i alt";"2002";8947
+"5 Veitrafikk";"Klimagasser i alt";"2003";9089
+"5 Veitrafikk";"Klimagasser i alt";"2004";9383
+"5 Veitrafikk";"Klimagasser i alt";"2005";9519
+"5 Veitrafikk";"Klimagasser i alt";"2006";9797
+"5 Veitrafikk";"Klimagasser i alt";"2007";10029
+"5 Veitrafikk";"Klimagasser i alt";"2008";9894
+"5 Veitrafikk";"Klimagasser i alt";"2009";9741
+"5 Veitrafikk";"Klimagasser i alt";"2010";9990
+"5 Veitrafikk";"Klimagasser i alt";"2011";9923
+"5 Veitrafikk";"Klimagasser i alt";"2012";9958
+"5 Veitrafikk";"Klimagasser i alt";"2013";10007
+"5 Veitrafikk";"Klimagasser i alt";"2014";10221
+"5 Veitrafikk";"Klimagasser i alt";"2015";10255
+"5 Veitrafikk";"Klimagasser i alt";"2016";9990
+"5 Veitrafikk";"Klimagasser i alt";"2017";9124
+"5 Veitrafikk";"Klimagasser i alt";"2018";9367
+"5 Veitrafikk";"Klimagasser i alt";"2019";8734
+"5 Veitrafikk";"Klimagasser i alt";"2020";8350
+"5 Veitrafikk";"Klimagasser i alt";"2021";8712
+"5 Veitrafikk";"Klimagasser i alt";"2022";8703
+"5 Veitrafikk";"Klimagasser i alt";"2023";8016
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1990";5298
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1991";5109
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1992";5461
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1993";5664
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1994";5858
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1995";6554
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1996";6960
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1997";7246
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1998";7463
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"1999";7526
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2000";6499
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2001";6588
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2002";6546
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2003";6471
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2004";6584
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2005";6428
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2006";6786
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2007";7008
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2008";6789
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2009";6737
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2010";7198
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2011";7289
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2012";7493
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2013";7605
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2014";7653
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2015";7470
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2016";7398
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2017";7506
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2018";7751
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2019";7692
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2020";7384
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2021";7435
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2022";7671
+"6 Luftfart, sj�fart, fiske, motorredskaper m.m.";"Klimagasser i alt";"2023";7637
+"7 Jordbruk";"Klimagasser i alt";"1990";5050
+"7 Jordbruk";"Klimagasser i alt";"1991";4984
+"7 Jordbruk";"Klimagasser i alt";"1992";4956
+"7 Jordbruk";"Klimagasser i alt";"1993";4937
+"7 Jordbruk";"Klimagasser i alt";"1994";4944
+"7 Jordbruk";"Klimagasser i alt";"1995";4988
+"7 Jordbruk";"Klimagasser i alt";"1996";5021
+"7 Jordbruk";"Klimagasser i alt";"1997";4962
+"7 Jordbruk";"Klimagasser i alt";"1998";4954
+"7 Jordbruk";"Klimagasser i alt";"1999";4947
+"7 Jordbruk";"Klimagasser i alt";"2000";4798
+"7 Jordbruk";"Klimagasser i alt";"2001";4739
+"7 Jordbruk";"Klimagasser i alt";"2002";4725
+"7 Jordbruk";"Klimagasser i alt";"2003";4809
+"7 Jordbruk";"Klimagasser i alt";"2004";4774
+"7 Jordbruk";"Klimagasser i alt";"2005";4791
+"7 Jordbruk";"Klimagasser i alt";"2006";4697
+"7 Jordbruk";"Klimagasser i alt";"2007";4700
+"7 Jordbruk";"Klimagasser i alt";"2008";4675
+"7 Jordbruk";"Klimagasser i alt";"2009";4641
+"7 Jordbruk";"Klimagasser i alt";"2010";4553
+"7 Jordbruk";"Klimagasser i alt";"2011";4554
+"7 Jordbruk";"Klimagasser i alt";"2012";4563
+"7 Jordbruk";"Klimagasser i alt";"2013";4609
+"7 Jordbruk";"Klimagasser i alt";"2014";4708
+"7 Jordbruk";"Klimagasser i alt";"2015";4772
+"7 Jordbruk";"Klimagasser i alt";"2016";4823
+"7 Jordbruk";"Klimagasser i alt";"2017";4791
+"7 Jordbruk";"Klimagasser i alt";"2018";4797
+"7 Jordbruk";"Klimagasser i alt";"2019";4746
+"7 Jordbruk";"Klimagasser i alt";"2020";4756
+"7 Jordbruk";"Klimagasser i alt";"2021";4815
+"7 Jordbruk";"Klimagasser i alt";"2022";4706
+"7 Jordbruk";"Klimagasser i alt";"2023";4519
+"9 Andre kilder";"Klimagasser i alt";"1990";3084
+"9 Andre kilder";"Klimagasser i alt";"1991";2953
+"9 Andre kilder";"Klimagasser i alt";"1992";2924
+"9 Andre kilder";"Klimagasser i alt";"1993";2968
+"9 Andre kilder";"Klimagasser i alt";"1994";2999
+"9 Andre kilder";"Klimagasser i alt";"1995";3042
+"9 Andre kilder";"Klimagasser i alt";"1996";2989
+"9 Andre kilder";"Klimagasser i alt";"1997";3066
+"9 Andre kilder";"Klimagasser i alt";"1998";2912
+"9 Andre kilder";"Klimagasser i alt";"1999";2891
+"9 Andre kilder";"Klimagasser i alt";"2000";3014
+"9 Andre kilder";"Klimagasser i alt";"2001";3014
+"9 Andre kilder";"Klimagasser i alt";"2002";2860
+"9 Andre kilder";"Klimagasser i alt";"2003";2808
+"9 Andre kilder";"Klimagasser i alt";"2004";2824
+"9 Andre kilder";"Klimagasser i alt";"2005";2720
+"9 Andre kilder";"Klimagasser i alt";"2006";2792
+"9 Andre kilder";"Klimagasser i alt";"2007";2786
+"9 Andre kilder";"Klimagasser i alt";"2008";2767
+"9 Andre kilder";"Klimagasser i alt";"2009";2785
+"9 Andre kilder";"Klimagasser i alt";"2010";2840
+"9 Andre kilder";"Klimagasser i alt";"2011";2872
+"9 Andre kilder";"Klimagasser i alt";"2012";2863
+"9 Andre kilder";"Klimagasser i alt";"2013";2888
+"9 Andre kilder";"Klimagasser i alt";"2014";2812
+"9 Andre kilder";"Klimagasser i alt";"2015";2722
+"9 Andre kilder";"Klimagasser i alt";"2016";2669
+"9 Andre kilder";"Klimagasser i alt";"2017";2587
+"9 Andre kilder";"Klimagasser i alt";"2018";2503
+"9 Andre kilder";"Klimagasser i alt";"2019";2398
+"9 Andre kilder";"Klimagasser i alt";"2020";2341
+"9 Andre kilder";"Klimagasser i alt";"2021";2294
+"9 Andre kilder";"Klimagasser i alt";"2022";2242
+"9 Andre kilder";"Klimagasser i alt";"2023";2227

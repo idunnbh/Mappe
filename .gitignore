@@ -1,0 +1,14 @@
+# Ignorer virtuelle miljø
+venv/
+
+# Ignorer cache-filer fra Python
+__pycache__/
+*.pyc
+
+# Ignorer midlertidige CSV-filer
+data/temp_gloshaugen_sanntid.csv.csv
+data/temp_gloshaugen_sanntid_renset.csv
+
+# Ignorer API-nøkkelfiler eller miljøfiler
+api.env
+.env

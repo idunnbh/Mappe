@@ -41,13 +41,16 @@ def process_air_quality_data(data):
     
 
 # Hent data fra API-et
-air_quality_data = get_air_quality_data(met_url, params, headers)
+#air_quality_data = get_air_quality_data(met_url, params, headers)
 # Lagre data til JSON-fil
-save_json_data(air_quality_data, "data/luftkvalitet.json")
+#save_json_data(air_quality_data, "data/luftkvalitet.json")
 # Bearbeid dataene med Pandas
-df = process_air_quality_data(air_quality_data)
+#df = process_air_quality_data(air_quality_data)
 #print("Første 5 rader av den bearbeidede DataFrame:")
-print(df.head())
+#print(df.head())
 
 
+df_historisk = pd.read_csv("C:\\Users\\idunn\\Downloads\\eksport.csv", sep=";", skiprows=3)
+
+print(df_historisk.head(10))
 

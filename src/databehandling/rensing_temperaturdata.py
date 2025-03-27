@@ -34,6 +34,6 @@ def rens_data(df):
     return df
 
 def klimagass_rens(df):
-    df = rense_kolonnenavn
-    df = fjern_duplikater
+    df = rense_kolonnenavn(df)
+    df = fjern_duplikater(df)
     return df

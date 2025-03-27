@@ -4,9 +4,8 @@ import os
 
     # Finne CSV og definere ; som seperator, df = dataframe/tabell i pandas
 base_path = os.path.dirname(__file__)
-file_path = os.path.join(base_path, "../data/klimagassutslipp.csv")
-df = pd.read_csv(file_path, sep=";", encoding="utf-8", skiprows=2)
-df.columns = df.columns.str.replace('"', '').str.strip()        # Fjerner "" rundt kolonnenavnene i CSV filen
+file_path = os.path.join(base_path, "../data/klimagassutslipp_renset.csv")
+df = pd.read_csv(file_path, sep=",", encoding="utf-8")
 
     # Definere at vi kun vil se "0 Alle kilder" og "Klimagasser i alt" fra CSVen, kan endres
 df = df[(df["kilde (aktivitet)"] == "0 Alle kilder") & (df["komponent"] == "Klimagasser i alt")]
@@ -18,4 +17,4 @@ df["Utslipp til luft (1 000 tonn CO2-ekvivalenter, AR5)"] = pd.to_numeric(
 )
 
     # Test
-print(df.top())
+print(df.head())

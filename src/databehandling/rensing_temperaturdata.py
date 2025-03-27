@@ -23,8 +23,17 @@ def fjern_outliers(df, min_temp=-50, max_temp=50):
     print(f"Fjernet {før - etter} outliers.")
     return df
 
+def rense_kolonnenavn(df):
+    df.columns = df.columns.str.replace('"', '').str.strip()
+    return df    
+
 def rens_data(df):
     df = håndter_manglende_verdier(df)
     df = fjern_duplikater(df)
     df = fjern_outliers(df)
+    return df
+
+def klimagass_rens(df):
+    df = rense_kolonnenavn
+    df = fjern_duplikater
     return df

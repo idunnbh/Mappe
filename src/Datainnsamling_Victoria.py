@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt       # For diagram senere
 import os
 
-    # Finne CSV og definere ; som seperator, df = dataframe/tabell i pandas, .. fordi den ligger i mappen over
+    # Finne CSV og definere ; som seperator, df = dataframe/tabell i pandas
 base_path = os.path.dirname(__file__)
 file_path = os.path.join(base_path, "../data/klimagassutslipp.csv")
 df = pd.read_csv(file_path, sep=";", encoding="utf-8", skiprows=2)
@@ -18,4 +18,4 @@ df["Utslipp til luft (1 000 tonn CO2-ekvivalenter, AR5)"] = pd.to_numeric(
 )
 
     # Test
-print(df.head())
+print(df.top())

@@ -1,0 +1,13 @@
+# Ignorer virtuelle miljø
+venv/
+
+# Ignorer cache-filer fra Python
+__pycache__/
+*.pyc
+
+# Ignorer midlertidige CSV-filer
+data/*.csv
+
+# Ignorer API-nøkkelfiler eller miljøfiler
+api.env
+.env

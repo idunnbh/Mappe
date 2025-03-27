@@ -35,7 +35,6 @@ def save_json_data(data, filename):
 def process_air_quality_data(data):
     try:
         df = pd.json_normalize(data, record_path=["data", "time"])
-        df.ffill(inplace=True) #Fyller inn manglende verdier med forrige verdi
         return df
     except Exception as e:
         raise Exception(f"Feil ved behandling av data: {e}")

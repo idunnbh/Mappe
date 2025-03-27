@@ -6,8 +6,8 @@ __pycache__/
 *.pyc
 
 # Ignorer midlertidige CSV-filer
-data/temp_gloshaugen_sanntid.csv.csv
-data/temp_gloshaugen_sanntid_renset.csv
+data/temp_gloshaugen_sanntid_renset_*.csv
+data/temp_gloshaugen_sanntid_*.csv
 
 # Ignorer API-nøkkelfiler eller miljøfiler
 api.env

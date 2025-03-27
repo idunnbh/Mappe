@@ -35,20 +35,20 @@ def save_json_data(data, filename):
 def process_air_quality_data(data):
     try:
         df = pd.json_normalize(data, record_path=["data", "time"])
-        df.fillna(method="ffill", inplace=True)
+        df.ffill(inplace=True) #Fyller inn manglende verdier med forrige verdi
         return df
     except Exception as e:
         raise Exception(f"Feil ved behandling av data: {e}")
     
 
 # Hent data fra API-et
-#air_quality_data = get_air_quality_data(met_url, params, headers)
+air_quality_data = get_air_quality_data(met_url, params, headers)
 # Lagre data til JSON-fil
-#save_json_data(air_quality_data, "data/luftkvalitet.json")
+save_json_data(air_quality_data, "data/luftkvalitet.json")
 # Bearbeid dataene med Pandas
-#df = process_air_quality_data(air_quality_data)
+df = process_air_quality_data(air_quality_data)
 #print("Første 5 rader av den bearbeidede DataFrame:")
-#print(df.head())
+print(df.head())
 
 
 

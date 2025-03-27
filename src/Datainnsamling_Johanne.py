@@ -4,29 +4,30 @@ import os
 from datetime import datetime
 import pytz
 import pandas as pd
-from pandasql import sqldf
 from dotenv import load_dotenv
+from datetime import date
 
-# Henter User-Agent fra api.env
+#Hente API-nøkler fra .env 
 load_dotenv('api.env')
 USER_AGENT = os.getenv('USER_AGENT')
+FROST_API_KEY = os.getenv('FROST_API_KEY')
 
-# Hente værdata fra Yr/MET API
-def hent_weather_data(lat, lon):
+#Hent sanntidsdata fra MET
+def hent_sanntidsdata(lat, lon):
+    if not USER_AGENT:
+        raise ValueError("USER_AGENT mangler! Sjekk api.env")
+
     url = f'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={lat}&lon={lon}'
     headers = {'User-Agent': USER_AGENT}
-    
     response = requests.get(url, headers=headers)
-    
+
     if response.status_code == 200:
-        print("Velykket henting av data!")
-        return response.json() 
+        print("Sanntidsdata hentet!")
+        return response.json()
     else:
-        print(f"Feil ved henting av data!")
-        print(f"Feil kode:{response.status_code}")
+        print(f"Feil ved henting av sanntidsdata: {response.status_code}")
         return None
 
-# Henter ut temperaturer fra JSON
 def hent_temperaturer(data):
     temperaturer = []
     for timepunkt in data['properties']['timeseries']:
@@ -35,22 +36,73 @@ def hent_temperaturer(data):
         temperaturer.append((tid, temp))
     return temperaturer
 
-# Lagrer data til CSV
+#Henter historiske temperaturdata fra Frost API
+def hent_historiske_temperaturer():
+    if not FROST_API_KEY:
+        raise ValueError("FROST_API_KEY mangler! Sjekk api.env")
+    
+    endpoint = "https://frost.met.no/observations/v0.jsonld"
+    temperaturer = []
+
+    for måned in range(1, 13):
+        startdato = f"2024-{måned:02d}-01"
+        if måned == 12:
+            sluttdato = "2024-12-31"
+        else:
+            sluttdato = f"2024-{måned + 1:02d}-01"
+
+        params = {
+            "sources": "SN18700",  # Gløshaugen
+            "elements": "air_temperature",
+            "referencetime": f"{startdato}/{sluttdato}",
+        }
+
+        response = requests.get(endpoint, params=params, auth=(FROST_API_KEY, ''))
+
+        if response.status_code == 200:
+            print(f"Data hentet for {startdato} til {sluttdato}")
+            data = response.json()
+            for obs in data["data"]:
+                tidspunkt = obs["referenceTime"]
+                verdi = obs["observations"][0]["value"]
+                temperaturer.append((tidspunkt, verdi))
+        else:
+            print(f"Feil ved {startdato}/{sluttdato}: {response.status_code}")
+     
+    #Behold kun én måling per time:
+    df = pd.DataFrame(temperaturer, columns=["tidspunkt", "temperatur"])
+    df["tidspunkt"] = pd.to_datetime(df["tidspunkt"])
+    df = df.set_index("tidspunkt").resample("1H").first().dropna().reset_index()
+
+    # Gjør om tilbake til liste 
+    return list(df.itertuples(index=False, name=None))
+
+
+#Lagrer listene til csv filer 
 def lagre_til_csv(data, filnavn):
-    os.makedirs('data', exist_ok=True)  # Lager data-mappe hvis den ikke finnes
+    os.makedirs('data', exist_ok=True)
     with open(f'data/{filnavn}', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['tidspunkt', 'temperatur'])
         writer.writerows(data)
-    print(f'Data lagret i data/{filnavn}')
+    print(f"Tempraturdata er nå lagret i data/{filnavn}")
+
+#Main
+def main():
+    lat, lon = 63.4195, 10.4065  # Gløshaugen, Trondheim
+
+    # Sanntidsdata, 48 neste timene 
+    sanntidsdata = hent_sanntidsdata(lat, lon)
+    today = date.today().isoformat()
+    
+    if sanntidsdata:
+        temp_sanntid = hent_temperaturer(sanntidsdata)
+        lagre_til_csv(temp_sanntid,f'temp_gloshaugen_sanntid_{today}.csv')
+
+    # Historiske data
+    temp_historisk = hent_historiske_temperaturer()
+    if temp_historisk:
+        lagre_til_csv(temp_historisk, 'temp_gloshaugen_historisk.csv')
 
 if __name__ == "__main__":
-    # Koordinater for Gløshaugen, Trondheim
-    lat, lon = 63.4195, 10.4065
-    weather_data = hent_weather_data(lat, lon)
-
-    if weather_data:
-        temperaturer = hent_temperaturer(weather_data)
-        lagre_til_csv(temperaturer, 'gloshaugen_temperaturer.csv')
-    
-  
+    main()

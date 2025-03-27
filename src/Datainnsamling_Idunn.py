@@ -51,6 +51,7 @@ def process_air_quality_data(data):
 
 
 df_historisk = pd.read_csv("C:\\Users\\idunn\\Downloads\\eksport.csv", sep=";", skiprows=3)
+df_historisk.to_csv("data/historisk_luftkvalitet.csv", index=False, encoding="utf-8")
 
 print(df_historisk.head(10))
 

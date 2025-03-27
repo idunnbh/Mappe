@@ -20,8 +20,8 @@ selected_columns = [
     "variables.pm10_concentration.value",
     "variables.pm25_concentration.value",
     "variables.no2_concentration.value",
-    "variables.o3_concentration.value",
-    "variables.AQI.value",
+    #"variables.o3_concentration.value",
+    #"variables.AQI.value",
 ]
 df_selected = df[selected_columns]
 

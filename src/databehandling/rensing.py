@@ -3,10 +3,11 @@ import pandas as pd
 def last_in_csv(filsti):
     return pd.read_csv(filsti)
 
-def håndter_manglende_verdier(df):
-    if df.isnull().values.any():
-        print("Manglende verdier funnet->fyller med gjennomsnitt.")
-    df['temperatur'] = df['temperatur'].fillna(df['temperatur'].mean())
+def håndter_manglende_verdier(df, kolonne='temperatur'):
+    manglende_verdier= df[kolonne].isnull().sum()
+    if manglende_verdier > 0:
+        print(f"Manglende verdier={manglende_verdier}.Disser er nå fylt med gjennomsnittet.")
+    df[kolonne] = df[kolonne].fillna(df[kolonne].mean())
     return df
 
 def fjern_duplikater(df):

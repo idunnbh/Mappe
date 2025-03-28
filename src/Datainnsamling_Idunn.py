@@ -62,9 +62,33 @@ df_valid = df_historisk[
     (df_historisk["Dekning"] == 100.0) &
     (df_historisk["Dekning.1"] == 100.0) &
     (df_historisk["Dekning.2"] == 100.0)
+].copy()
+
+#print(df_valid.head(10))
+
+#print(df_valid.info())
+
+cols = [
+    "Elgeseter NO2 µg/m³ Hour",
+    "Elgeseter PM10 µg/m³ Hour",
+    "Elgeseter PM2.5 µg/m³ Hour",
 ]
 
-print(df_valid.head(10))
+#print(df_valid.dtypes)
 
-print(df_valid.info())
+#print(df_valid.head(10))
 
+# Først erstatt komma med punktum og konverter til float
+df_valid["Elgeseter NO2 µg/m³ Hour"] = df_valid["Elgeseter NO2 µg/m³ Hour"].str.replace(',', '.').astype(float)
+df_valid["Elgeseter PM10 µg/m³ Hour"] = df_valid["Elgeseter PM10 µg/m³ Hour"].str.replace(',', '.').astype(float)
+df_valid["Elgeseter PM2.5 µg/m³ Hour"] = df_valid["Elgeseter PM2.5 µg/m³ Hour"].str.replace(',', '.').astype(float)
+
+#Validerer at strengene ble gjort om til flyttall
+#print(df_valid.head())
+#print(df_valid[["Elgeseter NO2 µg/m³ Hour", "Elgeseter PM10 µg/m³ Hour", "Elgeseter PM2.5 µg/m³ Hour"]].dtypes)
+
+# Sett alle negative verdier i disse kolonnene til 0
+df_valid.loc[:, cols] = df_valid.loc[:, cols].clip(lower=0)
+
+#Validerer at minimumsverdien er 0
+print(df_valid[cols].describe())

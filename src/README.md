@@ -78,3 +78,46 @@ Klimagassdata:
 I rens_og_lagre_klimagassdata():
 - Automatisk lagring i data/klimagassutslipp_renset.csv
 Disse dataene oppdateres sjeldent, da to ganger i året, og hentes ikke opp gjennom API. Derfor er rensekallet satt opp i en if-setning, ettersom at rensingen er i samme script som rensingen av temperatur som skjer ofte. If-setningen er satt opp slik at om det allerede eksisterer en renset versjon, vil den ikke gjennomføre rensingen på nytt.
+
+### generer_feil_i_data.py - lager feil i datasett
+For sjekke og vise at funksjonene våre for rensing av data fungerer, har vi laget en versjon av den historiske temperaturdataene som inneholder feil. 
+Vi tok utgangspunkt i temp_gloshaugen_historisk.csv og lagde en ny fil som heter: 
+data/temp_gloshaugen_historisk_inneholder_feil.csv
+
+Feilene ble lagt inn med kode på denne måten:
+-satt 10 tilfeldige temperaturverdier til null, for å få manglende verdier. 
+-erstattet 5 tilfeldige verdier med urealistiske temperaturer. 
+-kopierte og la inn 5 rader som allerede fantes i datasettet.
+
+Funksjonen for rensing av tempratur data: temperatur_rens() ble deretter kjørt på denne. Renset versjon lagres som: data/temp_gloshaugen_historisk_inneholder_feil_renset.csv
+
+**Eksempel på output ved kjøring:**
+Fjernet 0 duplikater.
+Fjernet 0 outliers.
+Sanntidstemperaturer renset og lagret i: data/temp_gloshaugen_sanntid_2025-03-28_renset.csv      
+Fjernet 0 duplikater.
+Fjernet 0 outliers.
+Historisk temperaturdata renset og lagret i:data/temp_gloshaugen_historisk_renset.csv
+Manglende verdier=10.Disser er nå fylt med gjennomsnittet.
+Fjernet 5 duplikater.
+Fjernet 5 outliers.
+Historisk temperaturdata(med feil) renset lagret i:data/temp_gloshaugen_historisk_inneholder_feil_renset.csv
+Klimagassdata er allerede renset.
+---
+Her vises det at funksjonene oppdager og behandler:
+10 manglende verdier, 5 duplikater og 5 outliers
+
+Altså fungerer rensingen som forventet!! YEY
+
+------------------------------------------------------------------------
+
+### Kilder
+Temperaturdata:
+1) Meteorologisk institutt. Locationforecast API v2. Hentet fra: https://api.met.no/weatherapi/locationforecast/2.0/documentation
+2) Meteorologisk institutt. Frost API. Hentet fra: https://frost.met.no/
+Klimagassutslipp:
+3) Statistisk sentralbyrå (SSB). Utslipp av klimagasser etter kilde og type. Tabell 13931. Hentet fra: https://www.ssb.no/statbank/table/13931
+
+**Miljøvariabler og API-nøkler:**
+API-nøkler lastes inn via dotenv fra en lokal .env-fil.
+Brukte variabler: USER_AGENT og FROST_API_KEY.

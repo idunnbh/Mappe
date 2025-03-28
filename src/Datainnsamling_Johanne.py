@@ -72,7 +72,7 @@ def hent_historiske_temperaturer():
     #Behold kun én måling per time:
     df = pd.DataFrame(temperaturer, columns=["tidspunkt", "temperatur"])
     df["tidspunkt"] = pd.to_datetime(df["tidspunkt"])
-    df = df.set_index("tidspunkt").resample("1H").first().dropna().reset_index()
+    df = df.set_index("tidspunkt").resample("1h").first().dropna().reset_index()
 
     # Gjør om tilbake til liste 
     return list(df.itertuples(index=False, name=None))

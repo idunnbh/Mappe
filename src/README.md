@@ -78,3 +78,17 @@ Klimagassdata:
 I rens_og_lagre_klimagassdata():
 - Automatisk lagring i data/klimagassutslipp_renset.csv
 Disse dataene oppdateres sjeldent, da to ganger i året, og hentes ikke opp gjennom API. Derfor er rensekallet satt opp i en if-setning, ettersom at rensingen er i samme script som rensingen av temperatur som skjer ofte. If-setningen er satt opp slik at om det allerede eksisterer en renset versjon, vil den ikke gjennomføre rensingen på nytt.
+
+
+---
+
+### Kilder
+Temperaturdata:
+1) Meteorologisk institutt. Locationforecast API v2. Hentet fra: https://api.met.no/weatherapi/locationforecast/2.0/documentation
+2) Meteorologisk institutt. Frost API. Hentet fra: https://frost.met.no/
+Klimagassutslipp:
+3) Statistisk sentralbyrå (SSB). Utslipp av klimagasser etter kilde og type. Tabell 13931. Hentet fra: https://www.ssb.no/statbank/table/13931
+
+**Miljøvariabler og API-nøkler:**
+API-nøkler lastes inn via dotenv fra en lokal .env-fil.
+Brukte variabler: USER_AGENT og FROST_API_KEY.

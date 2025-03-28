@@ -27,7 +27,7 @@ def rense_kolonnenavn(df):
     df.columns = df.columns.str.replace('"', '').str.strip()
     return df    
 
-def rens_data(df):
+def temperatur_rens(df):
     df = håndter_manglende_verdier(df)
     df = fjern_duplikater(df)
     df = fjern_outliers(df)

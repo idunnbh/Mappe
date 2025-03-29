@@ -4,12 +4,12 @@ Her samles det inn og lagres temperaturdata fra to ulike kilder:
 1) Sanntidsdata fra MET sitt Locationforecast API (48 timer framover)
 2) Historiske data fra Frost API (hver time for hele 2024)
 
-API-tilganger
+**API-tilganger**
 Scriptet bruker miljøvariabler fra api.env for å hente:
 USER_AGENT: kreves av MET API
 FROST_API_KEY: kreves av Frost API
 
-Hovedfunksjoner:
+**Hovedfunksjoner:**
 
 hent_sanntidsdata(lat, lon): 
     Henter værdata (48 timer frem) for gitt lokasjon fra MET.
@@ -35,6 +35,14 @@ hent_historiske_temperaturer():
 lagre_til_csv(data, filnavn): 
     Lagrer listene med (tid, temperatur) til en .csv-fil i data/-mappen.
 
+main()
+    -sanntidsdata blir hentet og lagret i en csv hver gang scriptet kjøres. 
+        CSV fila får navn på formen: temp_gloshaugen_sanntid_{dagens_dato}.csv
+        Dette gjør at vi får ny oppdatert sanntidsdata hver gang koden kjøres 
+    -Historisk data hentes kun en gang.
+        Sjekker om filen finnes i data/ fra før.
+        Hvis ja: hopper over henting for å unngå å laste ned store datamengder på nytt.
+        Hvis nei: data hentes via API og lagres i CSV.
 
 ### Klimagassutslipp
 Datasettet som brukes er hentet fra Statistisk sentralbyrå (https://www.ssb.no/statbank/table/13931) og inneholder data om klimagassutslipp i Norge fra 1990 til 2023. Rådataen ble hentet ut i CSV-fil og hadde små utfordringer knyttet til struktur og format. Filen inneholdt både metadata, kolonnenavn og data i samme fil.

@@ -15,8 +15,6 @@ params = {
 headers = {"User-Agent": my_user_agent}
 
 
-
-
 def get_air_quality_data(url, params, headers):
     response = requests.get(url, params=params, headers=headers)
     if response.status_code == 200:
@@ -41,21 +39,35 @@ def process_air_quality_data(data):
     
 
 # Hent data fra API-et
-#air_quality_data = get_air_quality_data(met_url, params, headers)
+air_quality_data = get_air_quality_data(met_url, params, headers)
 # Lagre data til JSON-fil
-#save_json_data(air_quality_data, "data/luftkvalitet.json")
+save_json_data(air_quality_data, "data/luftkvalitet.json")
 # Bearbeid dataene med Pandas
-#df = process_air_quality_data(air_quality_data)
-#print("Første 5 rader av den bearbeidede DataFrame:")
-#print(df.head())
+df = process_air_quality_data(air_quality_data)
 
 
+#Leser fra luftkvalitet.json
+with open("data/luftkvalitet.json", "r", encoding="utf-8") as f:
+    raw_data = json.load(f)
+
+#Lagrer den normaliserte dataframen i varaiabelen df
+df = process_air_quality_data(raw_data)
+    
+#Velger ut hvilke konsentrasjoner fra API-en vi analyserer videre
+selected_columns = [
+    "from",
+    "to",
+    "variables.pm10_concentration.value",
+    "variables.pm25_concentration.value",
+    "variables.no2_concentration.value",
+]
+df_selected = df[selected_columns].copy()   #Ny dataframe df_selected med de utvalgte verdiene
+
+
+#Henter historisk data fra Norsk institutt for luftforskning, lagret som CSV-fil lokalt på min pc
 df_historisk = pd.read_csv("C:\\Users\\idunn\\Downloads\\eksport.csv", sep=";", skiprows=3)
 df_historisk.to_csv("data/historisk_luftkvalitet.csv", index=False, encoding="utf-8")
 
-#print(df_historisk.info())
-
-#print(df_historisk.head(20))
 
 #Datasettet er veldig mangelfullt, så ekskluderer radene som ikke har registrerte verdier
 df_valid = df_historisk[
@@ -64,9 +76,6 @@ df_valid = df_historisk[
     (df_historisk["Dekning.2"] == 100.0)
 ].copy()
 
-#print(df_valid.head(10))
-
-#print(df_valid.info())
 
 cols = [
     "Elgeseter NO2 µg/m³ Hour",
@@ -74,21 +83,12 @@ cols = [
     "Elgeseter PM2.5 µg/m³ Hour",
 ]
 
-#print(df_valid.dtypes)
-
-#print(df_valid.head(10))
-
 # Først erstatt komma med punktum og konverter til float
 df_valid["Elgeseter NO2 µg/m³ Hour"] = df_valid["Elgeseter NO2 µg/m³ Hour"].str.replace(',', '.').astype(float)
 df_valid["Elgeseter PM10 µg/m³ Hour"] = df_valid["Elgeseter PM10 µg/m³ Hour"].str.replace(',', '.').astype(float)
 df_valid["Elgeseter PM2.5 µg/m³ Hour"] = df_valid["Elgeseter PM2.5 µg/m³ Hour"].str.replace(',', '.').astype(float)
 
-#Validerer at strengene ble gjort om til flyttall
-#print(df_valid.head())
-#print(df_valid[["Elgeseter NO2 µg/m³ Hour", "Elgeseter PM10 µg/m³ Hour", "Elgeseter PM2.5 µg/m³ Hour"]].dtypes)
 
 # Sett alle negative verdier i disse kolonnene til 0
 df_valid.loc[:, cols] = df_valid.loc[:, cols].clip(lower=0)
 
-#Validerer at minimumsverdien er 0
-print(df_valid[cols].describe())

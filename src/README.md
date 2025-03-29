@@ -51,6 +51,37 @@ For å bekrefte at koden fungerer har vi brukt print(df.head()) for å printe ut
 3     0 Alle kilder  Klimagasser i alt  1993                                              49379  
 4     0 Alle kilder  Klimagasser i alt  1994                                              51331
 
+## Luftkvalitet
+For å hente inn, rense og kombinere luftkvalitetsdata, er det brukt både API (Meterologisk institutt) og et historisk datasett (CSV-fil fra Norsk institutt for luftforskning, NILU). Dataen fra API-et er sanntidsdata 48 timer fram i tid, og det historiske datasettet er registrerte målinger hver time i 2024. Dette fordi vi tok en vurdering på at vi burde ha mer data å jobbe med.Hovedstrukturen i koden er:
+- Hente data fra API-et ved å bruke miljøvariabler for konfigurasjon.
+- Lagre rådata som JSON for senere bruk eller feilsøking.
+- Normalisere JSON-strukturen til en Pandas DataFrame for videre analyse.
+- Hente et historisk datasett (CSV) med luftkvalitetsmålinger og filtrere ut mangelfulle rader.
+
+### Kodeforklaring
+get_air_quality_data(url, params, headers):
+    Sender en GET-forespørsel til API-et med de spesifiserte parametrene. Får vi statuskode 200, returneres JSON-svaret. Ellers kastes en exception.
+
+save_json_data(data, filename):
+    Skriver JSON-data til en fil.
+
+process_air_quality_data(data):
+    pd.json_normalize flater ut den nestede JSON-strukturen (under "data" → "time") til en Pandas DataFrame.
+
+Lese historisk CSV-data:
+    Leser et lokalt CSV-datasett (eksportert fra Excel) med semikolon som delimiter, hopper over de 3 første radene som bare var tekst. Deretter lagres en kopi av DataFrame-en i data/historisk_luftkvalitet.csv.
+
+Filtrere ut rader med 100% dekning:
+    Datasettet er mangelfullt, så beholder kun de radene der alle kolonner for dekning er 100.0 for å kun jobbe med rader der alle målingene er fullstendige. .copy() brukes for å unngå SettingWithCopyWarning.
+
+Konvertere strenger til flyt:
+    I Excel-eksporten brukes komma som desimalskille. Vi erstatter komma med punktum og konverterer til float, for at Pandas skal kunne behandle dataene numerisk.
+
+Sette negative verdier til 0:
+    Negative verdier er satt til null, siden vi anser det som sensorstøy eller ugyldig data.
+
+
+
 ### rensing.py - Rensing av data
 Vi har laget en modul med funksjoner for å rense både temperaturdata, klimagassdata og luftkvalitetdate. Rensefunksjonene er delt inn i gjenbrukbare komponenter:
 

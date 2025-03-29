@@ -90,11 +90,11 @@ def lagre_til_csv(data, filnavn):
 #Main
 def main():
     lat, lon = 63.4195, 10.4065  # Gløshaugen, Trondheim
+    today = date.today().isoformat()
 
     # Sanntidsdata, 48 neste timene. Genererer ny hver gang
     filnavn=f"temp_gloshaugen_sanntid_{today}.csv"
     sanntidsdata = hent_sanntidsdata(lat, lon)
-    today = date.today().isoformat()
     
     if sanntidsdata:
         temp_sanntid = hent_temperaturer(sanntidsdata)

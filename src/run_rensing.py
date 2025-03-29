@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import date
 import os
-from databehandling.rensing import temperatur_rens, klimagass_rens
+from rensing import temperatur_rens, klimagass_rens
 
 def rens_og_lagre_temperaturdata():
     os.makedirs("data", exist_ok=True)

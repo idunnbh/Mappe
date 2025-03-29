@@ -23,9 +23,10 @@ Dette er den rensede versjonen av klimagassutslipp.csv. Den genereres automatisk
 - Har fjernet eventuelle duplikater
 
 ## Historisk_luftkvalitet.csv
-
+Dette er en original CSV-fil hentet fra NILU, Norsk institutt for luftforskning. Målingene er gjort på Elgeseter og har verdier for NO2-, PM10-, og PM2.5-nivå. Det er registrert en gang i timen i 2024.
 
 ## Luftkvalitet.json
+Inneholder data hentet fra API fra Meterologisk institutt, som blir lagret i en JSON-fil.
 
 
 ## temp_gloshaugen_historisk.csv: 

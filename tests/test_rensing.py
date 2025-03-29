@@ -3,8 +3,7 @@ import pandas as pd
 import sys, os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-
-import databehandling.rensing as rensing
+import rensing
 
 class TestRensing(unittest.TestCase):
 
@@ -34,13 +33,13 @@ class TestRensing(unittest.TestCase):
         df = rensing.fjern_duplikater(df)
         self.assertEqual(len(df), 1)
     
-    def test_rens_data_kombinert(self):
+    def test_temperatur_rens_kombinert(self):
         data = {
             'tidspunkt': ['2025-01-01 12:00', '2025-01-01 12:00'],
             'temperatur': [None, 1000]  # én mangler, én outlier og duplikat
         }
         df = pd.DataFrame(data)
-        df_renset = rensing.rens_data(df)
+        df_renset = rensing.temperatur_rens(df)
         self.assertEqual(len(df_renset), 0)
 
 if __name__ == '__main__':

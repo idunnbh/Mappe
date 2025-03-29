@@ -4,7 +4,7 @@ import sys, os
 from io import StringIO
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-import databehandling.rensing as rensing
+import rensing
 
 class TestKlimagass(unittest.TestCase):
 #Positiv test for rensing av kolonnenavn

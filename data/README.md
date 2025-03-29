@@ -1,4 +1,6 @@
+
 # Data -- Beskrivelse av filer i 'data/'
+Denne mappen inneholder originale datasett, rensede versjoner og testfiler med feil.
 
 ## Klimagassutslipp.csv
 Dette er en original CSV-fil eksportert manuelt fra SSB. Den inneholder informasjon om klimagassutslippet i Norge fra 1990 til 2023. Den oppdateres to ganger i året og vil oppdateres manuelt. 
@@ -22,8 +24,14 @@ Filstruktur:
 
 ## Luftkvalitet.json
 
+### temp_gloshaugen_historisk.csv: 
+-Original temperaturdata fra Frost API for 2024 (Gløshaugen)
+-Inkluderte fil i Git 
 
-## Temp_gloshaugen_historisk.csv
+### Ekskludert filer fra Git ( ligger i .gitignore):
+Disse filene vil ikke legges til i versjonskontroll. Detter er fordi de enten genereres automatisk, er midlertidige eller brukes til testing. 
+-*_renset.csv: Rensede versjoner som genereres i run_rensing.py
+-temp_gloshaugen_sanntid_*.csv: Sanntidsdata generert via API-kall
+- *inneholder_feil*.csv: Testfiler hvor vi har lagt inn ulike feil for å sjekke rensing
 
-
-## Temp_gloshaugen_historisk_renset.csv
+Vi har laget filer med feil for å teste hvordan rensefunksjonene håndterer disse. Testfilene er ignorert med .gitignore.

@@ -59,6 +59,7 @@ Generelle funksjoner
     - fjern_duplikater(df): Fjerner duplikate rader og gir beskjed om hvor mange som ble fjernet.
 
 Temperaturspesifikke funksjoner
+    - finn_gjennomsnittstemperatur(df):Henter ut gjennomsnittet av kolonnen temperatur med SQL
     - håndter_manglende_verdier(df, kolonne='temperatur')`: Fyller inn manglende temperaturer med gjennomsnitt.
     - fjern_outliers(df, kolonne='temperatur'):Fjerner urealistiske temperaturer (under -50°C eller over 50°C).
 
@@ -69,6 +70,8 @@ Kombinerte funksjoner (pipelines)
 - temperatur_rens(df): Brukes for temperaturdata. Den fjerner duplikater, outliers og manglende verdier.
 - klimagass_rens(df): Brukes for klimagassdata. Rydder kolonnenavn, fjerner duplikater og sjekker at de nødvendige kolonnene ('kilde (aktivitet)', 'komponent' og 'år') finnes.
 
+### Hvorfor bruke pandasql?
+I finn_gjennomsnittstemperatur(df) brukers pandasql for å kjøre en SQL-spørring direkte på Pandas-dataframes. Dette gjør  lesbarheten bedre og det vil være enklere å manipulere data senere. SQL er i flere situasjoner mer oversiktlig enn lange Pandas-kjeder.
 
 ### run_rensing.py – Kjøring for rensing av 
 I scriptet blir data renset ved at de ulike rensefunksjonene kjøres og den rensete dataen blir lagret som nye CSV-filer.

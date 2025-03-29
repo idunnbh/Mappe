@@ -15,6 +15,3 @@ df["år"] = pd.to_numeric(df["år"], errors = "coerce")
 df["Utslipp til luft (1 000 tonn CO2-ekvivalenter, AR5)"] = pd.to_numeric(
     df["Utslipp til luft (1 000 tonn CO2-ekvivalenter, AR5)"], errors = "coerce"
 )
-
-    # Test
-print(df.head())

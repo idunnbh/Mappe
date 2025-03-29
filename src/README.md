@@ -37,8 +37,19 @@ lagre_til_csv(data, filnavn):
 
 
 ### Klimagassutslipp
-Datasettet som brukes er hentet fra Statistisk sentralbyrå (https://www.ssb.no/statbank/table/13931) og inneholder data om klimagassutslipp i Norge fra 1990 til 2023. Rådataen ble hentet ut i CSV-fil og hadde små utfordringer knyttet til struktur og format. Filen inneholdt både metadata, kolonnenavn og data i samme fil.
+Datasettet som brukes er hentet fra Statistisk sentralbyrå og inneholder data om klimagassutslipp i Norge fra 1990 til 2023. Rådataen ble hentet ut i CSV-fil og hadde små utfordringer knyttet til struktur og format. Filen inneholdt både metadata, kolonnenavn og data i samme fil.
 
+For å arbeide med dataen har vi brukt Pandas til å lese inn og bearbeide CSV-filen. Ved hjelp av os, base_path og filepath finner koden filen relativt i arbeidet, uavhengig hvor den kjøres fra. Deretter filterer vi datatsettet til å kun vise aktivitet "0 Alle kilder" og komponent "Klimagasser i alt", slik at vi får et mer oversiktig datasett å jobbe med videre.
+
+Vi filtrerer så datasettet til å kun vise "0 Alle kilder" og "Klimagasser i alt", slik at vi får et mer oversiktlig datasett å jobbe videre med. Deretter konverterer vi tallverdier fra CSV-filen fra en streng til interger, slik at de vil bli forstått riktig av pandas og matplotlib i framtidig analyse. Om verdiere ikke lar deg konvertere vil de bli satt til NaN (Not a number).
+
+For å bekrefte at koden fungerer har vi brukt print(df.head()) for å printe ut de 5 første linjene. Det fungerte slik vi ønsker. Resultatet ble slik:
+  kilde (aktivitet)          komponent    år  Utslipp til luft (1 000 tonn CO2-ekvivalenter, AR5)
+0     0 Alle kilder  Klimagasser i alt  1990                                              51348  
+1     0 Alle kilder  Klimagasser i alt  1991                                              48987  
+2     0 Alle kilder  Klimagasser i alt  1992                                              47450  
+3     0 Alle kilder  Klimagasser i alt  1993                                              49379  
+4     0 Alle kilder  Klimagasser i alt  1994                                              51331
 
 ### rensing.py - Rensing av data
 Vi har laget en modul med funksjoner for å rense både temperaturdata, klimagassdata og luftkvalitetdate. Rensefunksjonene er delt inn i gjenbrukbare komponenter:
@@ -56,7 +67,7 @@ Klimagassspesifikke funksjoner
 
 Kombinerte funksjoner (pipelines)
 - temperatur_rens(df): Brukes for temperaturdata. Den fjerner duplikater, outliers og manglende verdier.
-- klimagass_rens(df): Brukes for klimagassdata. Rydder kolonnenavn og fjerner duplikater.
+- klimagass_rens(df): Brukes for klimagassdata. Rydder kolonnenavn, fjerner duplikater og sjekker at de nødvendige kolonnene ('kilde (aktivitet)', 'komponent' og 'år') finnes.
 
 
 ### run_rensing.py – Kjøring for rensing av 
@@ -75,9 +86,13 @@ For historisk temperatur:
 Rensing skjer kun en gang: Hvis renset fil allerede finnes, hoppes det over
 
 Klimagassdata:
-I rens_og_lagre_klimagassdata():
-- Automatisk lagring i data/klimagassutslipp_renset.csv
-Disse dataene oppdateres sjeldent, da to ganger i året, og hentes ikke opp gjennom API. Derfor er rensekallet satt opp i en if-setning, ettersom at rensingen er i samme script som rensingen av temperatur som skjer ofte. If-setningen er satt opp slik at om det allerede eksisterer en renset versjon, vil den ikke gjennomføre rensingen på nytt.
+I rens_og_lagre_klimagassdata() blir den originale CSV-filen data/klimagassutslipp.csv lest inn med sep=";" og skiprows=2 for å hoppe over metadata og hente riktige kolonnenavn.
+- Filen rensen med klimagass_rens() 
+- Hermetegn rundt navn og duplikater fjernes
+- Nødvendige kolonner blir sjekket
+- Den rensede dataen lagres som data/klimagassutslipp_renset.csv
+Siden klimagassdataen kun oppdateres et par ganger i året, og ikke hentes fra et API, er det lagt inn en if-sjekk i scriptet. Dersom den rensede filen allerede eksisterer, blir rensingen ikke kjørt på nytt.
+Dette sparer tid, og forhindrer unødvendig behandling hver gang scriptet kjøres.
 
 ### generer_feil_i_data.py - lager feil i datasett
 For sjekke og vise at funksjonene våre for rensing av data fungerer, har vi laget en versjon av den historiske temperaturdataene som inneholder feil. 

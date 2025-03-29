@@ -1,10 +1,11 @@
 import unittest
 import pandas as pd
 import sys, os
+from io import StringIO
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-import databehandling.rensing_temperaturdata as rensing
+import databehandling.rensing as rensing
 
 class TestRensing(unittest.TestCase):
 
@@ -40,7 +41,7 @@ class TestRensing(unittest.TestCase):
             'temperatur': [None, 1000]  # én mangler, én outlier og duplikat
         }
         df = pd.DataFrame(data)
-        df_renset = rensing.rens_data(df)
+        df_renset = rensing.rens_data_kombinert(df)
         self.assertEqual(len(df_renset), 0)
 
 if __name__ == '__main__':

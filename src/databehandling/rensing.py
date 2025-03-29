@@ -3,10 +3,11 @@ import pandas as pd
 def last_in_csv(filsti):
     return pd.read_csv(filsti)
 
-def håndter_manglende_verdier(df):
-    if df.isnull().values.any():
-        print("Manglende verdier funnet->fyller med gjennomsnitt.")
-    df['temperatur'] = df['temperatur'].fillna(df['temperatur'].mean())
+def håndter_manglende_verdier(df, kolonne='temperatur'):
+    manglende_verdier= df[kolonne].isnull().sum()
+    if manglende_verdier > 0:
+        print(f"Manglende verdier={manglende_verdier}.Disser er nå fylt med gjennomsnittet.")
+    df[kolonne] = df[kolonne].fillna(df[kolonne].mean())
     return df
 
 def fjern_duplikater(df):
@@ -27,7 +28,7 @@ def rense_kolonnenavn(df):
     df.columns = df.columns.str.replace('"', '').str.strip()
     return df    
 
-def rens_data(df):
+def temperatur_rens(df):
     df = håndter_manglende_verdier(df)
     df = fjern_duplikater(df)
     df = fjern_outliers(df)
@@ -35,5 +36,11 @@ def rens_data(df):
 
 def klimagass_rens(df):
     df = rense_kolonnenavn(df)
+    
+    nødvendige_kolonner = ['kilde (aktivitet)', 'komponent', 'år']
+    for kol in nødvendige_kolonner:
+        if kol not in df.columns:
+            raise KeyError (f"Mangler nødvendig kolonne: '{kol}'")
+        
     df = fjern_duplikater(df)
     return df

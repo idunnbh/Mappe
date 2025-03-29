@@ -72,7 +72,7 @@ def hent_historiske_temperaturer():
     #Behold kun én måling per time:
     df = pd.DataFrame(temperaturer, columns=["tidspunkt", "temperatur"])
     df["tidspunkt"] = pd.to_datetime(df["tidspunkt"])
-    df = df.set_index("tidspunkt").resample("1H").first().dropna().reset_index()
+    df = df.set_index("tidspunkt").resample("1h").first().dropna().reset_index()
 
     # Gjør om tilbake til liste 
     return list(df.itertuples(index=False, name=None))
@@ -91,18 +91,23 @@ def lagre_til_csv(data, filnavn):
 def main():
     lat, lon = 63.4195, 10.4065  # Gløshaugen, Trondheim
 
-    # Sanntidsdata, 48 neste timene 
+    # Sanntidsdata, 48 neste timene. Genererer ny hver gang
+    filnavn=f"temp_gloshaugen_sanntid_{today}.csv"
     sanntidsdata = hent_sanntidsdata(lat, lon)
     today = date.today().isoformat()
     
     if sanntidsdata:
         temp_sanntid = hent_temperaturer(sanntidsdata)
-        lagre_til_csv(temp_sanntid,f'temp_gloshaugen_sanntid_{today}.csv')
+        lagre_til_csv(temp_sanntid, filnavn)
 
-    # Historiske data
-    temp_historisk = hent_historiske_temperaturer()
-    if temp_historisk:
-        lagre_til_csv(temp_historisk, 'temp_gloshaugen_historisk.csv')
+    # Historiske data hvis den ikke finnes fra før
+    filnavn = "temp_gloshaugen_historisk.csv"
+    filsti = f"data/{filnavn}"
+    if not os.path.exists(filsti):
+        temp_historisk = hent_historiske_temperaturer()
+        lagre_til_csv(temp_historisk, filnavn)
+    else:
+        print("Historisk temperaturdata er allerede lagret under data")    
 
 if __name__ == "__main__":
     main()

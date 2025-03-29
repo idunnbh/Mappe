@@ -1,5 +1,6 @@
-## Tester av datarensing
+## Enhetstester for datarensing
 
+**Tempraturdata**
 Har laget enhetstester for funksjonene som renser temperaturdata, for å sikre at de fungerer som forventet.
 Testene sjekker følgene ting: 
 -fjern_outliers: Sikrer at ekstreme temperaturer fjernes korrekt

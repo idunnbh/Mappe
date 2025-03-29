@@ -1,4 +1,4 @@
-## Enhetstester for datarensing
+# Enhetstester for datarensing
 
 **Tempraturdata**
 Har laget enhetstester for funksjonene som renser temperaturdata, for å sikre at de fungerer som forventet.
@@ -41,3 +41,33 @@ OK
 #Dette viser at alle testene kjørte som forventet og at funksjonene for datarensing fungerer som den skal. 
 
 
+**Klimagassdata**
+Har laget enhetstester for funksjoner som renser klimagassdataen. Dette er for å sikre at de fungerer. Testene sjekker følgende:
+- rense_kolonnenavn: Fjerner hermetegn og mellomrom mellom kolonnenavn
+- last_in_csv: Sjekker at CSV-data blir lest opp riktig og i DataFrame form
+- klimagass_rens: Stopper med feilmelding om nødvendig kolonne mangler
+
+For at testfilene skal finne funksjonene i src/databehandling, legges src-mappa til i Pythons søkesti (sys.path). Dette gjøres slik i starten av test_klimagass.py:
+
+```bash
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+```
+
+Koden bruker både positive og negative tester. De positive testene sjekker at funksjonen fungere som forventet med gyldige data og de negative testene sjekker hvordan funksjonene håndterer potensielle feil, eksempelvis når en nødvendig kolonne mangler fra datasettet.
+
+Hvordan kjøre testene:
+Kjør følgende kommando fra testmappa:
+```bash
+python -m unittest tests/test_klimagass.py
+```
+
+Eksempel på output når koden kjøres:
+
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.015s
+
+OK
+
+Dette viser at testene kjøres som forventet og at funksjonene fungerer som de skal.

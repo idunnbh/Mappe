@@ -36,5 +36,11 @@ def temperatur_rens(df):
 
 def klimagass_rens(df):
     df = rense_kolonnenavn(df)
+    
+    nødvendige_kolonner = ['kilde (aktivitet)', 'komponent', 'år']
+    for kol in nødvendige_kolonner:
+        if kol not in df.columns:
+            raise KeyError (f"Mangler nødvendig kolonne: '{kol}'")
+        
     df = fjern_duplikater(df)
     return df

@@ -40,11 +40,7 @@ class TestRensing(unittest.TestCase):
             'temperatur': [None, 1000]  # én mangler, én outlier og duplikat
         }
         df = pd.DataFrame(data)
-<<<<<<< HEAD
         df_renset = rensing.temperatur_rens(df)
-=======
-        df_renset = rensing.rens_data_kombinert(df)
->>>>>>> main
         self.assertEqual(len(df_renset), 0)
 
 if __name__ == '__main__':

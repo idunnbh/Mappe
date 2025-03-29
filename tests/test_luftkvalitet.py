@@ -8,7 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 from dotenv import load_dotenv
 load_dotenv()
 
-from Datainnsamling_Idunn import fetch_air_quality_data
+from datainnsamling_luftkvalitet import fetch_air_quality_data
 
 
 class TestFetchAirQualityData(unittest.TestCase):

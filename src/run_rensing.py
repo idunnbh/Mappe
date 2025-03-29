@@ -41,7 +41,7 @@ def rens_og_lagre_temperaturdata():
     else:
         print("Fant ikke historisk temperaturdata (med feil)")
 
-#Kaller CSV om klimagassutslipp og renser den
+# Kaller CSV om klimagassutslipp og renser den
 def rens_og_lagre_klimagassdata():
     klimagass_renset_path = "data/klimagassutslipp_renset.csv"
     if not os.path.exists(klimagass_renset_path):

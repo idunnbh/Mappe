@@ -29,7 +29,7 @@ def save_json_data(data, filename):
     print(f"Data lagret til {filename}")
 
 
-#Normaliserer JSON-strukturen til en Pandas DataFrame
+# Normaliserer JSON-strukturen til en Pandas DataFrame
 def process_air_quality_data(data):
     try:
         df = pd.json_normalize(data, record_path=["data", "time"])
@@ -46,14 +46,14 @@ save_json_data(air_quality_data, "data/luftkvalitet.json")
 df = process_air_quality_data(air_quality_data)
 
 
-#Leser fra luftkvalitet.json
+# Leser fra luftkvalitet.json
 with open("data/luftkvalitet.json", "r", encoding="utf-8") as f:
     raw_data = json.load(f)
 
-#Lagrer den normaliserte dataframen i varaiabelen df
+# Lagrer den normaliserte dataframen i varaiabelen df
 df = process_air_quality_data(raw_data)
     
-#Velger ut hvilke konsentrasjoner fra API-en vi analyserer videre
+# Velger ut hvilke konsentrasjoner fra API-en vi analyserer videre
 selected_columns = [
     "from",
     "to",
@@ -63,13 +63,16 @@ selected_columns = [
 ]
 df_selected = df[selected_columns].copy()   #Ny dataframe df_selected med de utvalgte verdiene
 
+# Lagrer se utvalgte verdiene som ny CSV-fil
+df_selected.to_csv("data/luftkvalitet_api.csv", index=False, encoding="utf-8")
 
-#Henter historisk data fra Norsk institutt for luftforskning, lagret som CSV-fil lokalt på min pc
+
+# Henter historisk data fra Norsk institutt for luftforskning, lagret som CSV-fil lokalt på min pc
 df_historisk = pd.read_csv("C:\\Users\\idunn\\Downloads\\eksport.csv", sep=";", skiprows=3)
 df_historisk.to_csv("data/historisk_luftkvalitet.csv", index=False, encoding="utf-8")
 
 
-#Datasettet er veldig mangelfullt, så ekskluderer radene som ikke har registrerte verdier
+# Datasettet er veldig mangelfullt, så ekskluderer radene som ikke har registrerte verdier
 df_valid = df_historisk[
     (df_historisk["Dekning"] == 100.0) &
     (df_historisk["Dekning.1"] == 100.0) &
@@ -92,3 +95,5 @@ df_valid["Elgeseter PM2.5 µg/m³ Hour"] = df_valid["Elgeseter PM2.5 µg/m³ Hou
 # Sett alle negative verdier i disse kolonnene til 0
 df_valid.loc[:, cols] = df_valid.loc[:, cols].clip(lower=0)
 
+# Lagrer gyldige verdier som ny CSV-fil
+df_valid.to_csv("data/gyldig_historisk_luftkvalitet.csv", index=False, encoding="utf-8")

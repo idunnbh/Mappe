@@ -9,11 +9,10 @@ from datetime import date
 
 #Hente API-nøkler fra .env 
 load_dotenv('api.env')
-USER_AGENT = os.getenv('USER_AGENT')
-FROST_API_KEY = os.getenv('FROST_API_KEY')
 
 #Hent sanntidsdata fra MET
 def hent_sanntidsdata(lat, lon):
+    USER_AGENT = os.getenv('USER_AGENT')
     if not USER_AGENT:
         raise ValueError("USER_AGENT mangler! Sjekk api.env")
 
@@ -38,6 +37,7 @@ def hent_temperaturer(data):
 
 #Henter historiske temperaturdata fra Frost API
 def hent_historiske_temperaturer():
+    FROST_API_KEY = os.getenv('FROST_API_KEY')
     if not FROST_API_KEY:
         raise ValueError("FROST_API_KEY mangler! Sjekk api.env")
     

@@ -18,10 +18,13 @@ def rens_og_lagre_temperaturdata():
         print(f"Fant ikke sanntidsdata for temperatur: {sanntid_csv}")
 
     #Historisk data(ekte)
-    hist_csv_normal = "data/temp_gloshaugen_historisk.csv"
-    hist_renset_normal = "data/temp_gloshaugen_historisk_renset.csv"
+    antall_år = 50
+    hist_csv_normal = f"data/temp_gloshaugen_historisk_{antall_år}år.csv"
+    hist_renset_normal = f"data/temp_gloshaugen_historisk_renset_ {antall_år}.csv"
 
-    if not os.path.exists(hist_renset_normal) and os.path.exists(hist_csv_normal):
+    if os.path.exists(hist_renset_normal):
+        print("Historisk temperaturdata er allerede renset.")
+    elif os.path.exists(hist_csv_normal):
         df = pd.read_csv(hist_csv_normal)
         df = temperatur_rens(df)
         df.to_csv(hist_renset_normal, index=False)
@@ -30,10 +33,12 @@ def rens_og_lagre_temperaturdata():
         print("Fant ikke historisk temperaturdata")
 
     #Historisk data med feil
-    hist_csv_feil = "data/temp_gloshaugen_historisk_inneholder_feil.csv"
-    hist_renset_feil = "data/temp_gloshaugen_historisk_inneholder_feil_renset.csv"
+    hist_csv_feil = f"data/temp_gloshaugen_historisk_inneholder_feil_{antall_år}år.csv"
+    hist_renset_feil = f"data/temp_gloshaugen_historisk_inneholder_feil_renset_{antall_år}år.csv"
 
-    if not os.path.exists(hist_renset_feil) and os.path.exists(hist_csv_feil):
+    if os.path.exists(hist_renset_feil):
+        print("Historisk temperaturdata med feil er allerede renset.")
+    elif os.path.exists(hist_csv_feil):
         df = pd.read_csv(hist_csv_feil)
         df = temperatur_rens(df)
         df.to_csv(hist_renset_feil, index=False)

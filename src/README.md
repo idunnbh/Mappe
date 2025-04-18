@@ -196,6 +196,16 @@ Her vises det at funksjonene oppdager og behandler:
 
 Altså fungerer rensingen som forventet!! YEY
 
+## Dataanalyse
+I dataanlyse vlir dataen som har blitt samlet og renset analysert. 
+Filen inneholder funksjon `analyser_fil()`, som automatisk analyserer miljødata fra CSV-filer. Funksjonen identifiserer alle numeriske kolonner (f.eks. temperatur, utslipp, luftkvalitet), og beregner statistiske mål som gjennomsnitt, median og standardavvik.
+
+Dataene kan grupperes etter år eller etter både år og måned, noe som gir innsikt i utviklingen over tid. Resultatene returneres som en ordbok (`dict`) med én DataFrame per kolonne og gruppenivå. Detter er for å enkelt kunne bruke analyse dataen viderei visualiseringen. 
+
+Funksjonen er generisk og fungerer med alle datasett som inneholder enten årstall eller tidsstempel.
+
+Siden luftkvalitet dataen ligger i en JSON-fil er det også laget en hjelpefunksjon `json_til_dataframe()` som konverterer disse til et DataFrame. Dette gjør at JSON-data kan behandles og analyseres på likt som CSV-filer i resten av prosjektet.
+
 ------------------------------------------------------------------------ 
 
 # Kilder

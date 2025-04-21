@@ -4,7 +4,7 @@ Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet in
 ## Hente og lagre temperaturdata fra MET og Frost API
 Her samles det inn og lagres temperaturdata fra to ulike kilder:
 1) Sanntidsdata fra MET sitt Locationforecast API (48 timer framover)
-2) Historiske data fra Frost API (hver time for hele 2024)
+2) Historiske data fra Frost API (hver time for x antall år, her 50år)
 
 **API-tilganger:**
 Scriptet bruker miljøvariabler fra api.env for å hente:
@@ -16,6 +16,18 @@ Scriptet bruker miljøvariabler fra api.env for å hente:
 **hent_sanntidsdata(lat, lon):** Henter værdata (48 timer frem) for gitt lokasjon fra MET.
 
 **hent_temperaturer(data):** Denne funksjonen brukes for å hente ut tidspunkt og temperatur fra sanntidsdata. Den tar inn et JSON-objekt og returnerer en liste med (tidspunkt, temperatur)-par.
+
+hent_historiske_temperaturer(antall_år=50):
+    Denne funksjonen henter historiske temperaturdata fra Frost API for de siste antall_år (standard: 50 år tilbake). 
+    Funksjonens hovedtrekk: 
+    - Sjekker at API-nøkkel finnes
+    - Tidsintervall blir tilpasset ved at startår regnes ut basert på dagens år og      valgt antall år tilbake.
+    - Henter data måned for måned for å unngå feil: 
+        Vi prøvde først å hente ut alle tempraturdata for hele 2024 uten en for-løkke, men fikk feil (statuskode 400). Dette er fordi Frost API har en begrensning på hvor mye data som kan returneres per spørring. Derfor laget vi en for-løkke som henter data måned for måned. 
+    - Henter ut tidspunkt og temperatur fra JSON-responsen
+    - Filtrering, slik at en måling per time:
+        Da vi først hentet ut tempraturene for 2024, fikk vi nesten 50 000 datapunkter. Dette er fordi noen stasjoner rapporterer oftere enn en gang i timen. For å få et ryddigere og mer oversiktlig datasett, har vi brukt pandas til å filtrere målingene. Nå beholder en måling per time. Dette gjør vi ved å gruppere målingene etter time (resample('1h')) og hente den første verdien for hver time.
+    - Returnerer en liste med (tidspunkt, temperatur)-par
 
 Funksjonens hovedtrekk: 
 - Går gjennom alle tidspunktene i værdataene
@@ -121,6 +133,23 @@ I rens_og_lagre_temperaturdata() blir sanntidstemperatur og historiske tempratur
 - renset data lagres som data/temp_gloshaugen_sanntid_{dato}_renset.csv
 
 Dette skjer hver gang scriptet kjøres, slik at vi alltid har renset fersk sanntidsdata
+<<<<<<< HEAD
+For historisk temperatur:
+- leser inn data fra data/temp_gloshaugen_historisk_{antall_år}år.csv
+- renset versjon lagres som data/temp_gloshaugen_historisk_renset{antall_år}.csv
+Rensing skjer kun en gang: Hvis renset fil allerede finnes, hoppes det over
+
+#### Eksempel på output ved kjøring av run_rensing.py
+Fjernet 0 duplikater.
+Fjernet 0 outliers.
+Sanntidstemperaturer renset og lagret i: data/temp_gloshaugen_sanntid_2025-04-17_renset.csv
+Fjernet 0 duplikater.
+Fjernet 15 outliers.
+Historisk temperaturdata renset og lagret i:data/temp_gloshaugen_historisk_renset_ 50.csv
+Fant ikke historisk temperaturdata (med feil)
+
+Klimagassdata:
+=======
 
 **For historisk temperatur:**
 - leser inn data fra data/temp_gloshaugen_historisk.csv
@@ -128,6 +157,7 @@ Dette skjer hver gang scriptet kjøres, slik at vi alltid har renset fersk sannt
 Rensing skjer kun en gang: Hvis renset fil allerede finnes, hoppes det over
 
 ### Klimagassdata:
+>>>>>>> 654649a42520afc355638036a4bad56eef064a51
 I rens_og_lagre_klimagassdata() blir den originale CSV-filen data/klimagassutslipp.csv lest inn med sep=";" og skiprows=2 for å hoppe over metadata og hente riktige kolonnenavn.
 - Filen rensen med klimagass_rens() 
 - Hermetegn rundt navn og duplikater fjernes
@@ -165,6 +195,16 @@ Her vises det at funksjonene oppdager og behandler:
 10 manglende verdier, 5 duplikater og 5 outliers
 
 Altså fungerer rensingen som forventet!! YEY
+
+## Dataanalyse
+I dataanlyse vlir dataen som har blitt samlet og renset analysert. 
+Filen inneholder funksjon `analyser_fil()`, som automatisk analyserer miljødata fra CSV-filer. Funksjonen identifiserer alle numeriske kolonner (f.eks. temperatur, utslipp, luftkvalitet), og beregner statistiske mål som gjennomsnitt, median og standardavvik.
+
+Dataene kan grupperes etter år eller etter både år og måned, noe som gir innsikt i utviklingen over tid. Resultatene returneres som en ordbok (`dict`) med én DataFrame per kolonne og gruppenivå. Detter er for å enkelt kunne bruke analyse dataen viderei visualiseringen. 
+
+Funksjonen er generisk og fungerer med alle datasett som inneholder enten årstall eller tidsstempel.
+
+Siden luftkvalitet dataen ligger i en JSON-fil er det også laget en hjelpefunksjon `json_til_dataframe()` som konverterer disse til et DataFrame. Dette gjør at JSON-data kan behandles og analyseres på likt som CSV-filer i resten av prosjektet.
 
 ------------------------------------------------------------------------ 
 

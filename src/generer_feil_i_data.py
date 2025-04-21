@@ -1,7 +1,10 @@
 import pandas as pd
 import random
 
-df = pd.read_csv("data/temp_gloshaugen_historisk.csv")
+# Script for å simulere feil i historiske temperaturdata
+
+antall_år=50
+df = pd.read_csv(f"data/temp_gloshaugen_historisk_{antall_år}år.csv")
 
 #Legger til manglende verdier på 10 tilfeldige rader
 indekser = random.sample(range(len(df)), 10)  
@@ -18,5 +21,5 @@ duplikater = df.sample(5)
 df = pd.concat([df, duplikater], ignore_index=True)
 
 #Lagrer endringen/feilene i en ny fil
-df.to_csv("data/temp_gloshaugen_historisk_inneholder_feil.csv", index=False)
+df.to_csv(f"data/temp_gloshaugen_historisk_inneholder_feil_{antall_år}år.csv", index=False)
 print("CSV-fil med feil er lagret")

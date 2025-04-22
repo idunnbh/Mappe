@@ -5,12 +5,9 @@ import json
 def analyser_fil(filsti, sep=',', datokolonne=None, groupby='måned'):
     df = pd.read_csv(filsti, sep=sep) # Leser inn CSV-data
     df.columns = df.columns.str.strip().str.replace('"', '').str.lower()  # Rens kolonnenavn
+    df.columns = df.columns.str.replace(" ", "_").str.replace("µg/m³", "ugm3").str.replace("ug/m3", "ugm3") 
     print(f"\nAnalyse av:{filsti}")
     print("-------------------------------------------------")
-
-    grupper = []
-    statistikk = {}
-
 
     if datokolonne:
         datokolonne = datokolonne.strip().lower() # Fikser datokolonnen
@@ -20,59 +17,58 @@ def analyser_fil(filsti, sep=',', datokolonne=None, groupby='måned'):
     else: 
         print("Datokolonne ikke spesifisert (Hopper over gruppering).")
         return
+    
+    grupper = []
 
-    # Behandler dato og/eller årstall
+    # Beholder dato eller årstall
     if pd.api.types.is_integer_dtype(df[datokolonne]):
         df['år'] = df[datokolonne]
-        grupper = ['år']
     else:
         df[datokolonne] = pd.to_datetime(df[datokolonne], errors='coerce')
         df['år'] = df[datokolonne].dt.year
-        if groupby == 'år':
-            grupper = ['år']
-        elif groupby == 'måned':
+        if groupby == 'måned':
             df['måned'] = df[datokolonne].dt.month
-            grupper = ['år', 'måned']
-        else:
-            print("Ukjent groupby-verdi. Bruk 'år' eller 'måned'.")
-            return
 
+    # Gruppering
+    grupper = ['år']  
+    if groupby == 'måned':
+        grupper.append('måned')
+
+    if 'kilde (aktivitet)' in df.columns:
+        grupper.insert(0, 'kilde (aktivitet)') # Grupperer først mhp. kilde
+    
     if not grupper:
         print("Kan ikke gruppere. Hopper over analyse.")
         return
 
-    # Finn numeriske kolonner
+    # Finner numeriske kolonner
     numeriske_kolonner = df.select_dtypes(include=[np.number]).columns.difference(['år', 'måned'])
-
-    # Grupper etter måned (hvis spesisfisert)
-    if groupby == 'måned':
-        for kol in numeriske_kolonner:
-            #print(f"\nStatistikk for kolonne: {kol} (gruppert etter år og måned)")
-            stats = df.groupby(['år', 'måned'])[kol].agg(['mean', 'median', 'std']).reset_index()
-            #print(stats.round(2))
-            statistikk[f"{kol}_måned"] = stats
-
-    # Grupper etter år (alltid)
+    # Fjerner kolloner som starter med dekning (mhp på vidre analyse av luftkvalitetdata)
+    filtrerte_kolonner = []
     for kol in numeriske_kolonner:
-        #print(f"\nStatistikk for kolonne: {kol} (gruppert etter år)")
-        stats = df.groupby('år')[kol].agg(['mean', 'median', 'std']).reset_index()
-        #print(stats.round(2))
-        statistikk[f"{kol}_år"] = stats
+        if not kol.lower().startswith("dekning"):
+            filtrerte_kolonner.append(kol)
+
+    numeriske_kolonner = filtrerte_kolonner
+
+    statistikk = {}
+
+    # Grupper etter år
+    for kol in numeriske_kolonner:
+        gruppe_størrelser = df.groupby(grupper).size()
+
+        # Sjekk om det er nok datapunkter til å beregne standardavvik
+        if gruppe_størrelser.min() > 1:
+            stats = df.groupby(grupper)[kol].agg(['mean', 'median', 'std']).reset_index()
+        else:
+        # Bare mean og median
+            stats = df.groupby(grupper)[kol].agg(['mean', 'median']).reset_index()
+
+        stats = stats.rename(columns={
+            'mean': 'gjennomsnitt',
+            'median': 'median',
+            'std': 'standardavvik'
+        })
+        statistikk[kol] = stats
 
     return statistikk
-
-def json_til_dataframe(json_fil, tidspunkt="from"):
-    
-    with open(json_fil, encoding="utf-8") as fil:
-        innhold = json.load(fil)
-
-    rader = []
-    tid = innhold.get("data", {}).get("time", [])
-
-    for målepunkt in tid:
-        rad = {"tidspunkt": målepunkt.get(tidspunkt)}
-        for komponent, verdi in målepunkt.get("variables", {}).items():
-            rad[komponent] = verdi.get("value")
-        rader.append(rad)
-
-    return pd.DataFrame(rader)

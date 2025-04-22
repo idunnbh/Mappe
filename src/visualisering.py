@@ -1,21 +1,26 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-from datainnsamling_luftkvalitet import df_selected
+from datainnsamling_luftkvalitet import df_valid
 
-
+df_hist = df_valid.copy()
 
 # Konverterer til Pandas datetime-objekter og sorterer kronologisk
-df_selected["from"] = pd.to_datetime(df_selected["from"])
-df_selected = df_selected.sort_values("from")
+df_hist['Tid'] = pd.to_datetime(
+    df_hist['Tid'],
+    dayfirst=True,                # datoformatet er DD.MM.YYYY
+    format='%d.%m.%Y %H:%M'
+)
+df_hist = df_hist.sort_values("Tid")
 
 # Plotter linjediagram for luftkvalitetsvarsel
 plt.figure(figsize=(12, 6))
-sns.lineplot(data=df_selected, x="from", y="variables.pm10_concentration.value", label="PM10")
-sns.lineplot(data=df_selected, x="from", y="variables.pm25_concentration.value", label="PM2.5")
-sns.lineplot(data=df_selected, x="from", y="variables.no2_concentration.value", label="NO₂")
+sns.lineplot(data=df_hist, x="Tid", y="Elgeseter PM10 µg/m³ Day", label="PM10")
+sns.lineplot(data=df_hist, x="Tid", y="Elgeseter PM2.5 µg/m³ Day", label="PM2.5")
+sns.lineplot(data=df_hist, x="Tid", y="Elgeseter NO2 µg/m³ Day", label="NO₂")
 plt.xlabel("Tid")
 plt.ylabel("Konsentrasjon (µg/m³)")
 plt.title("Luftkvalitetsvarsel")
 plt.xticks(rotation=45)
 plt.show()
+

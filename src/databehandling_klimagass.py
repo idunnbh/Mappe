@@ -1,10 +1,10 @@
 import pandas as pd 
 import os
 
-def hent_klimagassdata():
+def hent_klimagassdata_norge():
     # Finne CSV og definere ; som seperator, df = dataframe/tabell i pandas
     base_path = os.path.dirname(__file__)
-    file_path = os.path.join(base_path, "../data/klimagassutslipp_renset.csv")
+    file_path = os.path.join(base_path, "../data/klimagassutslipp_norge_renset.csv")
     df = pd.read_csv(file_path, sep=",", encoding="utf-8")
 
     # Definere at vi kun vil se "0 Alle kilder" og "Klimagasser i alt" fra CSVen, kan endres

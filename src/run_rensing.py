@@ -48,15 +48,31 @@ def rens_og_lagre_temperaturdata():
 
 # Kaller CSV om klimagassutslipp og renser den
 def rens_og_lagre_klimagassdata():
-    klimagass_renset_path = "data/klimagassutslipp_renset.csv"
+    klimagass_renset_path = "data/klimagassutslipp_norge_renset.csv"
     if not os.path.exists(klimagass_renset_path):
         df_klima = pd.read_csv("data/klimagassutslipp.csv", sep=";", encoding="utf-8", skiprows=2)
         df_klima = klimagass_rens(df_klima)
-        df_klima.to_csv("data/klimagassutslipp_renset.csv", index=False)
-        print("Renset data lagret i data/klimagassutslipp_renset.csv")
+        df_klima.to_csv("data/klimagassutslipp_norge_renset.csv", index=False)
+        print("Renset data lagret i data/klimagassutslipp_norge_renset.csv")
     else:
         print("Klimagassdata er allerede renset.")
+
+# Kaller CSV om verdens klimagassutslipp og renser den
+def rens_og_lagre_klimagass_verden():
+    os.makedirs("data", exist_ok=True)
+    if not os.path.exists("data/klimagassutslipp_verden.csv"):
+        print("Fant ikke filen: data/klimagassutslipp_verden.csv")
+        return
+    df = pd.read_csv("data/klimagassutslipp_verden.csv")
+    df.rename(columns={
+        "Year": "År",
+        "Annual greenhouse gas emissions in CO₂ equivalents": "Utslipp i CO2 ekvivalenter"
+    }, inplace=True)
+    df_renset = df[["År", "Utslipp i CO2 ekvivalenter"]]
+    df_renset.to_csv("data/klimagassutslipp_verden_renset.csv", index=False)
+    print("Renset data lagret i data/klimagassutslipp_verden_renset.csv")
 
 if __name__ == "__main__":
     rens_og_lagre_temperaturdata()
     rens_og_lagre_klimagassdata()
+    rens_og_lagre_klimagass_verden()

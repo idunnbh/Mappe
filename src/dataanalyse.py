@@ -13,7 +13,7 @@ def analyser_fil(filsti, sep=',', datokolonne=None, groupby='måned'):
         datokolonne = datokolonne.strip().lower() # Fikser datokolonnen
         if datokolonne not in df.columns:
             print("Datokolonnen IKKE funnet.")
-            return
+            return 
     else: 
         print("Datokolonne ikke spesifisert (Hopper over gruppering).")
         return
@@ -28,6 +28,18 @@ def analyser_fil(filsti, sep=',', datokolonne=None, groupby='måned'):
         df['år'] = df[datokolonne].dt.year
         if groupby == 'måned':
             df['måned'] = df[datokolonne].dt.month
+
+    # Finn kolonnenavn som matcher "kilde"
+    #kildekol = [kol for kol in df.columns if "kilde" in kol][0]
+    kildekolonner = [kol for kol in df.columns if "kilde" in kol]
+    kildekol = kildekolonner[0] if kildekolonner else None
+    df_total = None
+    
+    if kildekol in df.columns:
+        df_total = df[df[kildekol].astype(str).str.lower().str.contains("alle kilder")].copy()
+        df[kildekol] = df[kildekol].astype(str).str.strip()
+        df = df[~df[kildekol].str.lower().str.contains("alle kilder")].copy()
+        grupper.insert(0, kildekol)
 
     # Gruppering
     grupper = ['år']  
@@ -71,4 +83,4 @@ def analyser_fil(filsti, sep=',', datokolonne=None, groupby='måned'):
         })
         statistikk[kol] = stats
 
-    return statistikk
+    return statistikk, df_total, df

@@ -44,3 +44,21 @@ Denne notebooken viser likevel et godt eksempel på hvordan prediktiv analyse ka
 ### Om R2 og MSE
 - **R^2 (R2):** Hvor godt dataened passer sammen kan tallfestes med R^2. Verdien går fra 0 til 1, og destro høyere det er, jo bedre. I denne analysen forteller R2-verdien om hvor mye av variasjonen i temperaturer modellen klarer å forklare. En R2 på 0.054 betyr at de har en forklaringsgrad på 5%, som er relativt lite.
 - **MSE (Mean Squared Error):** Oversatt som midlere kvadratisk feil. Det er en modell som måler hvor store feil en regresjonsmodell kan gjøre. Desto lavere tallet er, desto mer presis er modellen. Det er gjennomsnittet av kvadrerte avvik mellom faktiske og predikerte verdier.
+
+## Visualisering
+PS: VISUALISERINGEN ER IKKE FERDIG
+Her visualiseres den analyserte dataen, ved hjelp av Matplotlib, Seaborn, Widgets og Bokeh. Notebooken inneholder ulike typer diagrammer for temperatur, klimagassutslipp og luftkvalitet. 
+
+### Temperatur
+#### Linjediagram
+Her brukes Bokeh til å lage et linjediagram som viser utviklingen av gjennomsnittstemperaturen de siste 50 årene. Dette er et interaktivt diagram der man kan zoome og flytte på diagrammet. I tillegg brukes hover så brukeren enkelt kan se verdien på hvert datapunkt. Høyeste og laveste verdi som ble funnet i analysen er også markert for å gjøre diagrammet mer informativt.
+#### Søylediagram
+Søylediagrammet viser gjennomsnittstemperaturen per tiår, som gir et mer tydelig bilde på den generelle temperaturøkningen. Til visualiseringen brukes Matplotlib og Seaborn.
+
+### Klimagassutslipp
+
+
+### Luftkvalitet
+#### Linjediagram
+Dette skal utbedres
+

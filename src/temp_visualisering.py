@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+from bokeh.plotting import figure, output_notebook, show
+from bokeh.models import ColumnDataSource, HoverTool
+from bokeh.models import Arrow, NormalHead, Annulus
+from datetime import datetime
 
-import dataanalyse
-import importlib
-importlib.reload(dataanalyse)
+# Aktiver inline-visning i Jupyter
+output_notebook()
 
 
 import sys, os
@@ -45,18 +48,49 @@ def load_and_compute(path, datokolonne="tidspunkt"):
     return annual_df, decade_df
 
 
-# Linjediagram av årlig gjennomsnittstemperatur
-def plot_annual(annual_df):
-    plt.figure(figsize=(10,5))
-    sns.lineplot(
-        data=annual_df, 
-        x="år", 
-        y="gjennomsnitt", 
-        marker="o")
-    plt.title("Årlig gjennomsnittstemperatur på Gløshaugen")
-    plt.xlabel("År"); plt.ylabel("Temperatur (°C)")
-    plt.xticks(rotation=45); plt.tight_layout()
-    plt.show()
+# Linjediagram av årlig gjennomsnittstemperatur med Bokeh
+def plot_interactive_bokeh(annual_df):
+    # Gjør DataFrame om til ColumnDataSource for hover-verktøy
+    src = ColumnDataSource(annual_df)
+
+    # Sett opp figur
+    p = figure(
+        title="Årlig gjennomsnittstemperatur på Gløshaugen",
+        x_axis_label="År",
+        y_axis_label="Temperatur (°C)",
+        sizing_mode="stretch_width",
+        height=350,
+        tools="pan,wheel_zoom,box_zoom,reset"
+    )
+
+    # Legg til hover
+    hover = HoverTool(tooltips=[
+        ("År", "@år"),
+        ("Temp", "@gjennomsnitt{0.2f} °C"),
+    ])
+    p.add_tools(hover)
+
+    # Tegn linje + punkter
+    p.line("år", "gjennomsnitt", source=src, line_width=2)
+    p.circle("år", "gjennomsnitt", source=src, size=6, fill_color="white")
+    
+    # Tegner ring rundt varmeste punkt
+    ann = Annulus(
+        x=2020, y=8.76,
+        inner_radius=0.69, outer_radius=0.7,
+        line_color="red", line_width=1 
+    )
+    p.add_glyph(ann)
+
+    # Tegner ring rundt kaldeste punkt
+    ann = Annulus(
+        x=1985, y=4.67,
+        inner_radius=0.69, outer_radius=0.7,
+        line_color="red", line_width=1
+    )
+    p.add_glyph(ann)
+
+    show(p)
 
 # Søylediagram av årlig snittemperatur per tiår
 def plot_by_decade(decade_df):

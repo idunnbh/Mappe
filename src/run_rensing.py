@@ -46,8 +46,8 @@ def rens_og_lagre_temperaturdata():
     else:
         print("Fant ikke historisk temperaturdata (med feil)")
 
-# Kaller CSV om klimagassutslipp og renser den
-def rens_og_lagre_klimagassdata():
+# Kaller CSV om klimagassutslipp i norge og renser den
+def rens_og_lagre_klimagassdata_norge():
     klimagass_renset_path = "data/klimagassutslipp_norge_renset.csv"
     if not os.path.exists(klimagass_renset_path):
         df_klima = pd.read_csv("data/klimagassutslipp.csv", sep=";", encoding="utf-8", skiprows=2)
@@ -74,5 +74,5 @@ def rens_og_lagre_klimagass_verden():
 
 if __name__ == "__main__":
     rens_og_lagre_temperaturdata()
-    rens_og_lagre_klimagassdata()
+    rens_og_lagre_klimagassdata_norge()
     rens_og_lagre_klimagass_verden()

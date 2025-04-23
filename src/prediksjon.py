@@ -1,23 +1,10 @@
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
-def prediksjon1(temp_les, luftkvalitet_les):
-    temp = pd.read_csv(temp_les)
-    temp["tidspunkt"] = pd.to_datetime(temp["tidspunkt"])
-    temp["tidspunkt"] = temp["tidspunkt"].dt.tz_localize(None)
+def koble_temp_klima(df_klima, df_temp):
+    df_temp["år"] = df_temp["tidspunkt"].dt.year
+    df_temp_agg = df_temp.groupby("år")["temperatur"].mean().reset_index()
+    df_merged = pd.merge(df_temp_agg, df_klima, left_on="år", right_on="År").drop(columns=["År"])
 
-    luft = pd.read_csv(luftkvalitet_les)
-    luft.columns = luft.columns.str.strip()
-    luft["Tid"] = pd.to_datetime(luft["Tid"], dayfirst=True)
-
-    luft = luft.rename(columns={
-        "Elgeseter NO2 µg/m³ Hour": "NO2",
-        "Elgeseter PM10 µg/m³ Hour": "PM10",
-        "Elgeseter PM2.5 µg/m³ Hour": "PM25"
-    })
-
-    # Merge
-    df = pd.merge(temp, luft, left_on="tidspunkt", right_on="Tid")
-    df = df[["tidspunkt", "temperatur", "NO2", "PM10", "PM25"]]
-    df = df.dropna()
-
-    return df
+    return df_merged, df_temp_agg

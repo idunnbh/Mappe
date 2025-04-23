@@ -3,12 +3,6 @@ import seaborn as sns
 import pandas as pd
 
 from datainnsamling_luftkvalitet import df_valid
-
-import dataanalyse
-import importlib
-importlib.reload(dataanalyse)
-
-
  
 df_hist = df_valid.copy()
 
@@ -29,6 +23,6 @@ plt.xlabel("Tid")
 plt.ylabel("Konsentrasjon (µg/m³)")
 plt.title("Luftkvalitet siste 20 år")
 plt.xticks(rotation=45)
-#plt.show()
+plt.show()
 
 

@@ -48,6 +48,8 @@ Funksjonens hovedtrekk:
 **lagre_til_csv(data, filnavn):** Lagrer listene med (tid, temperatur) til en .csv-fil i data/-mappen.
 
 ## Klimagassutslipp
+
+### I Norge
 Datasettet som brukes er hentet fra Statistisk sentralbyrå og inneholder data om klimagassutslipp i Norge fra 1990 til 2023. Rådataen ble hentet ut i CSV-fil og hadde små utfordringer knyttet til struktur og format. Filen inneholdt både metadata, kolonnenavn og data i samme fil.
 
 For å arbeide med dataen har vi brukt Pandas til å lese inn og bearbeide CSV-filen. Ved hjelp av os, base_path og filepath finner koden filen relativt i arbeidet, uavhengig hvor den kjøres fra. Deretter filterer vi datatsettet til å kun vise aktivitet "0 Alle kilder" og komponent "Klimagasser i alt", slik at vi får et mer oversiktig datasett å jobbe med videre.
@@ -67,6 +69,35 @@ For å bekrefte at koden fungerer har vi brukt print(df.head()) for å printe ut
 
 
 ------ 
+
+### I verden
+Datasettet som brukes her er hentet fra nettstedet Our World in Data (OWID). Dataen inneholder globale klimagassutslipp fra 1973 til 2023, målt i CO2-ekvivalenter, lik som det norske datasettet. Dataen blir hentet ved hjelp av en åpen Data API (CSV-lenke) fra OWID, som gir oss tilgang til oppdaterte datasett direkte, uten behov for API-nøkkel.
+
+Vi bruker pandas.read_csv() med en tilpasset User-Agent for å hente fila direkte fra nettstedet. Slik så de 5 første linjene ut i et originale datasettet:
+
+-----
+
+Entity,Code,Year,Annual greenhouse gas emissions in CO₂ equivalents
+World,OWID_WRL,1973,30340880000
+World,OWID_WRL,1974,30245190000
+World,OWID_WRL,1975,30411125000
+World,OWID_WRL,1976,31535469000
+
+-----
+
+Det originale datasettet var ryddig og strukturert, men overskriftene var på engelsk og det var to unødvendige kolonner i forhold til filtreringene gjort før API-en var lastet ned. Under rensingen justerte vi dette med å oversette overskriftene og ta vekk de to første kolonnene. Resultatet etter rensingen så slik ut:
+
+-----
+
+År,Utslipp i CO2 ekvivalenter
+1973,30340880000
+1974,30245190000
+1975,30411125000
+1976,31535469000
+
+-----
+
+
 
 ## Luftkvalitet
 For å hente inn, rense og kombinere luftkvalitetsdata, er det brukt både API (Meterologisk institutt) og et historisk datasett (CSV-fil fra Norsk institutt for luftforskning, NILU). Dataen fra API-et er sanntidsdata 48 timer fram i tid, og det historiske datasettet er registrerte målinger hver time i 2024. Dette fordi vi tok en vurdering på at vi burde ha mer data å jobbe med.Hovedstrukturen i koden er:
@@ -111,7 +142,7 @@ Vi har laget en modul med funksjoner for å rense både temperaturdata og klimag
 - fjern_outliers(df, kolonne='temperatur'):Fjerner urealistiske temperaturer (under -50°C eller over 50°C).
 
 **Klimagassspesifikke funksjoner:**
-- rense_kolonnenavn(df): Fjerner hermetegn og ekstra mellomrom fra kolonnenavn.
+- rense_kolonnenavn(df): Fjerner hermetegn og ekstra mellomrom fra kolonnenavn i det norske klimagass-settet.
 
 **Kombinerte funksjoner (pipelines):**
 - temperatur_rens(df): Brukes for temperaturdata. Den fjerner duplikater, outliers og manglende verdier.
@@ -214,6 +245,8 @@ Temperaturdata:
 2) Meteorologisk institutt. Frost API. Hentet fra: https://frost.met.no/
 Klimagassutslipp:
 3) Statistisk sentralbyrå (SSB). Utslipp av klimagasser etter kilde og type. Tabell 13931. Hentet fra: https://www.ssb.no/statbank/table/13931
+4) https://ourworldindata.org/co2-and-greenhouse-gas-emissions#all-charts
+
 
 ## Miljøvariabler og API-nøkler:
 API-nøkler lastes inn via dotenv fra en lokal .env-fil.

@@ -29,9 +29,11 @@ Ran 6 tests in 0.193s
 
 ## test_klimagassdata
 Vi har laget enhetstester for funksjoner som renser klimagassdataen. Dette er for å sikre at de fungerer. Testene sjekker følgende:
-- Funksjonen test_klimagass_rens() sjekker at datasettet inneholder riktige kolonner, kilde (aktivitet), komponent og år. Eksempeldataet som brukes:
+- Funksjonen test_klimagass_rens_norge() sjekker at datasettet inneholder riktige kolonner, kilde (aktivitet), komponent og år. Eksempeldataet som brukes:
 Olje- og gassutvinning, Klimagasser i alt, 1990.
 Her testes det at datasettet behandles uten feil, og at radene beholdes.
+- Funksjonen test_klimagass_rens_verden() er en integrasjonstest. I testen blir det opprettet en midlertidig csv-fil med eksempeldata og lagrer den lokal i data-mappen. Derreter kaller funksjonen rens_og_lagre_klimagass_verden() og sjekker at den rensede filen blir opprettet, at den kun inneholder de kolonnene som er relevante (År og utslipp i CO2 ekvivalenter) og at verdiene i filen er riktige og i forventet format.
+Testen bruker tempfile.TemporaryDirectory() for å opprette en midlertidig mappe.Dette gjør at alle filer som blit opprettes i testen slettes automatisk etterpå. 
 - I test_mangler_kolonne(self): Er det et ugyldig datasett som mangler en nødvendige kolonnene. Her skal funksjonen kaste en KeyError.
 - last_in_csv: Sjekker at CSV-data blir lest opp riktig og i DataFrame form
 
@@ -51,11 +53,11 @@ python -m unittest tests/test_klimagass.py
 
 **Eksempel på output når koden kjøres:**
 
+Fjernet 0 duplikater.
+.Renset data lagret i data/klimagassutslipp_verden_renset.csv
 ...
 ----------------------------------------------------------------------
-Ran 3 tests in 0.015s
-
-OK
+Ran 4 tests in 0.054s
 
 **Dette viser at testene kjøres som forventet og at funksjonene fungerer som de skal.**
 

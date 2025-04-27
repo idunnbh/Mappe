@@ -2,13 +2,16 @@ import unittest
 import pandas as pd
 import sys, os
 from io import StringIO
+import tempfile
+from contextlib import redirect_stdout
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 import rensing
+import run_rensing
 
 class TestKlimagassRens(unittest.TestCase):
 
-    def test_klimagass_rens(self):
+    def test_klimagass_rens_norge(self):
         data = {
             'kilde (aktivitet)': ['Olje- og gassutvinning'],
             'komponent': ['Klimagasser i alt'],
@@ -17,6 +20,39 @@ class TestKlimagassRens(unittest.TestCase):
         df = pd.DataFrame(data)
         renset = rensing.klimagass_rens(df)
         self.assertEqual(len(renset), 1)
+
+    def test_klimagass_rens_verden(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Opprett midlertidig data-mappe
+            data_dir = os.path.join(tmpdir, "data")
+            os.makedirs(data_dir, exist_ok=True)
+
+            # Lager testfil med innhold
+            input_path = os.path.join(data_dir, "klimagassutslipp_verden.csv")
+            output_path = os.path.join(data_dir, "klimagassutslipp_verden_renset.csv")
+
+            with open(input_path, "w", encoding="utf-8") as f:
+                f.write("Year,Annual greenhouse gas emissions in CO₂ equivalents,Other\n")
+                f.write("2000,30000,foo\n")
+                f.write("2001,31000,bar\n")
+
+            # Bytt til temp data dir under test
+            original_cwd = os.getcwd()
+            os.chdir(tmpdir)
+
+            try:
+                run_rensing.rens_og_lagre_klimagass_verden()
+
+                self.assertTrue(os.path.exists(output_path))
+                df = pd.read_csv(output_path)
+
+                self.assertIn("År", df.columns)
+                self.assertIn("Utslipp i CO2 ekvivalenter", df.columns)
+                self.assertEqual(df.shape, (2, 2))
+                self.assertEqual(df["Utslipp i CO2 ekvivalenter"].iloc[1], 31000)
+
+            finally:
+                os.chdir(original_cwd)
         
     #Negativ test (mangler komponent, skal da feile)
     def test_mangler_kolonne(self):

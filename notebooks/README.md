@@ -1,17 +1,14 @@
-## Dataanalyse av miljødata
-I notebooken vises det hvordan vi bruker funksjonene i `dataanalyse.py` til å analysere de rensede datasettene: 
+## dataanalyse.ipynb
+I notebooken vises det hvordan funksjonene fra statistikk.py brukes til å analysere og strukturere de ulike datasettene:
 
-- Temperaturdata (`temp_gloshaugen_historisk.csv`)
-- Klimagassutslipp (`klimagassutslipp_renset.csv`)
-- Luftkvalitet (`luftkvalitet.json`)
+- Temperaturdata (`temp_gloshaugen_historisk_renset_ 50.csv`)
+- Klimagassutslipp (`klimagassutslipp_norge_renset.csv`) og (`klimagassutslipp_verden_renset.csv`)
+- Luftkvalitet (`gyldig_historisk_luftkvalitet.csv`)
 
-### Det som gjøres i notebooken:
-- Importerer funksjoner fra `src/dataanalyse.py`
-- Kjører `analyser_fil()` på hvert datasett
-- Bruker `json_til_dataframe()` for å konvertere JSON til CSV
-- Grupperer data etter år og/eller måned
-
-For å vise resultatet på en oversiktlig måte i notebooken brukes en løkke og display() slik at DataFrame blir vist på en pen måte  i Jupyter. 
+Først analyseres temperaturdata for å undersøke utviklingen over tid, både årlig og per tiår.
+Deretter analyseres globale utslipp for å få oversikt over utviklingen i verden.
+Videre undersøkes utslipp i Norge, fordelt på ulike kilder.
+Til slutt analyseres luftkvalitetsmålinger for å finne utviklingen av stoffene over tid.
 
 
 ## Prediktiv_analyse

@@ -164,8 +164,8 @@ I rens_og_lagre_temperaturdata() blir sanntidstemperatur og historiske tempratur
 - renset data lagres som data/temp_gloshaugen_sanntid_{dato}_renset.csv
 
 Dette skjer hver gang scriptet kjøres, slik at vi alltid har renset fersk sanntidsdata
-<<<<<<< HEAD
-For historisk temperatur:
+
+**For historisk temperatur:**
 - leser inn data fra data/temp_gloshaugen_historisk_{antall_år}år.csv
 - renset versjon lagres som data/temp_gloshaugen_historisk_renset{antall_år}.csv
 Rensing skjer kun en gang: Hvis renset fil allerede finnes, hoppes det over
@@ -180,15 +180,11 @@ Historisk temperaturdata renset og lagret i:data/temp_gloshaugen_historisk_rense
 Fant ikke historisk temperaturdata (med feil)
 
 Klimagassdata:
-=======
 
-**For historisk temperatur:**
-- leser inn data fra data/temp_gloshaugen_historisk.csv
-- renset versjon lagres som data/temp_gloshaugen_historisk_renset.csv
 Rensing skjer kun en gang: Hvis renset fil allerede finnes, hoppes det over
 
 ### Klimagassdata:
->>>>>>> 654649a42520afc355638036a4bad56eef064a51
+
 I rens_og_lagre_klimagassdata() blir den originale CSV-filen data/klimagassutslipp.csv lest inn med sep=";" og skiprows=2 for å hoppe over metadata og hente riktige kolonnenavn.
 - Filen rensen med klimagass_rens() 
 - Hermetegn rundt navn og duplikater fjernes
@@ -227,15 +223,71 @@ Her vises det at funksjonene oppdager og behandler:
 
 Altså fungerer rensingen som forventet!! YEY
 
-## Dataanalyse
-I dataanlyse vlir dataen som har blitt samlet og renset analysert. 
-Filen inneholder funksjon `analyser_fil()`, som automatisk analyserer miljødata fra CSV-filer. Funksjonen identifiserer alle numeriske kolonner (f.eks. temperatur, utslipp, luftkvalitet), og beregner statistiske mål som gjennomsnitt, median og standardavvik.
 
-Dataene kan grupperes etter år eller etter både år og måned, noe som gir innsikt i utviklingen over tid. Resultatene returneres som en ordbok (`dict`) med én DataFrame per kolonne og gruppenivå. Detter er for å enkelt kunne bruke analyse dataen viderei visualiseringen. 
+## statistikk.py
+statistikk.py inneholder funksjoner for å analysere de ulik datasettene.
 
-Funksjonen er generisk og fungerer med alle datasett som inneholder enten årstall eller tidsstempel.
+### Funksjoner i statistikk.py
 
-Siden luftkvalitet dataen ligger i en JSON-fil er det også laget en hjelpefunksjon `json_til_dataframe()` som konverterer disse til et DataFrame. Dette gjør at JSON-data kan behandles og analyseres på likt som CSV-filer i resten av prosjektet.
+**Hjelpefunksjoner**
+
+rens_kolonnenavn(df)
+-Renser kolonnenavn ved å fjerner mellomrom og spesialtegn og gjør alt til små bokstaver.
+
+legg_til_tid(df, tidkolonne="tid", groupby=None)
+- Legger til kolonner for dato, år, måned og time basert på en tid-kolonne.
+- Hvis tidkolonnen bare inneholder årstall (heltall), legges kun år til og hvis groupby er lik "år", fjernes måned og time 
+
+finn_kildekolonne(df)
+-Finner kolonnen som inneholder ordet "kilde", som brukes til senere.
+
+**Analysefunksjoner**
+
+analyser_fil(filsti, sep=',', datokolonne=None, groupby='måned')
+- Leser inn CSV-fil, rydder opp kolonnenavn og grupperer data per år/måned/kilde.
+- Gjør enkle statistikke beregninger (gjennomsnitt, median og eventuelt standardavvik) for numeriske variabler. Standardavvik blir bare regnet ut hvis det er mer enn ett datapunkt i hver gruppe.
+- Den returnerer 3 ting: 
+    - statistikk = Samlede beregninger.(En dictionary, der nøkkelen er kolonnenavnet på den målte variabelen, og verdien er en df med samlet statistikk (gjennomsnitt, median, evt. standardavvik))
+    - df_total = Kun totalverdier hvis de finnes, f.eks. "alle kilder" (Returnerer None hvis det ikke finnes).
+    - df = hele det ferdig ryddede datasettet (Alle kolonner fra datasettet, rensede kolonnenavn, tid-kolonnen konvertert til datetime-format)
+
+analyser_temperatur(filsti, dataanalysemodul, datokolonne="tidspunkt", groupby="måned")
+Bygger vidrer på analyser_fil. Siden temperaturdata inneholder målinger for de første månedene av 2025 vil dette gi misvisende statistikk.
+For tempraturdata må det derfor gjøres en ekstra kontroll slik at kun år med fullstendig data (alle 12 måneder) tas med i beregningene.
+- Bygger videre på analyser_fil.
+- Brukes for temperaturdata, hvor man må filtrere ut år som ikke har data for alle 12 måneder.
+- Returnerer samlet statistikk (gjennomsnitt, median, standaravik) og årlige gjennomsnitt for hele år.
+
+beregn_endring_totalt(df, årskolonne='år', verdikolonne='årsgjennomsnitt')
+- Beregner total endring fra første til siste år, både som absolutt endring og prosentvis endring. Denne brukes for å se utvikling over tid.
+
+beregn_endring_årlig(df, årskolonne='år', verdikolonne='årsgjennomsnitt')
+- Beregner endringen fra ett år til neste, både i absolutte tall og prosentvis. Dette gir mer detaljert oversikt over utviklingen over tid. 
+
+ekstremverdier(df, årskolonne='år', verdikolonne='gjennomsnitt')
+- Finner året med høyest og året med lavest verdi.
+
+tiår_snitt(df, årskolonne='år', verdikolonne='gjennomsnitt')
+-Grupperer dataen i tiårsperioder og regner ut gjennomsnitt av disse perioden.
+
+beregn_avvik(df, årskolonne='år', verdikolonne='årsgjennomsnitt')
+- Legger til en ny kolonne som viser avviket fra totalgjennomsnittet for hver rad i datasettet. Dette er nyttig for å finne unormale år.
+
+analyser_utslipp_norge(df, årskolonne='år', kildekolonne='kilde_(aktivitet)')
+- Brukes for å analysere utslipp i Norge. Beregner gjennomsnitt og median per kilde per år og fjerner "alle kilder".
+
+gjennomsnitt_per_kilde(df, kildekolonne='kilde_(aktivitet)', årskolonne='år')
+- Finner gjennomsnitt og median for hver kilde over alle år. Brukes for å rangere hvilken kilde som slipper ut mest.
+
+lag_totaldata(df_total, årskolonne='år')
+- Finner år og totalutslipp fra en datastruktur og renser kolonnenavn for at dataen kan brukes videre.
+
+beregn_endring_per_kilde(df, aktivitetskolonne='kilde_(aktivitet)', årskolonne='år', verdikolonne='mean')
+- Beregner årlig endring for hver enkelt kilde.
+
+analyser_luftkvalitet(df_luft, målinger)
+- Regner ut daglig, månedlig og årlig snitt for hvert stoff. Bruker også ekstremverdier() for å finne høyeste og laveste måling for hver kilde.
+
 
 ------------------------------------------------------------------------ 
 

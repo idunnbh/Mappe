@@ -1,3 +1,7 @@
+# notebooks -- Beskrivelse av filer i 'notebooks/'
+Denne mappen inneholder notebooks som brukes til analyse, prediktiv modellering og visualisering av temperatur-, klimagass- og luftkvalitetsdata.
+
+
 ## dataanalyse.ipynb
 I notebooken vises det hvordan funksjonene fra statistikk.py brukes til å analysere og strukturere de ulike datasettene:
 

@@ -1,7 +1,6 @@
 import pandas as pd
 from pandasql import sqldf
 
-
 def last_in_csv(filsti):
     return pd.read_csv(filsti)
 

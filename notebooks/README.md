@@ -11,7 +11,7 @@ Videre undersøkes utslipp i Norge, fordelt på ulike kilder.
 Til slutt analyseres luftkvalitetsmålinger for å finne utviklingen av stoffene over tid.
 
 
-## Prediktiv_analyse
+## prediktiv_analyse.ipynb
 Denne notebooken tar for seg en predektiv analyse med lineær regresjon.
 
 ### Datagrunnlag
@@ -41,7 +41,7 @@ Denne notebooken tar for seg en predektiv analyse med lineær regresjon.
 - **R^2 (R2):** Hvor godt dataene passer sammen kan tallfestes med R^2. Verdien går fra 0 til 1 (eller 0% til 100%), og destro høyere det er, jo bedre.
 - **MSE (Mean Squared Error):** Oversatt som midlere kvadratisk feil. Det er en modell som måler hvor store feil en regresjonsmodell kan gjøre. Desto lavere tallet er, desto mer presis er modellen. Det er gjennomsnittet av kvadrerte avvik mellom faktiske og predikerte verdier.
 
-## Visualisering
+## visualisering.ipynb
 PS: VISUALISERINGEN ER IKKE FERDIG
 Her visualiseres den analyserte dataen, ved hjelp av Matplotlib, Seaborn, Widgets og Bokeh. Notebooken inneholder ulike typer diagrammer for temperatur, klimagassutslipp og luftkvalitet. 
 
@@ -52,6 +52,12 @@ Her brukes Bokeh til å lage et linjediagram som viser utviklingen av gjennomsni
 Søylediagrammet viser gjennomsnittstemperaturen per tiår, som gir et mer tydelig bilde på den generelle temperaturøkningen. Til visualiseringen brukes Matplotlib og Seaborn.
 
 ### Klimagassutslipp
+For klimagassutslipp visualiseres og analyseres utviklingen i Norge og globalt. Gjennom ulike visualiseringer analyseres endringer over tid og forskjeller mellom sektorer.
+Visualiseringene er laget ved hjelp av funksjoner definert i klimagass_visualisering.py, som blir importert via analyser_fil i statistikk.py.
+Funksjonene brukes til å generere grafene som presenteres i denne delen av notebooken.
+
+**Konklusjon**
+Analysen viser blant annet at Norges klimagassutslipp har gått ned de siste årene, spesielt etter 2020, mens globale utslipp fortsatt å øke. Flere sektorer i Norge, som industri, olje- og gassutvinning og veitrafikk, har redusert sine utslipp over tid.
 
 
 ### Luftkvalitet

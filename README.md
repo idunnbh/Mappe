@@ -33,10 +33,13 @@ Ved å kombinere disse datasettene håper vi å finne trender som kan gi større
 Prosjektet er strukturert slik:
 
 ├── data/           # Rådata og rensede datafiler
+├── docs/           # Dokumentasjon (oppgaver og ki-deklarasjon)
 ├── notebooks/      # Jupyter Notebooks (analyser, visualisering)
 ├── src/            # Kildekode (datainnsamling, rensing, analyse)
 ├── tests/          # Enhetstester
-├── README.md       # (Denne filen)
+├── .gitignore      # Filer og mapper som ignoreres av Git
+├── README.md       # Prosjektbeskrivelse (Denne filen)
+├── requirements.txt # Liste over nødvendige Python-pakke
 
 ## Kilder
 

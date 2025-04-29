@@ -1,9 +1,23 @@
 # Src -- Beskrivelse av filer i 'src/'
-Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet inn og bearbeidet dataen.
+Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet inn, bearbeidet, analysert og visualisert data.
+
+## Innholdsfortegnelse
+- [datainnsamling_tempratur.py](#datainnsamling_tempraturpy)
+- [datainnsamling_klimagassutslipp.py og datainnsamling_klimagassutslipp_verden.py](#datainnsamling_klimagassutslipppy-og-datainnsamling_klimagassutslipp_verdenpy)
+- [datainnsamling_luftkvalitet.py](#datainnsamling_luftkvalitetpy)
+- [rensing.py](#rensingpy)
+- [run_rensing.py](#run_rensingpy)
+- [generer_feil_i_data.py](#generer_feil_i_datapy)
+- [statistikk.py](#statistikkpy)
+- [kilmagass_visualisering.py](#kilmagass_visualiseringpy)
+- [Kilder](#kilder)
+- [Miljøvariabler og API-nøkler](#miljøvariabler-og-api-nøkler)
 
 ------------------------------------------------------------------------ 
 
 ## datainnsamling_tempratur.py
+[Åpne fil->](datainnsamling_tempratur.py)
+
 I datainnsamling_tempratur.py blir det hentet og lagrer temperaturdata fra MET og Frost API
 Her samles det inn og lagres temperaturdata fra to ulike kilder:
 1) Sanntidsdata fra MET sitt Locationforecast API (48 timer framover)
@@ -14,15 +28,17 @@ Scriptet bruker miljøvariabler fra api.env for å hente:
 - USER_AGENT: kreves av MET API
 - FROST_API_KEY: kreves av Frost API
 
-### Hovedfunksjoner:
+### Funksjoner i datainnsamling_tempratur.py:
 
-**hent_sanntidsdata(lat, lon):** Henter værdata (48 timer frem) for gitt lokasjon fra MET.
+**hent_sanntidsdata(lat, lon):** 
+- Henter værdata (48 timer frem) for en gitt lokasjon fra MET.
 
-**hent_temperaturer(data):** Denne funksjonen brukes for å hente ut tidspunkt og temperatur fra sanntidsdata. Den tar inn et JSON-objekt og returnerer en liste med (tidspunkt, temperatur)-par.
+**hent_temperaturer(data):** 
+- Denne funksjonen brukes for å hente ut tidspunkt og temperatur fra sanntidsdata. Den tar inn et JSON-objekt og returnerer en liste med (tidspunkt, temperatur)-par.
 
 **hent_historiske_temperaturer(antall_år=50):**
-    Denne funksjonen henter historiske temperaturdata fra Frost API for de siste antall_år (standard: 50 år tilbake). 
-    Funksjonens hovedtrekk: 
+- Denne funksjonen henter historiske temperaturdata fra Frost API for de siste antall_år (standard: 50 år tilbake). 
+- Funksjonen: 
     - Sjekker at API-nøkkel finnes
     - Tidsintervall blir tilpasset ved at startår regnes ut basert på dagens år og valgt antall år tilbake.
     - Henter data måned for måned for å unngå feil: 
@@ -40,6 +56,7 @@ Scriptet bruker miljøvariabler fra api.env for å hente:
 ## datainnsamling_klimagassutslipp.py og datainnsamling_klimagassutslipp_verden.py 
 
 ### datainnsamling_klimagassutslipp.py 
+[Åpne fil->](datainnsamling_klimagassutslipp.py)
 Datasettet som brukes er hentet fra Statistisk sentralbyrå og inneholder data om klimagassutslipp i Norge fra 1990 til 2023. Rådataen ble hentet ut i CSV-fil og hadde små utfordringer knyttet til struktur og format. Filen inneholdt både metadata, kolonnenavn og data i samme fil.
 
 For å arbeide med dataen har vi brukt Pandas til å lese inn og bearbeide CSV-filen. Ved hjelp av os, base_path og filepath finner koden filen relativt i arbeidet, uavhengig hvor den kjøres fra. Deretter filterer vi datatsettet til å kun vise aktivitet "0 Alle kilder" og komponent "Klimagasser i alt", slik at vi får et mer oversiktig datasett å jobbe med videre.
@@ -61,6 +78,7 @@ For å bekrefte at koden fungerer har vi brukt print(df.head()) for å printe ut
 ------ 
 
 ### datainnsamling_klimagassutslipp_verden.py 
+[Åpne fil->](datainnsamling_klimagassutslipp_verden.py)
 Datasettet som brukes her er hentet fra nettstedet Our World in Data (OWID). Dataen inneholder globale klimagassutslipp fra 1973 til 2023, målt i CO2-ekvivalenter, lik som det norske datasettet. Dataen blir hentet ved hjelp av en åpen Data API (CSV-lenke) fra OWID, som gir oss tilgang til oppdaterte datasett direkte, uten behov for API-nøkkel.
 
 Vi bruker pandas.read_csv() med en tilpasset User-Agent for å hente fila direkte fra nettstedet. Slik så de 5 første linjene ut i et originale datasettet:
@@ -90,13 +108,14 @@ Det originale datasettet var ryddig og strukturert, men overskriftene var på en
 ------------------------------------------------------------------------ 
 
 ## datainnsamling_luftkvalitet.py 
+[Åpne fil->](datainnsamling_luftkvalitet.py)
 For å hente inn, rense og kombinere luftkvalitetsdata, er det brukt både API (Meterologisk institutt) og et historisk datasett (CSV-fil fra Norsk institutt for luftforskning, NILU). Dataen fra API-et er sanntidsdata 48 timer fram i tid, og det historiske datasettet er registrerte målinger hver time i 2024. Dette fordi vi tok en vurdering på at vi burde ha mer data å jobbe med.Hovedstrukturen i koden er:
 - Hente data fra API-et ved å bruke miljøvariabler for konfigurasjon.
 - Lagre rådata som JSON for senere bruk eller feilsøking.
 - Normalisere JSON-strukturen til en Pandas DataFrame for videre analyse.
 - Hente et historisk datasett (CSV) med luftkvalitetsmålinger og filtrere ut mangelfulle rader.
 
-### Kodeforklaring
+### Funksjoner i datainnsamling_luftkvalitet.py 
 - get_air_quality_data(url, params, headers):
     Sender en GET-forespørsel til API-et med de spesifiserte parametrene. Får vi statuskode 200, returneres JSON-svaret. Ellers kastes en exception.
 
@@ -120,32 +139,33 @@ For å hente inn, rense og kombinere luftkvalitetsdata, er det brukt både API (
 
 ------------------------------------------------------------------------ 
 
-## rensing.py - Rensing av data
-Vi har laget en modul med funksjoner for å rense både temperaturdata og klimagassdata. Rensefunksjonene er delt inn i gjenbrukbare komponenter:
+## rensing.py
+[Åpne fil->](rensing.py) 
+Dette scriptet inneholder funksjoner som skal rense temperatur- og klimagassdata før videre analyse.
 
 **Generelle funksjoner:**
-- last_in_csv(filsti): Leser inn en CSV-fil som pandas DataFrame.
+- last_in_csv(filsti): Leser inn en CSV-fil som en pandas DataFrame.
 - fjern_duplikater(df): Fjerner duplikate rader og gir beskjed om hvor mange som ble fjernet.
 
 **Temperaturspesifikke funksjoner:**
-- finn_gjennomsnittstemperatur(df):Henter ut gjennomsnittet av kolonnen temperatur med SQL
+- finn_gjennomsnittstemperatur(df):  Henter ut gjennomsnittet av kolonnen temperatur ved hjelp av SQL (pandasq)
 - håndter_manglende_verdier(df, kolonne='temperatur')`: Fyller inn manglende temperaturer med gjennomsnitt.
 - fjern_outliers(df, kolonne='temperatur'):Fjerner urealistiske temperaturer (under -50°C eller over 50°C).
 
 **Klimagassspesifikke funksjoner:**
 - rense_kolonnenavn(df): Fjerner hermetegn og ekstra mellomrom fra kolonnenavn i det norske klimagass-settet.
 
-**Kombinerte funksjoner (pipelines):**
+**Kombinerte funksjoner:**
 - temperatur_rens(df): Brukes for temperaturdata. Den fjerner duplikater, outliers og manglende verdier.
 - klimagass_rens(df): Brukes for klimagassdata. Rydder kolonnenavn, fjerner duplikater og sjekker at de nødvendige kolonnene ('kilde (aktivitet)', 'komponent' og 'år') finnes.
 
 ### Hvorfor bruke pandasql?
-I finn_gjennomsnittstemperatur(df) brukers pandasql for å kjøre en SQL-spørring direkte på Pandas-dataframes. Dette gjør lesbarheten bedre og det vil være enklere å manipulere data senere. 
-SQL vil i flere situasjoner mer oversiktlig enn lange Pandas-kjeder.
+I finn_gjennomsnittstemperatur(df) brukers pandasql for å kjøre en SQL-spørring direkte på Pandas-dataframes. Dette gjør lesbarheten bedre og det vil være enklere å manipulere data senere. Ved å bruke pandasql her blir det enklere å hente ut gjennomsnittstemperatur på strukturert måte. SQL vil også flere situasjoner være mer oversiktlig enn lange Pandas-kjeder.
 
 ------------------------------------------------------------------------ 
 
 ## run_rensing.py 
+[Åpne fil->](run_rensing.py)
 I scriptet blir data renset ved at de ulike rensefunksjonene kjøres og den rensete dataen blir lagret som nye CSV-filer.
 
 **For sanntidsdata:**
@@ -153,11 +173,11 @@ I scriptet blir data renset ved at de ulike rensefunksjonene kjøres og den rens
 - temperatur_rens() kjøres for å rense data 
 - renset data lagres som data/temp_gloshaugen_sanntid_{dato}_renset.csv
 
-Dette skjer hver gang scriptet kjøres, slik at vi alltid har renset fersk sanntidsdata
+Dette skjer hver gang scriptet kjøres, slik at vi alltid har renset ny sanntidsdata
 
 **For historisk temperatur:**
 - leser inn data fra data/temp_gloshaugen_historisk_{antall_år}år.csv
-- renset versjon lagres som data/temp_gloshaugen_historisk_renset{antall_år}.csv
+- renset versjon lagres som data/temp_gloshaugen_historisk_renset_ {antall_år}.csv
 Rensing skjer kun en gang: Hvis renset fil allerede finnes, hoppes det over
 
 **For Klimagassdata:**
@@ -172,7 +192,7 @@ Siden klimagassdataen kun oppdateres et par ganger i året, og ikke hentes fra e
 ------------------------------------------------------------------------ 
 
 ## generer_feil_i_data.py 
-- lager feil i datasett
+[Åpne fil->](generer_feil_i_data.py)
 For sjekke og vise at funksjonene våre for rensing av data fungerer, har vi laget en versjon av den historiske temperaturdataene som inneholder feil. Vi tok utgangspunkt i data/temp_gloshaugen_historisk.csv og lagde en ny fil som heter data/temp_gloshaugen_historisk_inneholder_feil.csv
 
 **Feilene ble lagt inn med kode på denne måten:**
@@ -207,6 +227,7 @@ Altså fungerer rensingen som forventet!! YEY
 ------------------------------------------------------------------------ 
 
 ## statistikk.py
+[Åpne fil->](statistikk.py)
 statistikk.py inneholder funksjoner for å analysere de ulik datasettene.
 
 ### Funksjoner i statistikk.py
@@ -273,6 +294,7 @@ analyser_luftkvalitet(df_luft, målinger)
 ------------------------------------------------------------------------ 
 
 ## kilmagass_visualisering.py
+[Åpne fil->](klimagass_visualisering.py)
 Denne filen inneholder funksjoner for å visualisere klimagassutslipp. 
 
 ### Funksjoner i  kilmagass_visualisering.py:

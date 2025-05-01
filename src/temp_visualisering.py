@@ -6,10 +6,11 @@ from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus
 from datetime import datetime
 from statistikk import analyser_fil
 
+
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-'''
+
 def load_and_compute(path, datokolonne="tidspunkt"):
 
     # 1) Les inn og gjør datetime
@@ -42,7 +43,6 @@ def load_and_compute(path, datokolonne="tidspunkt"):
     )
 
     return annual_df, decade_df
-'''
 
 
 
@@ -73,7 +73,7 @@ def plot_interactive_bokeh(årlig_df):
 
     # Tegn linje + punkter
     p.line("år", "gjennomsnitt", source=src, line_width=2)
-    p.circle("år", "gjennomsnitt", source=src, size=6, fill_color="white")
+    p.scatter("år", "gjennomsnitt", source=src, size=6, fill_color="white", marker="circle")
 
     # Finn varmeste og kaldeste
     varm = årlig_df.loc[årlig_df["gjennomsnitt"].idxmax()]
@@ -122,13 +122,7 @@ def plot_interactive_bokeh(årlig_df):
 # Søylediagram av årlig snittemperatur per tiår
 def plot_by_decade(tiårs_df):
     plt.figure(figsize=(10,5))
-    ax = sns.barplot(
-        data=tiårs_df,
-        x="tiår",
-        y="gjennomsnitt",
-        color="steelblue",
-        errcolor="none"    
-    )
+    ax = sns.barplot(data=tiårs_df, x="tiår", y="gjennomsnitt", color="steelblue", err_kws={"color": "none"})
     ax.set_title("Gjennomsnitt per tiår")
     ax.set_xlabel("Tiår")
     ax.set_ylabel("Temperatur (°C)")

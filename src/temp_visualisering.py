@@ -2,18 +2,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from bokeh.plotting import figure, output_notebook, show
-from bokeh.models import ColumnDataSource, HoverTool
-from bokeh.models import Arrow, NormalHead, Annulus
+from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus, Label
 from datetime import datetime
-
-# Aktiver inline-visning i Jupyter
-output_notebook()
-
+from statistikk import analyser_fil
 
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-
+'''
 def load_and_compute(path, datokolonne="tidspunkt"):
 
     # 1) Les inn og gjør datetime
@@ -46,12 +42,16 @@ def load_and_compute(path, datokolonne="tidspunkt"):
     )
 
     return annual_df, decade_df
+'''
+
 
 
 # Linjediagram av årlig gjennomsnittstemperatur med Bokeh
-def plot_interactive_bokeh(annual_df):
+def plot_interactive_bokeh(årlig_df):
+
     # Gjør DataFrame om til ColumnDataSource for hover-verktøy
-    src = ColumnDataSource(annual_df)
+    src = ColumnDataSource(årlig_df)
+    output_notebook()
 
     # Sett opp figur
     p = figure(
@@ -65,41 +65,86 @@ def plot_interactive_bokeh(annual_df):
 
     # Legg til hover
     hover = HoverTool(tooltips=[
-        ("År", "@år"),
-        ("Temp", "@gjennomsnitt{0.2f} °C"),
+        ("År",             "@år"),
+        ("Temperatur",     "@gjennomsnitt{0.2f} °C"),
+        ("Median",         "@median{0.2f} °C")
     ])
     p.add_tools(hover)
 
     # Tegn linje + punkter
     p.line("år", "gjennomsnitt", source=src, line_width=2)
     p.circle("år", "gjennomsnitt", source=src, size=6, fill_color="white")
+
+    # Finn varmeste og kaldeste
+    varm = årlig_df.loc[årlig_df["gjennomsnitt"].idxmax()]
+    kald = årlig_df.loc[årlig_df["gjennomsnitt"].idxmin()]
     
     # Tegner ring rundt varmeste punkt
-    ann = Annulus(
-        x=2020, y=8.76,
-        inner_radius=0.69, outer_radius=0.7,
-        line_color="red", line_width=1 
-    )
-    p.add_glyph(ann)
-
-    # Tegner ring rundt kaldeste punkt
-    ann = Annulus(
-        x=1985, y=4.67,
-        inner_radius=0.69, outer_radius=0.7,
+    ring_varm = Annulus(
+        x=varm["år"], y=varm["gjennomsnitt"],
+        inner_radius=0.5, outer_radius=0.55,
         line_color="red", line_width=1
     )
-    p.add_glyph(ann)
+    p.add_glyph(ring_varm)
+
+    # Label ved varmeste
+    label_varm = Label(
+        x=varm["år"], y=varm["gjennomsnitt"],
+        x_offset=10, y_offset=-20,
+        text=f"Varmest\n{int(varm['år'])}: {varm['gjennomsnitt']:.2f}°C",
+        text_color="red",
+        text_font_size="9pt"
+    )
+    p.add_layout(label_varm)
+
+    # Tegner ring rundt kaldeste punkt
+    ring_kald = Annulus(
+        x=kald["år"], y=kald["gjennomsnitt"],
+        inner_radius=0.5, outer_radius=0.55,
+        line_color="red", line_width=1
+    )
+    p.add_glyph(ring_kald)
+
+    # Label ved kaldeste
+    label_kald = Label(
+        x=kald["år"], y=kald["gjennomsnitt"],
+        x_offset=-65, y_offset=-20,
+        text=f"Kaldest\n{int(kald['år'])}: {kald['gjennomsnitt']:.2f}°C",
+        text_color="red",
+        text_font_size="9pt"
+    )
+    p.add_layout(label_kald)
 
     show(p)
 
+
+
 # Søylediagram av årlig snittemperatur per tiår
-def plot_by_decade(decade_df):
+def plot_by_decade(tiårs_df):
     plt.figure(figsize=(10,5))
-    sns.barplot(data=decade_df, x="tiår", y="gjennomsnitt", palette="Blues_d")
-    plt.title("Gjennomsnitt per tiår")
-    plt.xlabel("Tiår"); plt.ylabel("Temperatur (°C)")
-    plt.xticks(rotation=45); plt.tight_layout()
+    ax = sns.barplot(
+        data=tiårs_df,
+        x="tiår",
+        y="gjennomsnitt",
+        color="steelblue",
+        errcolor="none"    
+    )
+    ax.set_title("Gjennomsnitt per tiår")
+    ax.set_xlabel("Tiår")
+    ax.set_ylabel("Temperatur (°C)")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    for bar in ax.patches:
+        h = bar.get_height()
+        x = bar.get_x() + bar.get_width() / 2
+        ax.text(x, h + 0.05, f"{h:.2f}", 
+                ha="center", va="bottom", fontsize=8)
+        
     plt.show()
+
+
+
 
 
 

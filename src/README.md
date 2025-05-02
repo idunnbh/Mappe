@@ -10,8 +10,10 @@ Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet in
 - [generer_feil_i_data.py](#generer_feil_i_datapy)
 - [statistikk.py](#statistikkpy)
 - [kilmagass_visualisering.py](#kilmagass_visualiseringpy)
+- [temp_visualisering.py](#temp_visualiseringpy)
 - [Kilder](#kilder)
 - [Miljøvariabler og API-nøkler](#miljøvariabler-og-api-nøkler)
+
 
 ------------------------------------------------------------------------ 
 
@@ -320,6 +322,31 @@ def plot_andel_per_kilde(df, år, årskolonne, kildekolonne, utslippkolonne):
 def plot_heatmap_per_kilde(df):
 - Lager et heatmap som viser utslipp per kilde og år, hvor fargen sier nooe om hvor mye utslipp hver sektor har.
 
+-----------------------------------------------------------------------
+
+## temp_visualisering.py
+[Åpne fil->](temp_visualisering.py)
+Denne filen inneholder funksjoner for å visualisere tempraturdata. 
+
+### Funksjoner i  temp_visualisering.py:
+
+- plot_interactive_bokeh(df):  
+    Interaktivt linjeplot av årlig gjennomsnittstemperatur med hover-effekt og markering av varmeste og kaldeste år (Bruker Bokeh).
+
+- plot_by_decade(df):  
+    Søylediagram som viser gjennomsnittlig temperatur per tiår.
+
+- plot_temperatur_år(df):  
+    Enkelt linjeplot for temperaturutvikling år for år (Matplotlib).
+
+- plot_avvik(df):  
+    Visualiserer avvik fra totalgjennomsnitt som farget barplot (blå for kaldere, rød for varmere).
+
+- tegn_endring_sol(filsti):  
+    En sol med stråler og tekst som viser hvor mye temperaturen har økt i datasettet.
+
+- plot_sanntids_temperatur
+    Viser temperatur for kommende dager basert på sanntidsdata fra MET.
 
 ------------------------------------------------------------------------ 
 

@@ -45,15 +45,20 @@ Denne notebooken tar for seg en predektiv analyse med lineær regresjon.
 - **R^2 (R2):** Hvor godt dataene passer sammen kan tallfestes med R^2. Verdien går fra 0 til 1 (eller 0% til 100%), og destro høyere det er, jo bedre.
 - **MSE (Mean Squared Error):** Oversatt som midlere kvadratisk feil. Det er en modell som måler hvor store feil en regresjonsmodell kan gjøre. Desto lavere tallet er, desto mer presis er modellen. Det er gjennomsnittet av kvadrerte avvik mellom faktiske og predikerte verdier.
 
+
 ## visualisering.ipynb
-PS: VISUALISERINGEN ER IKKE FERDIG
 Her visualiseres den analyserte dataen, ved hjelp av Matplotlib, Seaborn, Widgets og Bokeh. Notebooken inneholder ulike typer diagrammer for temperatur, klimagassutslipp og luftkvalitet. 
 
 ### Temperatur
-#### Linjediagram
-Her brukes Bokeh til å lage et linjediagram som viser utviklingen av gjennomsnittstemperaturen de siste 50 årene. Dette er et interaktivt diagram der man kan zoome og flytte på diagrammet. I tillegg brukes hover så brukeren enkelt kan se verdien på hvert datapunkt. Høyeste og laveste verdi som ble funnet i analysen er også markert for å gjøre diagrammet mer informativt.
-#### Søylediagram
-Søylediagrammet viser gjennomsnittstemperaturen per tiår, som gir et mer tydelig bilde på den generelle temperaturøkningen. Til visualiseringen brukes Matplotlib og Seaborn.
+For tempraturdata visualiseres utviklingen de siste 50 årene fra Gløshaugen.
+Grafene er laget med funksjoner fra temp_visualisering.py, og dataene hentes fra filen temp_gloshaugen_historisk_renset_ 50.csv.
+I notatboken er det skrevet refleksjoner og tolkninger i markdown. Det brukes flere ulike graf-typer:
+**Interaktivt linjediagram med Bokeh:**
+Viser årlig gjennomsnittstemperatur. Brukeren kan zoome og navigere i grafen, og verdier vises med hover. Varmeste og kaldeste år er også markert.
+**Søylediagram per tiår:**
+Viser gjennomsnittstemperatur for hvert tiår og gjør den langsiktige utviklingen tydeligere. Her brukes Matplotlib og Seaborn.
+**Sol-graf:**
+En figur som viser total temperaturøkning som en sol. Tallet i midten viser endringen i grader. 
 
 ### Klimagassutslipp
 For klimagassutslipp visualiseres og analyseres utviklingen i Norge og globalt. Gjennom ulike visualiseringer analyseres endringer over tid og forskjeller mellom sektorer.

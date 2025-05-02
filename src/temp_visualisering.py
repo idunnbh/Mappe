@@ -6,11 +6,14 @@ from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus
 from datetime import datetime
 from statistikk import analyser_fil
 import calendar
+from statistikk import beregn_avvik, analyser_temperatur, beregn_endring_totalt
+from datainnsamling_temperatur import hent_temperaturer, hent_sanntidsdata
+import numpy as np
 
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-'''
+
 def load_and_compute(path, datokolonne="tidspunkt"):
 
     # 1) Les inn og gjør datetime
@@ -43,7 +46,6 @@ def load_and_compute(path, datokolonne="tidspunkt"):
     )
 
     return annual_df, decade_df
-'''
 
 
 
@@ -74,7 +76,7 @@ def plot_interactive_bokeh(årlig_df):
 
     # Tegn linje + punkter
     p.line("år", "gjennomsnitt", source=src, line_width=2)
-    p.circle("år", "gjennomsnitt", source=src, size=6, fill_color="white")
+    p.scatter("år", "gjennomsnitt", source=src, size=6, fill_color="white", marker="circle")
 
     # Finn varmeste og kaldeste
     varm = årlig_df.loc[årlig_df["gjennomsnitt"].idxmax()]
@@ -123,13 +125,7 @@ def plot_interactive_bokeh(årlig_df):
 # Søylediagram av årlig snittemperatur per tiår
 def plot_by_decade(tiårs_df):
     plt.figure(figsize=(10,5))
-    ax = sns.barplot(
-        data=tiårs_df,
-        x="tiår",
-        y="gjennomsnitt",
-        color="steelblue",
-        errcolor="none"    
-    )
+    ax = sns.barplot(data=tiårs_df, x="tiår", y="gjennomsnitt", color="steelblue", err_kws={"color": "none"})
     ax.set_title("Gjennomsnitt per tiår")
     ax.set_xlabel("Tiår")
     ax.set_ylabel("Temperatur (°C)")
@@ -172,5 +168,82 @@ def plot_temp_heatmap(df, årskolonne='år', månedskolonne='måned', verdikolon
         labels=['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'],
         rotation=0
     )
+def plot_temperatur_år(df):
+    plt.figure(figsize=(10, 5))
+    plt.plot(df["år"], df["gjennomsnitt"], marker="o")
+    plt.title("Årlig gjennomsnittstemperatur")
+    plt.xlabel("År")
+    plt.ylabel("Temperatur (°C)")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_avvik(df):
+    df_avvik = beregn_avvik(df, verdikolonne="gjennomsnitt")
+    
+    plt.figure(figsize=(12, 5))
+    sns.barplot(data=df_avvik, x="år", y="avvik", hue="år", palette="coolwarm", dodge=False, legend=False)
+
+    plt.axhline(0, color="black", linewidth=1)
+    plt.title("Årlig temperaturavvik fra totalgjennomsnitt")
+    plt.xlabel("År")
+    plt.ylabel("Avvik (°C)")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+
+def tegn_endring_sol(filsti):
+
+    resultat = analyser_temperatur(filsti)
+    df_temp = resultat["temperatur"]["årlig_snitt"]
+    endring = beregn_endring_totalt(df_temp)
+
+    fig, ax = plt.subplots(figsize=(5, 5))
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    # Solsirkel
+    sol = plt.Circle((0.5, 0.5), 0.3, color="yellow", ec="orange", lw=4)
+    ax.add_patch(sol)
+
+    # Tekst i sol
+    tekst = f"+{endring['endring']:.2f}°C)"
+    ax.text(0.5, 0.5, tekst, ha="center", va="center", fontsize=14, fontweight="bold", color="black")
+
+    n_stråler = 12
+    for i in range(n_stråler):
+        vinkel = 2 * np.pi * i / n_stråler
+        x0, y0 = 0.5 + 0.31 * np.cos(vinkel), 0.5 + 0.31 * np.sin(vinkel)
+        x1, y1 = 0.5 + 0.42 * np.cos(vinkel), 0.5 + 0.42 * np.sin(vinkel)
+        ax.plot([x0, x1], [y0, y1], color="orange", lw=2)
+
+    plt.title(f"Temperaturøkning fra {endring['startår']} til {endring['sluttår']}", pad=20)
+    plt.show()
+
+
+
+
+def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
+    data = hent_sanntidsdata(lat, lon)
+    if not data:
+        print("Klarte ikke hente sanntidsdata.")
+        return
+    temperaturer = hent_temperaturer(data)
+    if not temperaturer:
+        print("Ingen temperaturer funnet.")
+        return
+
+    df = pd.DataFrame(temperaturer, columns=["tid", "temperatur"])
+    df["tid"] = pd.to_datetime(df["tid"])
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(df["tid"], df["temperatur"], marker="o")
+    plt.title("Sanntidstemperatur (Værvarsel for kommende dager)")
+    plt.xlabel("Tid")
+    plt.ylabel("Temperatur (°C)")
+    plt.xticks(rotation=45)
+    plt.grid(True)
     plt.tight_layout()
     plt.show()

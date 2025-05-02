@@ -331,20 +331,22 @@ Denne filen inneholder funksjoner for å visualisere tempraturdata.
 ### Funksjoner i  temp_visualisering.py:
 
 - plot_interactive_bokeh(df):  
-  Interaktivt linjeplot av årlig gjennomsnittstemperatur med hover-effekt og markering av varmeste og kaldeste år (Bruker Bokeh).
+    Interaktivt linjeplot av årlig gjennomsnittstemperatur med hover-effekt og markering av varmeste og kaldeste år (Bruker Bokeh).
 
 - plot_by_decade(df):  
-  Søylediagram som viser gjennomsnittlig temperatur per tiår.
+    Søylediagram som viser gjennomsnittlig temperatur per tiår.
 
-- plott_temperatur_år(df):  
-  Enkelt linjeplot for temperaturutvikling år for år (Matplotlib).
+- plot_temperatur_år(df):  
+    Enkelt linjeplot for temperaturutvikling år for år (Matplotlib).
 
-- plott_avvik(df):  
-  Visualiserer avvik fra totalgjennomsnitt som farget barplot (blå for kaldere, rød for varmere).
+- plot_avvik(df):  
+    Visualiserer avvik fra totalgjennomsnitt som farget barplot (blå for kaldere, rød for varmere).
 
 - tegn_endring_sol(filsti):  
-  En sol med stråler og tekst som viser hvor mye temperaturen har økt i datasettet.
+    En sol med stråler og tekst som viser hvor mye temperaturen har økt i datasettet.
 
+- plot_sanntids_temperatur
+    Viser temperatur for kommende dager basert på sanntidsdata fra MET.
 
 ------------------------------------------------------------------------ 
 

@@ -347,6 +347,7 @@ Denne filen inneholder funksjoner for å visualisere tempraturdata.
 
 - plot_sanntids_temperatur
     Viser temperatur for kommende dager basert på sanntidsdata fra MET.
+    Funksjonen varsler også dersom det er meldt veldig varmt (over 25°C) eller veldig kaldt (under 0°C).
 
 ------------------------------------------------------------------------ 
 

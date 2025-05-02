@@ -68,15 +68,50 @@ df_selected.to_csv("data/luftkvalitet_api.csv", index=False, encoding="utf-8")
 
 
 # Henter historisk data fra Norsk institutt for luftforskning, lagret som CSV-fil lokalt på min pc
-df_historisk = pd.read_csv("C:\\Users\\idunn\\Downloads\\eksport.csv", sep=";", skiprows=3)
+df_historisk = pd.read_csv(r"C:\Users\idunn\OneDrive - NTNU\TDT4114\luftkvalitet_20aar.csv", sep=";", skiprows=3)
 df_historisk.to_csv("data/historisk_luftkvalitet.csv", index=False, encoding="utf-8")
 
 
-# Datasettet er veldig mangelfullt, så ekskluderer radene som ikke har registrerte verdier
+# Datasettet er veldig mangelfullt, så ekskluderer radene som har for lav dekning
 df_valid = df_historisk[
-    (df_historisk["Dekning"] == 100.0) &
-    (df_historisk["Dekning.1"] == 100.0) &
-    (df_historisk["Dekning.2"] == 100.0)
+    (df_historisk["Dekning"] >= 80.0) &
+    (df_historisk["Dekning.1"] >= 80.0) &
+    (df_historisk["Dekning.2"] >= 80.0)
+].copy()
+
+
+cols = [
+    "Elgeseter NO2 µg/m³ Day",
+    "Elgeseter PM10 µg/m³ Day",
+    "Elgeseter PM2.5 µg/m³ Day",
+]
+
+# Først erstatt komma med punktum og konverter til float
+df_valid["Elgeseter NO2 µg/m³ Day"] = df_valid["Elgeseter NO2 µg/m³ Day"].str.replace(',', '.').astype(float)
+df_valid["Elgeseter PM10 µg/m³ Day"] = df_valid["Elgeseter PM10 µg/m³ Day"].str.replace(',', '.').astype(float)
+df_valid["Elgeseter PM2.5 µg/m³ Day"] = df_valid["Elgeseter PM2.5 µg/m³ Day"].str.replace(',', '.').astype(float)
+
+
+# Sett alle negative verdier i disse kolonnene til 0
+df_valid.loc[:, cols] = df_valid.loc[:, cols].clip(lower=0)
+
+# Lagrer gyldige verdier som ny CSV-fil
+df_valid.to_csv("data/gyldig_historisk_luftkvalitet.csv", index=False, encoding="utf-8")
+
+
+# Henter luftkvalitetsdata på samme måte for ett år tilbake i tid
+df_ettår = pd.read_csv(
+    r"C:\Users\idunn\Downloads\eksport.csv",
+    sep=";",
+    skiprows=3       
+)
+df_ettår.to_csv("data/luftkvalitet_2024.csv", index=False, encoding="utf-8")
+
+# Ekskluderer verdier med for lav dekning
+df_valid_1 = df_ettår[
+    (df_ettår["Dekning"]   >= 80.0) &
+    (df_ettår["Dekning.1"] >= 80.0) &
+    (df_ettår["Dekning.2"] >= 80.0)
 ].copy()
 
 
@@ -87,13 +122,13 @@ cols = [
 ]
 
 # Først erstatt komma med punktum og konverter til float
-df_valid["Elgeseter NO2 µg/m³ Hour"] = df_valid["Elgeseter NO2 µg/m³ Hour"].str.replace(',', '.').astype(float)
-df_valid["Elgeseter PM10 µg/m³ Hour"] = df_valid["Elgeseter PM10 µg/m³ Hour"].str.replace(',', '.').astype(float)
-df_valid["Elgeseter PM2.5 µg/m³ Hour"] = df_valid["Elgeseter PM2.5 µg/m³ Hour"].str.replace(',', '.').astype(float)
+df_valid_1["Elgeseter NO2 µg/m³ Hour"] = df_valid_1["Elgeseter NO2 µg/m³ Hour"].str.replace(',', '.').astype(float)
+df_valid_1["Elgeseter PM10 µg/m³ Hour"] = df_valid_1["Elgeseter PM10 µg/m³ Hour"].str.replace(',', '.').astype(float)
+df_valid_1["Elgeseter PM2.5 µg/m³ Hour"] = df_valid_1["Elgeseter PM2.5 µg/m³ Hour"].str.replace(',', '.').astype(float)
 
 
 # Sett alle negative verdier i disse kolonnene til 0
-df_valid.loc[:, cols] = df_valid.loc[:, cols].clip(lower=0)
+df_valid_1.loc[:, cols] = df_valid_1.loc[:, cols].clip(lower=0)
 
 # Lagrer gyldige verdier som ny CSV-fil
-df_valid.to_csv("data/gyldig_historisk_luftkvalitet.csv", index=False, encoding="utf-8")
+df_valid_1.to_csv("data/gyldig_luftkvalitet_2024.csv", index=False, encoding="utf-8")

@@ -1,7 +1,6 @@
 import pandas as pd
 from pandasql import sqldf
 
-
 def last_in_csv(filsti):
     return pd.read_csv(filsti)
 
@@ -12,12 +11,25 @@ def finn_gjennomsnittstemperatur(df):
     return result['snitt_temp'].iloc[0]
 
 def håndter_manglende_verdier(df, kolonne='temperatur'):
-    manglende_verdier= df[kolonne].isnull().sum()
-    if manglende_verdier > 0:
-        gjennomsnitt = finn_gjennomsnittstemperatur(df)
-        print(f"Manglende verdier={manglende_verdier}. Disser er nå fylt med gjennomsnittet:{gjennomsnitt}")
-        df[kolonne] = df[kolonne].fillna(gjennomsnitt)
+    manglende_verdi= df[df[kolonne].isnull()]
+    print(f"Manglende verdier = {len(manglende_verdi)}")
+
+    for i in manglende_verdi.index:
+        if 0 < i < len(df) - 1:
+            før = df.loc[i - 1, kolonne]
+            etter = df.loc[i + 1, kolonne]
+
+            if pd.notnull(før) and pd.notnull(etter):
+                gjennomsnitt = (før + etter) / 2
+                df.at[i, kolonne] = gjennomsnitt
+                print(f"Fylte inn gjennomsnitt: {gjennomsnitt}, (mellom {før} og {etter})")
+            else:
+                print(f"Kunne ikke fylle inn verdi")
+        else:
+            print(f"Kunne ikke fylle inn verdi")
+
     return df
+
 
 def fjern_duplikater(df):
     før = len(df)
@@ -28,6 +40,11 @@ def fjern_duplikater(df):
 
 def fjern_outliers(df, min_temp=-50, max_temp=50):
     før = len(df)
+    outliers = df[(df['temperatur'] < min_temp) | (df['temperatur'] > max_temp)]
+    # For å se hvilke verdier som er fjernet 
+    if not outliers.empty:
+        print("Fjerner outliers:")
+        print(outliers)
     df = df[(df['temperatur'] >= min_temp) & (df['temperatur'] <= max_temp)]
     etter = len(df)
     print(f"Fjernet {før - etter} outliers.")

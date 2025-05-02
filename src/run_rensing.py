@@ -18,10 +18,13 @@ def rens_og_lagre_temperaturdata():
         print(f"Fant ikke sanntidsdata for temperatur: {sanntid_csv}")
 
     #Historisk data(ekte)
-    hist_csv_normal = "data/temp_gloshaugen_historisk.csv"
-    hist_renset_normal = "data/temp_gloshaugen_historisk_renset.csv"
+    antall_år = 50
+    hist_csv_normal = f"data/temp_gloshaugen_historisk_{antall_år}år.csv"
+    hist_renset_normal = f"data/temp_gloshaugen_historisk_renset_ {antall_år}.csv"
 
-    if not os.path.exists(hist_renset_normal) and os.path.exists(hist_csv_normal):
+    if os.path.exists(hist_renset_normal):
+        print("Historisk temperaturdata er allerede renset.")
+    elif os.path.exists(hist_csv_normal):
         df = pd.read_csv(hist_csv_normal)
         df = temperatur_rens(df)
         df.to_csv(hist_renset_normal, index=False)
@@ -30,10 +33,12 @@ def rens_og_lagre_temperaturdata():
         print("Fant ikke historisk temperaturdata")
 
     #Historisk data med feil
-    hist_csv_feil = "data/temp_gloshaugen_historisk_inneholder_feil.csv"
-    hist_renset_feil = "data/temp_gloshaugen_historisk_inneholder_feil_renset.csv"
+    hist_csv_feil = f"data/temp_gloshaugen_historisk_inneholder_feil_{antall_år}år.csv"
+    hist_renset_feil = f"data/temp_gloshaugen_historisk_inneholder_feil_renset_{antall_år}år.csv"
 
-    if not os.path.exists(hist_renset_feil) and os.path.exists(hist_csv_feil):
+    if os.path.exists(hist_renset_feil):
+        print("Historisk temperaturdata med feil er allerede renset.")
+    elif os.path.exists(hist_csv_feil):
         df = pd.read_csv(hist_csv_feil)
         df = temperatur_rens(df)
         df.to_csv(hist_renset_feil, index=False)
@@ -41,17 +46,33 @@ def rens_og_lagre_temperaturdata():
     else:
         print("Fant ikke historisk temperaturdata (med feil)")
 
-# Kaller CSV om klimagassutslipp og renser den
-def rens_og_lagre_klimagassdata():
-    klimagass_renset_path = "data/klimagassutslipp_renset.csv"
+# Kaller CSV om klimagassutslipp i norge og renser den
+def rens_og_lagre_klimagassdata_norge():
+    klimagass_renset_path = "data/klimagassutslipp_norge_renset.csv"
     if not os.path.exists(klimagass_renset_path):
         df_klima = pd.read_csv("data/klimagassutslipp.csv", sep=";", encoding="utf-8", skiprows=2)
         df_klima = klimagass_rens(df_klima)
-        df_klima.to_csv("data/klimagassutslipp_renset.csv", index=False)
-        print("Renset data lagret i data/klimagassutslipp_renset.csv")
+        df_klima.to_csv("data/klimagassutslipp_norge_renset.csv", index=False)
+        print("Renset data lagret i data/klimagassutslipp_norge_renset.csv")
     else:
         print("Klimagassdata er allerede renset.")
 
+# Kaller CSV om verdens klimagassutslipp og renser den
+def rens_og_lagre_klimagass_verden():
+    os.makedirs("data", exist_ok=True)
+    if not os.path.exists("data/klimagassutslipp_verden.csv"):
+        print("Fant ikke filen: data/klimagassutslipp_verden.csv")
+        return
+    df = pd.read_csv("data/klimagassutslipp_verden.csv")
+    df.rename(columns={
+        "Year": "År",
+        "Annual greenhouse gas emissions in CO₂ equivalents": "Utslipp i CO2 ekvivalenter"
+    }, inplace=True)
+    df_renset = df[["År", "Utslipp i CO2 ekvivalenter"]]
+    df_renset.to_csv("data/klimagassutslipp_verden_renset.csv", index=False)
+    print("Renset data lagret i data/klimagassutslipp_verden_renset.csv")
+
 if __name__ == "__main__":
     rens_og_lagre_temperaturdata()
-    rens_og_lagre_klimagassdata()
+    rens_og_lagre_klimagassdata_norge()
+    rens_og_lagre_klimagass_verden()

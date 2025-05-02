@@ -238,6 +238,24 @@ def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
     df = pd.DataFrame(temperaturer, columns=["tid", "temperatur"])
     df["tid"] = pd.to_datetime(df["tid"])
 
+    
+    varm_grense = 25
+    kald_grense = 0
+    varme_dager = df[df["temperatur"] >= varm_grense]
+    kalde_dager = df[df["temperatur"] <= kald_grense]
+
+    if not varme_dager.empty:
+        maks_temp = varme_dager["temperatur"].max()
+        tid = varme_dager.loc[varme_dager["temperatur"].idxmax(), "tid"]
+        print(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}!")
+        print("Husk å drikke mye vann!")
+
+    if not kalde_dager.empty:
+        min_temp = kalde_dager["temperatur"].min()
+        tid = kalde_dager.loc[kalde_dager["temperatur"].idxmin(), "tid"]
+        print(f"Varsel: Det er er meldt {min_temp:.1f}°C den {tid.date()}!")
+        print ("Ta på mye klær!")
+
     plt.figure(figsize=(10, 5))
     plt.plot(df["tid"], df["temperatur"], marker="o")
     plt.title("Sanntidstemperatur (Værvarsel for kommende dager)")

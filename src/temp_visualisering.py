@@ -4,8 +4,8 @@ import pandas as pd
 from bokeh.plotting import figure, output_notebook, show
 from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus, Label
 from datetime import datetime
-from statistikk import analyser_fil
-
+from statistikk import beregn_avvik, analyser_temperatur, beregn_endring_totalt
+import numpy as np
 
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
@@ -138,7 +138,58 @@ def plot_by_decade(tiårs_df):
     plt.show()
 
 
+def plott_temperatur_år(df):
+    plt.figure(figsize=(10, 5))
+    plt.plot(df["år"], df["årsgjennomsnitt"], marker="o")
+    plt.title("Årlig gjennomsnittstemperatur")
+    plt.xlabel("År")
+    plt.ylabel("Temperatur (°C)")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
 
 
+def plott_avvik(df):
+    df_avvik = beregn_avvik(df, verdikolonne="årsgjennomsnitt")
+    
+    plt.figure(figsize=(12, 5))
+    sns.barplot(data=df_avvik, x="år", y="avvik", hue="år", palette="coolwarm", dodge=False, legend=False)
+
+    plt.axhline(0, color="black", linewidth=1)
+    plt.title("Årlig temperaturavvik fra totalgjennomsnitt")
+    plt.xlabel("År")
+    plt.ylabel("Avvik (°C)")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+
+def tegn_endring_sol(filsti):
+
+    resultat = analyser_temperatur(filsti)
+    df_temp = resultat["temperatur"]["årlig_snitt"]
+    endring = beregn_endring_totalt(df_temp)
+
+    fig, ax = plt.subplots(figsize=(5, 5))
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    # Solsirkel
+    sol = plt.Circle((0.5, 0.5), 0.3, color="yellow", ec="orange", lw=4)
+    ax.add_patch(sol)
+
+    # Tekst i sol
+    tekst = f"+{endring['endring']:.2f}°C)"
+    ax.text(0.5, 0.5, tekst, ha="center", va="center", fontsize=14, fontweight="bold", color="black")
+
+    n_stråler = 12
+    for i in range(n_stråler):
+        vinkel = 2 * np.pi * i / n_stråler
+        x0, y0 = 0.5 + 0.31 * np.cos(vinkel), 0.5 + 0.31 * np.sin(vinkel)
+        x1, y1 = 0.5 + 0.42 * np.cos(vinkel), 0.5 + 0.42 * np.sin(vinkel)
+        ax.plot([x0, x1], [y0, y1], color="orange", lw=2)
+
+    plt.title(f"Temperaturøkning fra {endring['startår']} til {endring['sluttår']}", pad=20)
+    plt.show()
 
 

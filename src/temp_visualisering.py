@@ -5,6 +5,7 @@ from bokeh.plotting import figure, output_notebook, show
 from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus, Label
 from datetime import datetime
 from statistikk import analyser_fil
+import calendar
 
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
@@ -144,7 +145,32 @@ def plot_by_decade(tiårs_df):
     plt.show()
 
 
-
-
-
-
+# Heatmap av temperaturer per måned og år
+def plot_temp_heatmap(df, årskolonne='år', månedskolonne='måned', verdikolonne='temperatur'):
+    # Lager pivottabell der radene er måneder og kolonnene er år
+    pivot = df.pivot(index=månedskolonne, columns=årskolonne, values=verdikolonne)
+    # Sørger for at radene ligger i rekkefølge 1–12
+    pivot = pivot.reindex(range(1, 13))
+    
+    # Plotter
+    plt.figure(figsize=(14, 4))
+    sns.heatmap(
+        pivot,
+        cmap='coolwarm',        # rød-blå fargekart
+        cbar_kws={'label': verdikolonne},
+        linewidths=0.5,         # streker mellom rutene
+        annot=False,             # vis tallene i rutene
+        #fmt=".1f",              # én desimal
+        linecolor='white' 
+    )
+    # Label aksene med månednavn
+    plt.title("Gjennomsnittstemperatur per måned og år")
+    plt.xlabel("År")
+    plt.ylabel("Måned")
+    plt.yticks(
+        ticks=range(0,12),
+        labels=['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'],
+        rotation=0
+    )
+    plt.tight_layout()
+    plt.show()

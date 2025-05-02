@@ -57,7 +57,7 @@ I notatboken er det skrevet refleksjoner og tolkninger i markdown. Det brukes fl
 Viser årlig gjennomsnittstemperatur. Brukeren kan zoome og navigere i grafen, og verdier vises med hover. Varmeste og kaldeste år er også markert.
 **Søylediagram per tiår:**
 Viser gjennomsnittstemperatur for hvert tiår og gjør den langsiktige utviklingen tydeligere. Her brukes Matplotlib og Seaborn.
-**Symbolsk sol-graf:**
+**Sol-graf:**
 En figur som viser total temperaturøkning som en sol. Tallet i midten viser endringen i grader. 
 
 ### Klimagassutslipp

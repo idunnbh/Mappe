@@ -5,6 +5,7 @@ from bokeh.plotting import figure, output_notebook, show
 from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus, Label
 from datetime import datetime
 from statistikk import beregn_avvik, analyser_temperatur, beregn_endring_totalt
+from datainnsamling_temperatur import hent_temperaturer, hent_sanntidsdata
 import numpy as np
 
 import sys, os
@@ -138,7 +139,7 @@ def plot_by_decade(tiårs_df):
     plt.show()
 
 
-def plott_temperatur_år(df):
+def plot_temperatur_år(df):
     plt.figure(figsize=(10, 5))
     plt.plot(df["år"], df["gjennomsnitt"], marker="o")
     plt.title("Årlig gjennomsnittstemperatur")
@@ -149,7 +150,7 @@ def plott_temperatur_år(df):
     plt.show()
 
 
-def plott_avvik(df):
+def plot_avvik(df):
     df_avvik = beregn_avvik(df, verdikolonne="gjennomsnitt")
     
     plt.figure(figsize=(12, 5))
@@ -193,3 +194,27 @@ def tegn_endring_sol(filsti):
     plt.show()
 
 
+
+
+def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
+    data = hent_sanntidsdata(lat, lon)
+    if not data:
+        print("Klarte ikke hente sanntidsdata.")
+        return
+    temperaturer = hent_temperaturer(data)
+    if not temperaturer:
+        print("Ingen temperaturer funnet.")
+        return
+
+    df = pd.DataFrame(temperaturer, columns=["tid", "temperatur"])
+    df["tid"] = pd.to_datetime(df["tid"])
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(df["tid"], df["temperatur"], marker="o")
+    plt.title("Sanntidstemperatur (Værvarsel for kommende dager)")
+    plt.xlabel("Tid")
+    plt.ylabel("Temperatur (°C)")
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()

@@ -247,3 +247,25 @@ def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+
+    # Heatmap av månedlig temperatur over flere år
+from temp_visualisering import plot_temp_heatmap
+
+# Leser inn og aggregér til månedsgjennomsnitt
+stat_dict, _, _ = analyser_fil(
+    filsti="../data/temp_gloshaugen_historisk_renset_ 50.csv",
+    sep=",",
+    datokolonne="tidspunkt",
+    groupby="måned"
+)
+måned_df = stat_dict["temperatur"] 
+# Fjerner 2025 siden det er ufullstendig
+måned_df = måned_df[måned_df["år"] < 2025]
+
+plot_temp_heatmap(
+    måned_df,
+    årskolonne="år",
+    månedskolonne="måned",
+    verdikolonne='gjennomsnitt'
+)

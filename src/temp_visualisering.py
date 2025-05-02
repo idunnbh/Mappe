@@ -4,6 +4,8 @@ import pandas as pd
 from bokeh.plotting import figure, output_notebook, show
 from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus, Label
 from datetime import datetime
+from statistikk import analyser_fil
+import calendar
 from statistikk import beregn_avvik, analyser_temperatur, beregn_endring_totalt
 from datainnsamling_temperatur import hent_temperaturer, hent_sanntidsdata
 import numpy as np
@@ -139,6 +141,33 @@ def plot_by_decade(tiårs_df):
     plt.show()
 
 
+# Heatmap av temperaturer per måned og år
+def plot_temp_heatmap(df, årskolonne='år', månedskolonne='måned', verdikolonne='temperatur'):
+    # Lager pivottabell der radene er måneder og kolonnene er år
+    pivot = df.pivot(index=månedskolonne, columns=årskolonne, values=verdikolonne)
+    # Sørger for at radene ligger i rekkefølge 1–12
+    pivot = pivot.reindex(range(1, 13))
+    
+    # Plotter
+    plt.figure(figsize=(14, 4))
+    sns.heatmap(
+        pivot,
+        cmap='coolwarm',        # rød-blå fargekart
+        cbar_kws={'label': verdikolonne},
+        linewidths=0.5,         # streker mellom rutene
+        annot=False,             # vis tallene i rutene
+        #fmt=".1f",              # én desimal
+        linecolor='white' 
+    )
+    # Label aksene med månednavn
+    plt.title("Gjennomsnittstemperatur per måned og år")
+    plt.xlabel("År")
+    plt.ylabel("Måned")
+    plt.yticks(
+        ticks=range(0,12),
+        labels=['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'],
+        rotation=0
+    )
 def plot_temperatur_år(df):
     plt.figure(figsize=(10, 5))
     plt.plot(df["år"], df["gjennomsnitt"], marker="o")
@@ -209,6 +238,24 @@ def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
     df = pd.DataFrame(temperaturer, columns=["tid", "temperatur"])
     df["tid"] = pd.to_datetime(df["tid"])
 
+    
+    varm_grense = 25
+    kald_grense = 0
+    varme_dager = df[df["temperatur"] >= varm_grense]
+    kalde_dager = df[df["temperatur"] <= kald_grense]
+
+    if not varme_dager.empty:
+        maks_temp = varme_dager["temperatur"].max()
+        tid = varme_dager.loc[varme_dager["temperatur"].idxmax(), "tid"]
+        print(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}!")
+        print("Husk å drikke mye vann!")
+
+    if not kalde_dager.empty:
+        min_temp = kalde_dager["temperatur"].min()
+        tid = kalde_dager.loc[kalde_dager["temperatur"].idxmin(), "tid"]
+        print(f"Varsel: Det er er meldt {min_temp:.1f}°C den {tid.date()}!")
+        print ("Ta på mye klær!")
+
     plt.figure(figsize=(10, 5))
     plt.plot(df["tid"], df["temperatur"], marker="o")
     plt.title("Sanntidstemperatur (Værvarsel for kommende dager)")
@@ -218,3 +265,25 @@ def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+
+    # Heatmap av månedlig temperatur over flere år
+from temp_visualisering import plot_temp_heatmap
+
+# Leser inn og aggregér til månedsgjennomsnitt
+stat_dict, _, _ = analyser_fil(
+    filsti="../data/temp_gloshaugen_historisk_renset_ 50.csv",
+    sep=",",
+    datokolonne="tidspunkt",
+    groupby="måned"
+)
+måned_df = stat_dict["temperatur"] 
+# Fjerner 2025 siden det er ufullstendig
+måned_df = måned_df[måned_df["år"] < 2025]
+
+plot_temp_heatmap(
+    måned_df,
+    årskolonne="år",
+    månedskolonne="måned",
+    verdikolonne='gjennomsnitt'
+)

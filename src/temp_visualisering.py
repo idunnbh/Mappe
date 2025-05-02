@@ -140,7 +140,7 @@ def plot_by_decade(tiårs_df):
 
 def plott_temperatur_år(df):
     plt.figure(figsize=(10, 5))
-    plt.plot(df["år"], df["årsgjennomsnitt"], marker="o")
+    plt.plot(df["år"], df["gjennomsnitt"], marker="o")
     plt.title("Årlig gjennomsnittstemperatur")
     plt.xlabel("År")
     plt.ylabel("Temperatur (°C)")
@@ -150,7 +150,7 @@ def plott_temperatur_år(df):
 
 
 def plott_avvik(df):
-    df_avvik = beregn_avvik(df, verdikolonne="årsgjennomsnitt")
+    df_avvik = beregn_avvik(df, verdikolonne="gjennomsnitt")
     
     plt.figure(figsize=(12, 5))
     sns.barplot(data=df_avvik, x="år", y="avvik", hue="år", palette="coolwarm", dodge=False, legend=False)

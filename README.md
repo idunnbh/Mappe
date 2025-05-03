@@ -32,14 +32,14 @@ Ved å kombinere disse datasettene håper vi å finne trender som kan gi større
 ## Filstruktur
 Prosjektet er strukturert slik:
 
-├── data/           # Rådata og rensede datafiler
-├── docs/           # Dokumentasjon (oppgaver og ki-deklarasjon)
-├── notebooks/      # Jupyter Notebooks (analyser, visualisering)
-├── src/            # Kildekode (datainnsamling, rensing, analyse)
-├── tests/          # Enhetstester
-├── .gitignore      # Filer og mapper som ignoreres av Git
-├── README.md       # Prosjektbeskrivelse (Denne filen)
-├── requirements.txt # Liste over nødvendige Python-pakke
+- `data/`: Rådata og rensede datafiler  
+- `docs/`: Dokumentasjon (oppgaver og ki-deklarasjon)  
+- `notebooks/`: Jupyter Notebooks (analyser, visualisering, data-app)  
+- `src/`: Kildekode (datainnsamling, rensing, analyse)  
+- `tests/`: Enhetstester  
+- `.gitignore`: Filer og mapper som ignoreres av Git  
+- `README.md`: Prosjektbeskrivelse (denne filen)  
+- `requirements.txt`: Liste over nødvendige Python-pakker 
 
 ## Kilder
 

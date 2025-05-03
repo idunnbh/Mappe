@@ -3,7 +3,7 @@ Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet in
 
 ## Innholdsfortegnelse
 - [datainnsamling_tempratur.py](#datainnsamling_tempraturpy)
-- [datainnsamling_klimagassutslipp.py og datainnsamling_klimagassutslipp_verden.py](#datainnsamling_klimagassutslipppy-og-datainnsamling_klimagassutslipp_verdenpy)
+- [databehandling_klimagassutslipp.py og datainnsamling_klimagassutslipp_verden.py](#datainnsamling_klimagassutslipppy-og-datainnsamling_klimagassutslipp_verdenpy)
 - [datainnsamling_luftkvalitet.py](#datainnsamling_luftkvalitetpy)
 - [rensing.py](#rensingpy)
 - [run_rensing.py](#run_rensingpy)
@@ -11,7 +11,10 @@ Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet in
 - [statistikk.py](#statistikkpy)
 - [kilmagass_visualisering.py](#kilmagass_visualiseringpy)
 - [temp_visualisering.py](#temp_visualiseringpy)
-- []
+- [luftkvalitet_visualisering.py](#luftkvalitet_visualiseringpy)
+- [prediksjon_visualisering.py](#prediksjon_visualiseringpy)
+- [app_funksjoner.py](#app_funksjonerpy)
+- [widgets_app.py](#widgets_apppy)
 - [Kilder](#kilder)
 - [Miljøvariabler og API-nøkler](#miljøvariabler-og-api-nøkler)
 
@@ -351,6 +354,20 @@ Denne filen inneholder funksjoner for å visualisere tempraturdata.
     Funksjonen varsler også dersom det er meldt veldig varmt (over 25°C) eller veldig kaldt (under 0°C).
 
 ------------------------------------------------------------------------ 
+
+## luftkvalitet_visualisering.py
+[Åpne fil->](luftkvalitet_visualisering.py)
+Denne filen inneholder funksjoner for å visualisere luftkvalitetsdata fra Elgeseter, basert på stoffene NO₂, PM10 og PM2.5.
+
+### Funksjoner i luftkvalitet_visualisering.py:
+
+- plott_årssnitt(df, stoffnavn):
+    Lager et linjeplot som viser gjennomsnittlig luftkvalitet per år for et valgt stoff.
+
+- plott_månedsnitt(df, stoffnavn):
+    Lager et søylediagram som viser gjennomsnittlig luftkvalitet per måned for valgt stoff.
+
+------------------------------------------------------------------------ 
 ## Prediksjon_visualisering.py
 [Åpne fil->](prediksjon_visualisering.py)
 Denne filen inneholder funksjoner for å koble sammen temperaturdata i forhold til både globale CO₂-utslipp og lokal luftforurensning.
@@ -375,6 +392,60 @@ Denne filen inneholder funksjoner for å koble sammen temperaturdata i forhold t
 - plot_regresjon_luftkvalitet_vs_temp(df_merged, stoff="no2") 
   Plotter et regresjonsplott som viser sammenhengen mellom årsgjennomsnittstemperatur og luftforurensning for valgt stoff.
 
+------------------------------------------------------------------------ 
+## app_funksjoner.py
+[Åpne fil →](app_funksjoner.py)  
+Denne filen inneholder logikken for den interaktive data-appen. Den kobler widgets fra `widgets_app.py` med funksjoner fra ulike visualiseringsmoduler, og styrer visningen basert på brukerens valg.
+
+### Funksjoner i app_funksjoner.py:
+
+- vis_valgt_data(endring) 
+    Viser riktig meny og valg basert på valgt analysetype (temperatur, utslipp, luftkvalitet eller prediktiv).
+
+- vis_klimagass_plot(endring)  
+    Viser grafer for klimagassutslipp basert på valgt sted og type plott (år, tiår, kilde, osv.).
+
+- vis_temperatur_plot(endring) 
+    Viser temperaturdata som årlig trend, tiårsgjennomsnitt, avvik eller visuell fremstilling (SOL).
+
+- vis_luft_plot(endring) 
+    Viser luftkvalitetsdata for NO₂, PM10 eller PM2.5 som års- eller månedsnivå.
+
+- vis_prediktiv_plot(endring)  
+    Viser regresjonsplott som kobler temperatur med enten CO₂-utslipp eller luftkvalitet.
+
+- oppdater_plottvalg(endring)  
+    Oppdaterer hvilket plott brukeren kan velge basert på valgt sted (Norge, Globalt, Sammenlign).
+
+- tilbakestill_knapp_callback(_) 
+    Nullstiller visningen slik at brukeren kan gjøre nye valg.
+
+- kjør_app()  
+  Starter appen og viser det interaktive grensesnittet.
+
+------------------------------------------------------------------------ 
+## widgets_app.py
+[Åpne fil →](widgets_app.py)  
+Denne filen inneholder alle widgets som brukes i data-appen. Den inneholder også innlasting og behandling av data. Den gjør data og widgets  tilgjengelig for `app_funksjoner.py`.
+
+### Widgets i widgets_app.py:
+
+  - `valg`: valgmeny for analysetype (Temperatur, Klimagass, Luftkvalitet, Prediktiv)
+  - `sted_widget`: nedtrekksvalg for Norge, Globalt eller Sammenlign
+  - `datatype_widget`: valg mellom historiske eller sanntidsdata
+  - `år_widget`: år-slider for valg av år
+  - `temp_plott_valg`: valg av temperaturvisualisering
+  - `sanntid_plott_valg`: sanntids temperaturvalg
+  - `lufttype_plott_valg`: valg av luftkomponent (NO₂, PM10, PM2.5)
+  - `luft_plott_valg`: valg mellom års- eller månedsnivå
+  - `prediktiv_plott_valg`: valg for prediktiv visualisering
+  - `klima_plott_valg`: brukes i klimagassvisning
+  - `ny_graf_knapp`: knapp for å generere ny graf
+  - `output`: område for å vise grafene
+
+- I tilegg har den funksjonen `setup_widgets()` som viser hovedwidgetene i notatboken.
+
+Alle elementene eksporteres med __all__, og brukes videre i app_funksjoner.py.
 
 ------------------------------------------------------------------------ 
 

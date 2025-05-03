@@ -24,14 +24,3 @@ def plott_månedsnitt(df, stoffnavn):
     plt.tight_layout()
     plt.show()
 
-def plott_endring_over_tid(df, stoff):
-    df["endring"] = df["årsgjennomsnitt"].diff()
-    plt.figure(figsize=(8, 4))
-    plt.plot(df["år"], df["årsgjennomsnitt"], label="Snitt")
-    plt.plot(df["år"], df["endring"], label="Årlig endring", linestyle="--")
-    plt.title(f"Endringer i årssnitt for {stoff}")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-

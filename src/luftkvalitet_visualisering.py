@@ -2,27 +2,36 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
-from datainnsamling_luftkvalitet import df_valid
  
-df_hist = df_valid.copy()
+import matplotlib.pyplot as plt
 
-# Konverterer til Pandas datetime-objekter og sorterer kronologisk
-df_hist['Tid'] = pd.to_datetime(
-    df_hist['Tid'],
-    dayfirst=True,                # datoformatet er DD.MM.YYYY
-    format='%d.%m.%Y %H:%M'
-)
-df_hist = df_hist.sort_values("Tid")
+def plott_årssnitt(df, stoffnavn):
+    plt.figure(figsize=(8, 5))
+    plt.plot(df['år'], df['årssnitt'], marker='o')
+    plt.title(f"Årsgjennomsnitt for {stoffnavn}")
+    plt.xlabel("År")
+    plt.ylabel("µg/m³")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
 
-# Plotter linjediagram for historisk luftkvalitet
-plt.figure(figsize=(12, 6))
-sns.lineplot(data=df_hist, x="Tid", y="Elgeseter PM10 µg/m³ Day", label="PM10")
-sns.lineplot(data=df_hist, x="Tid", y="Elgeseter PM2.5 µg/m³ Day", label="PM2.5")
-sns.lineplot(data=df_hist, x="Tid", y="Elgeseter NO2 µg/m³ Day", label="NO₂")
-plt.xlabel("Tid")
-plt.ylabel("Konsentrasjon (µg/m³)")
-plt.title("Luftkvalitet siste 20 år")
-plt.xticks(rotation=45)
-plt.show()
+def plott_månedsnitt(df, stoffnavn):
+    plt.figure(figsize=(8, 5))
+    plt.bar(df['måned'], df['månedsnitt'])
+    plt.title(f"Månedsnitt for {stoffnavn}")
+    plt.xlabel("Måned")
+    plt.ylabel("µg/m³")
+    plt.tight_layout()
+    plt.show()
 
+def plott_endring_over_tid(df, stoff):
+    df["endring"] = df["årsgjennomsnitt"].diff()
+    plt.figure(figsize=(8, 4))
+    plt.plot(df["år"], df["årsgjennomsnitt"], label="Snitt")
+    plt.plot(df["år"], df["endring"], label="Årlig endring", linestyle="--")
+    plt.title(f"Endringer i årssnitt for {stoff}")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
 

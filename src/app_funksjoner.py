@@ -8,16 +8,17 @@ sys.path.append(os.path.abspath("../src"))
 
 from widgets_app import (
     valg, sted_widget, datatype_widget, år_widget, temp_plott_valg,
-    sanntid_plott_valg, lufttype_plott_valg, prediktiv_plott_valg,
+    sanntid_plott_valg, lufttype_plott_valg, luft_plott_valg, prediktiv_plott_valg,
     klima_plott_valg, ny_graf_knapp, output,
     df_norge, df_norge_alt, df_verden,
-    årlig_temp_df, temp_fil, klima_fil, luft_fil
+    årlig_temp_df, temp_fil, klima_fil, luft_fil, luftdata
 )
 
 
 from klimagass_visualisering import *
 from  temp_visualisering import *
 from prediksjon_visualisering import *
+from luftkvalitet_visualisering import *
 from statistikk import tiår_snitt
 
 
@@ -41,7 +42,11 @@ def vis_valgt_data(endring):
         with output:
             display(widgets.HTML("<h4>Analyse av luftkvalitet på Elgseter</h4>"))  
             display(datatype_widget)
-            display(lufttype_plott_valg)
+            if datatype_widget.value == "Historiske data":
+                display(lufttype_plott_valg)
+                display(luft_plott_valg)
+            elif datatype_widget.value == "Sanntidsdata":
+                display(lufttype_plott_valg)
     elif valg.value == "Prediktiv visualisering":
         with output:
             display(widgets.HTML("<h4>Velg analyse for prediktiv visualisering</h4>"))
@@ -126,15 +131,30 @@ def vis_temperatur_plot(endring):
 
         display(ny_graf_knapp)
 
-def vis_luft_plot():
+        
+def vis_luft_plot(endring=None):
     output.clear_output(wait=True)
     with output:
+    
+        stoff_mapping = {
+            "NO₂": "elgeseter_no2_ugm3_day",
+            "PM10": "elgeseter_pm10_ugm3_day",
+            "PM2.5": "elgeseter_pm2.5_ugm3_day"
+        }
+        stoff_valg = lufttype_plott_valg.value
+
+        stoff = stoff_mapping[stoff_valg]
         if datatype_widget.value == "Historiske data":
-            print(f"[Plott historisk luftkvalitet for {lufttype_plott_valg.value}]")
+            if luft_plott_valg.value == "Årsgjennomsnitt":
+                plott_årssnitt(luftdata[stoff]["årlig"], stoff)
+            elif luft_plott_valg.value == "Månedsnitt":
+                plott_månedsnitt(luftdata[stoff]["månedlig"], stoff)
+
         elif datatype_widget.value == "Sanntidsdata":
-            print(f"[Plott sanntids luftkvalitet for {lufttype_plott_valg.value}]")
+            print(f"[Plott sanntids luftkvalitet for {stoff}]")
 
         display(ny_graf_knapp)
+
 
 def vis_prediktiv_plot(endring):
     output.clear_output(wait=True)
@@ -167,6 +187,7 @@ datatype_widget.observe(vis_valgt_data, names='value')
 temp_plott_valg.observe(vis_temperatur_plot, names='value')
 sanntid_plott_valg.observe(vis_temperatur_plot, names='value')
 lufttype_plott_valg.observe(vis_luft_plot, names='value')
+luft_plott_valg.observe(vis_luft_plot, names='value')
 prediktiv_plott_valg.observe(vis_prediktiv_plot, names='value')
 ny_graf_knapp.on_click(tilbakestill_knapp_callback)
 

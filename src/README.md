@@ -11,6 +11,7 @@ Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet in
 - [statistikk.py](#statistikkpy)
 - [kilmagass_visualisering.py](#kilmagass_visualiseringpy)
 - [temp_visualisering.py](#temp_visualiseringpy)
+- []
 - [Kilder](#kilder)
 - [Miljøvariabler og API-nøkler](#miljøvariabler-og-api-nøkler)
 
@@ -348,6 +349,32 @@ Denne filen inneholder funksjoner for å visualisere tempraturdata.
 - plot_sanntids_temperatur
     Viser temperatur for kommende dager basert på sanntidsdata fra MET.
     Funksjonen varsler også dersom det er meldt veldig varmt (over 25°C) eller veldig kaldt (under 0°C).
+
+------------------------------------------------------------------------ 
+## Prediksjon_visualisering.py
+[Åpne fil->](prediksjon_visualisering.py)
+Denne filen inneholder funksjoner for å koble sammen temperaturdata i forhold til både globale CO₂-utslipp og lokal luftforurensning.
+
+### Funksjoner i prediksjon_visualisering.py:
+
+- last_og_koble_data(temp_fil, klima_fil)  
+  Leser og kobler sammen temperaturdata og globale CO₂-utslippsdata basert på år.  
+
+- plot_temp_vs_klima(df_merged) 
+  Plotter utviklingen i både temperatur og CO₂-utslipp over tid som et linjediagram (Matplotlib).
+
+- scatter_temp_vs_utslipp(df, x_col="gjennomsnitt", y_col="årsgjennomsnitt") 
+  Lager et spredningsplott mellom temperatur og CO₂-utslipp for å visualisere sammenhengen.
+
+- plot_regresjon_temp_vs_utslipp(df, x_col="gjennomsnitt", y_col="årsgjennomsnitt")  
+  Viser et regresjonsplott med trendlinje og 95 % konfidensintervall for forholdet mellom temperatur og CO₂-utslipp.
+
+- last_og_koble_temp_luft(temp_fil, luft_fil, stoffnavn)  
+  Leser inn og kobler sammen temperaturdata med luftkvalitetsmålinger for et stoff  
+
+- plot_regresjon_luftkvalitet_vs_temp(df_merged, stoff="no2") 
+  Plotter et regresjonsplott som viser sammenhengen mellom årsgjennomsnittstemperatur og luftforurensning for valgt stoff.
+
 
 ------------------------------------------------------------------------ 
 

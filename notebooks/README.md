@@ -1,6 +1,13 @@
 # notebooks -- Beskrivelse av filer i 'notebooks/'
 Denne mappen inneholder notebooks som brukes til analyse, prediktiv modellering og visualisering av temperatur-, klimagass- og luftkvalitetsdata.
 
+## Innholdsfortegnelse
+
+- [dataanalyse.ipynb](#dataanalyseipynb) – Analyse av temperatur, klimagassutslipp og luftkvalitet  
+- [prediktiv_analyse.ipynb](#prediktiv_analyseipynb) – Lineær regresjon og fremtidsprediksjoner  
+- [visualisering.ipynb](#visualiseringipynb) – Grafisk fremstilling med Matplotlib, Seaborn og Bokeh
+- [data-app](#data-app) – 'App' med widgets for utforsking av miljødata
+
 
 ## dataanalyse.ipynb
 I notebooken vises det hvordan funksjonene fra statistikk.py brukes til å analysere og strukturere de ulike datasettene:
@@ -19,8 +26,9 @@ Til slutt analyseres luftkvalitetsmålinger for å finne utviklingen av stoffene
 Denne notebooken tar for seg en predektiv analyse med lineær regresjon.
 
 ### Datagrunnlag
-- **Temperaturdata:** Data er hentet fra data/temp_gloshaugen_historisk_renset_ 50.csv
-- **Klimagassdata:** Data er hentet fra data/klimagassutslipp_verden_renset.csv
+- Temperaturdata (`temp_gloshaugen_historisk_renset_ 50.csv`)
+- Klimagassutslipp (`klimagassutslipp_verden_renset.csv`)
+- Luftkvalitet (`gyldig_historisk_luftkvalitet.csv`)
 
 ### Innhold - Hva gjør notebooken?
 - Leser inn og slår sammen temperaturdata og klimagassutslippdata

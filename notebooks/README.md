@@ -3,10 +3,17 @@ Denne mappen inneholder notebooks som brukes til analyse, prediktiv modellering 
 
 ## Innholdsfortegnelse
 
+- [data-app](#data-app) – 'App' med widgets for utforsking av miljødata
 - [dataanalyse.ipynb](#dataanalyseipynb) – Analyse av temperatur, klimagassutslipp og luftkvalitet  
 - [prediktiv_analyse.ipynb](#prediktiv_analyseipynb) – Lineær regresjon og fremtidsprediksjoner  
 - [visualisering.ipynb](#visualiseringipynb) – Grafisk fremstilling med Matplotlib, Seaborn og Bokeh
-- [data-app](#data-app) – 'App' med widgets for utforsking av miljødata
+
+## data-app.ipynb
+
+data-app.ipynb er en interaktiv Jupyter-notatbok som lar brukeren velge hvilke visualiseringer som skal vises. Den kombinerer klimagassutslipp, temperaturmålinger fra Gløshaugen og luftkvalitet fra Elgeseter.
+Appen gir også mulighet for å vise prediktive analyser som illustrerer mulige sammenhenger mellom temperatur og miljøpåvirkning.
+
+Notatboken bruker funksjoner fra app_funksjoner.py, og og bruker widgets og data som er definert i widgets_app.py
 
 
 ## dataanalyse.ipynb

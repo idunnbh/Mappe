@@ -8,8 +8,7 @@ from dotenv import load_dotenv
 load_dotenv("../api.env")
 
 import os, sys
-sys.path.append(os.path.abspath("../src")
-                )
+sys.path.append(os.path.abspath("../src"))
 
 # Henter data
 statistikk_norge, df_total_norge, df_norge_alt = analyser_fil("../data/klimagassutslipp_norge_renset.csv", datokolonne="år", groupby="år")
@@ -28,6 +27,12 @@ luft_fil = "../data/gyldig_historisk_luftkvalitet.csv"
 
 årlig_temp_df, tiårs_temp_df = load_and_compute(temp_fil)
 
+
+from statistikk import analyser_luftkvalitet, legg_til_tid
+_, _, df_luft = analyser_fil(luft_fil, datokolonne="tid", groupby="år")
+df_luft = legg_til_tid(df_luft)
+målinger = [kol for kol in df_luft.columns if "ugm3" in kol]
+luftdata = analyser_luftkvalitet(df_luft, målinger)
 
 # Widgets
 valg = widgets.ToggleButtons(
@@ -57,10 +62,19 @@ temp_plott_valg = widgets.Dropdown(
 
 sanntid_plott_valg = widgets.Dropdown(
     options=["Trykk her for å velge", "Temperatur neste dager"],
-    value="Trykk her for å velge", description="Plott:")
+    value="Trykk her for å velge",
+      description="Plott:")
 
 lufttype_plott_valg = widgets.Dropdown(
-    options=["NO₂", "PM10", "PM2.5"], value="NO₂", description="Komponent:")
+    options=["NO₂", "PM10", "PM2.5"],
+    value="NO₂",
+    description="Komponent:")
+
+luft_plott_valg = widgets.Dropdown(
+    options=["Årsgjennomsnitt", "Månedsnitt"],
+    value= "Årsgjennomsnitt",
+    description="Periode:"
+)
 
 prediktiv_plott_valg = widgets.Dropdown(
     options=[
@@ -86,5 +100,5 @@ __all__ = [
     "sanntid_plott_valg", "lufttype_plott_valg", "prediktiv_plott_valg", "klima_plott_valg",
     "ny_graf_knapp", "output", "setup_widgets",
     "df_norge", "df_norge_alt", "df_verden", "årlig_temp_df", "tiårs_temp_df",
-    "temp_fil", "klima_fil", "luft_fil"
+    "temp_fil", "klima_fil", "luft_fil", "luftdata"
 ]

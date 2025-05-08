@@ -1,7 +1,9 @@
 import pandas as pd
 from datetime import date
 import os
-from rensing import temperatur_rens, klimagass_rens
+from rensing import temperatur_rens, klimagass_rens, rense_luftkvalitet
+from datainnsamling_temperatur import main as hent_temperaturdata_main
+
 
 def rens_og_lagre_temperaturdata():
     os.makedirs("data", exist_ok=True)
@@ -72,7 +74,40 @@ def rens_og_lagre_klimagass_verden():
     df_renset.to_csv("data/klimagassutslipp_verden_renset.csv", index=False)
     print("Renset data lagret i data/klimagassutslipp_verden_renset.csv")
 
+def rens_og_lagre_luftkvalitet():
+    os.makedirs("data", exist_ok=True)
+    historisk_csv = "data/historisk_luftkvalitet.csv"
+    renset_csv = "data/gyldig_historisk_luftkvalitet.csv"
+
+    if os.path.exists(renset_csv):
+        print("Historisk luftkvalitetsdata er allerede renset.")
+        print("Renset data lagret i data/data/gyldig_historisk_luftkvalitet.csv")
+        return
+    
+    if not os.path.exists(historisk_csv):
+        print(f"Fant ikke filen: {historisk_csv}")
+        return
+
+    df = pd.read_csv(historisk_csv, sep=",")
+   
+    cols = [
+        "Elgeseter NO2 µg/m³ Day",
+        "Elgeseter PM10 µg/m³ Day",
+        "Elgeseter PM2.5 µg/m³ Day",
+    ]
+    
+    df = rense_luftkvalitet(df)
+
+    for col in cols:
+        df[col] = pd.to_numeric(df[col].astype(str).str.replace(",", "."), errors="coerce")
+        df[col] = df[col].clip(lower=0)
+
+    df.to_csv(renset_csv, index=False, encoding="utf-8")
+    print(f"Renset luftkvalitetsdata lagret i {renset_csv}")
+
 if __name__ == "__main__":
+    hent_temperaturdata_main()
     rens_og_lagre_temperaturdata()
     rens_og_lagre_klimagassdata_norge()
     rens_og_lagre_klimagass_verden()
+    rens_og_lagre_luftkvalitet()

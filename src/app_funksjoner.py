@@ -8,15 +8,15 @@ sys.path.append(os.path.abspath("../src"))
 
 from widgets_app import (
     valg, sted_widget, datatype_widget, år_widget, temp_plott_valg,
-    sanntid_plott_valg, lufttype_plott_valg, luft_plott_valg, prediktiv_plott_valg,
+    temp_sanntid_plott_valg, lufttype_plott_valg, luft_plott_valg, prediktiv_plott_valg,
     klima_plott_valg, ny_graf_knapp, output,
     df_norge, df_norge_alt, df_verden,
-    årlig_temp_df, temp_fil, klima_fil, luft_fil, luftdata
+    årlig_temp_df, temp_fil, klima_fil, luft_fil, luftdata, luft_sanntid_plott_valg
 )
 
 
 from klimagass_visualisering import *
-from  temp_visualisering import *
+from temp_visualisering import *
 from prediksjon_visualisering import *
 from luftkvalitet_visualisering import *
 from statistikk import tiår_snitt
@@ -37,7 +37,7 @@ def vis_valgt_data(endring):
             if datatype_widget.value == "Historiske data":
                 display(temp_plott_valg)
             elif datatype_widget.value == "Sanntidsdata":
-                display(sanntid_plott_valg)
+                display(temp_sanntid_plott_valg)
     elif valg.value == "Luftkvalitet":
         with output:
             display(widgets.HTML("<h4>Analyse av luftkvalitet på Elgseter</h4>"))  
@@ -46,7 +46,7 @@ def vis_valgt_data(endring):
                 display(lufttype_plott_valg)
                 display(luft_plott_valg)
             elif datatype_widget.value == "Sanntidsdata":
-                display(lufttype_plott_valg)
+                display(luft_sanntid_plott_valg)
     elif valg.value == "Prediktiv visualisering":
         with output:
             display(widgets.HTML("<h4>Velg analyse for prediktiv visualisering</h4>"))
@@ -151,7 +151,8 @@ def vis_luft_plot(endring=None):
                 plott_månedsnitt(luftdata[stoff]["månedlig"], stoff)
 
         elif datatype_widget.value == "Sanntidsdata":
-            print(f"[Plott sanntids luftkvalitet for {stoff}]")
+            if luft_sanntid_plott_valg.value == "Sanntid søylediagram":
+                plot_sanntids_luftkvalitet()
 
         display(ny_graf_knapp)
 
@@ -185,9 +186,10 @@ sted_widget.observe(oppdater_plottvalg, names='value')
 klima_plott_valg.observe(vis_klimagass_plot, names='value')
 datatype_widget.observe(vis_valgt_data, names='value')
 temp_plott_valg.observe(vis_temperatur_plot, names='value')
-sanntid_plott_valg.observe(vis_temperatur_plot, names='value')
+temp_sanntid_plott_valg.observe(vis_temperatur_plot, names='value')
 lufttype_plott_valg.observe(vis_luft_plot, names='value')
 luft_plott_valg.observe(vis_luft_plot, names='value')
+luft_sanntid_plott_valg.observe(vis_luft_plot, names='value')
 prediktiv_plott_valg.observe(vis_prediktiv_plot, names='value')
 ny_graf_knapp.on_click(tilbakestill_knapp_callback)
 

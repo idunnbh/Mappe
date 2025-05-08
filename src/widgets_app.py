@@ -1,7 +1,7 @@
 
 import ipywidgets as widgets
 from IPython.display import display
-from statistikk import analyser_fil
+from statistikk import analyser_fil, analyser_luftkvalitet, legg_til_tid
 from temp_visualisering import load_and_compute
 
 from dotenv import load_dotenv
@@ -11,24 +11,23 @@ import os, sys
 sys.path.append(os.path.abspath("../src"))
 
 # Henter data
+temp_fil = "../data/temp_gloshaugen_historisk_renset_ 50.csv"
+klima_fil = "../data/klimagassutslipp_verden_renset.csv"
+luft_fil = "../data/gyldig_historisk_luftkvalitet.csv"
+
 statistikk_norge, df_total_norge, df_norge_alt = analyser_fil("../data/klimagassutslipp_norge_renset.csv", datokolonne="år", groupby="år")
 statistikk_verden, df_total_verden, df_verden_alt = analyser_fil("../data/klimagassutslipp_verden_renset.csv", datokolonne="År", groupby="år")
 
-
+# Endrer og fikser koloner og navn for klimagassdata
 df_norge = df_total_norge[df_total_norge["kilde_(aktivitet)"].str.lower().str.contains("alle kilder")].copy()
 df_norge = df_norge[["år", "utslipp_til_luft_(1_000_tonn_co2-ekvivalenter,_ar5)"]]
 df_norge.rename(columns={"utslipp_til_luft_(1_000_tonn_co2-ekvivalenter,_ar5)": "gjennomsnitt"}, inplace=True)
 df_norge_alt = df_norge_alt.rename(columns={"utslipp_til_luft_(1_000_tonn_co2-ekvivalenter,_ar5)": "gjennomsnitt"})
 df_verden = df_verden_alt.rename(columns={"utslipp_i_co2_ekvivalenter": "gjennomsnitt"})
 
-temp_fil = "../data/temp_gloshaugen_historisk_renset_ 50.csv"
-klima_fil = "../data/klimagassutslipp_verden_renset.csv"
-luft_fil = "../data/gyldig_historisk_luftkvalitet.csv"
-
 årlig_temp_df, tiårs_temp_df = load_and_compute(temp_fil)
 
-
-from statistikk import analyser_luftkvalitet, legg_til_tid
+# Luftkvalitet data
 _, _, df_luft = analyser_fil(luft_fil, datokolonne="tid", groupby="år")
 df_luft = legg_til_tid(df_luft)
 målinger = [kol for kol in df_luft.columns if "ugm3" in kol]
@@ -60,7 +59,7 @@ temp_plott_valg = widgets.Dropdown(
     options=["Trykk her for å velge", "Årlig utvikling", "Gjennomsnitt per tiår", "Avvik fra snitt", "Endring total (SOL)"],
     value="Trykk her for å velge", description="Temperatur:" )
 
-sanntid_plott_valg = widgets.Dropdown(
+temp_sanntid_plott_valg = widgets.Dropdown(
     options=["Trykk her for å velge", "Temperatur neste dager"],
     value="Trykk her for å velge",
       description="Plott:")
@@ -74,6 +73,12 @@ luft_plott_valg = widgets.Dropdown(
     options=["Årsgjennomsnitt", "Månedsnitt"],
     value= "Årsgjennomsnitt",
     description="Periode:"
+)
+
+luft_sanntid_plott_valg = widgets.Dropdown(
+    options=["Trykk her for å velge", "Sanntid søylediagram"],
+    value="Trykk her for å velge",
+    description="Plott:"
 )
 
 prediktiv_plott_valg = widgets.Dropdown(
@@ -97,8 +102,8 @@ def setup_widgets():
 # Eksporter alle relevante variabler
 __all__ = [
     "valg", "sted_widget", "datatype_widget", "år_widget", "temp_plott_valg",
-    "sanntid_plott_valg", "lufttype_plott_valg", "prediktiv_plott_valg", "klima_plott_valg",
+    "temp_sanntid_plott_valg", "lufttype_plott_valg", "prediktiv_plott_valg", "klima_plott_valg",
     "ny_graf_knapp", "output", "setup_widgets",
     "df_norge", "df_norge_alt", "df_verden", "årlig_temp_df", "tiårs_temp_df",
-    "temp_fil", "klima_fil", "luft_fil", "luftdata"
+    "temp_fil", "klima_fil", "luft_fil", "luftdata", "luft_sanntid_plott_valg"
 ]

@@ -153,13 +153,16 @@ Dette scriptet inneholder funksjoner som skal rense temperatur- og klimagassdata
 - last_in_csv(filsti): Leser inn en CSV-fil som en pandas DataFrame.
 - fjern_duplikater(df): Fjerner duplikate rader og gir beskjed om hvor mange som ble fjernet.
 
-**Temperaturspesifikke funksjoner:**
+**Temperatur-spesifikke funksjoner:**
 - finn_gjennomsnittstemperatur(df):  Henter ut gjennomsnittet av kolonnen temperatur ved hjelp av SQL (pandasq)
 - håndter_manglende_verdier(df, kolonne='temperatur')`: Fyller inn manglende temperaturer med gjennomsnitt.
 - fjern_outliers(df, kolonne='temperatur'):Fjerner urealistiske temperaturer (under -50°C eller over 50°C).
 
-**Klimagassspesifikke funksjoner:**
+**Klimagass-spesifikke funksjoner:**
 - rense_kolonnenavn(df): Fjerner hermetegn og ekstra mellomrom fra kolonnenavn i det norske klimagass-settet.
+
+**Luftkvalitet-spesifikke funksjoner:**
+- rense_luftkvalitet(): fjerner rader med lav dekning og setter negative verdier til 0. 
 
 **Kombinerte funksjoner:**
 - temperatur_rens(df): Brukes for temperaturdata. Den fjerner duplikater, outliers og manglende verdier.
@@ -174,26 +177,38 @@ I finn_gjennomsnittstemperatur(df) brukers pandasql for å kjøre en SQL-spørri
 [Åpne fil->](run_rensing.py)
 I scriptet blir data renset ved at de ulike rensefunksjonene kjøres og den rensete dataen blir lagret som nye CSV-filer.
 
-**For sanntidsdata:**
+### Temperaturdata
+Funksjonen `rens_og_lagre_temperaturdata()` utfører rensing av både sanntids- og historiske temperaturdata:
+
+**For sanntids temperaturdata:**
 - data fra data/temp_gloshaugen_sanntid_{dato}.csv blir lest inn 
 - temperatur_rens() kjøres for å rense data 
 - renset data lagres som data/temp_gloshaugen_sanntid_{dato}_renset.csv
-
 Dette skjer hver gang scriptet kjøres, slik at vi alltid har renset ny sanntidsdata
-
-**For historisk temperatur:**
+**For historisk temperaturdata:**
 - leser inn data fra data/temp_gloshaugen_historisk_{antall_år}år.csv
 - renset versjon lagres som data/temp_gloshaugen_historisk_renset_ {antall_år}.csv
 Rensing skjer kun en gang: Hvis renset fil allerede finnes, hoppes det over
 
-**For Klimagassdata:**
- den originale CSV-filen data/klimagassutslipp.csv lest inn med sep=";" og skiprows=2 for å hoppe over metadata og hente riktige kolonnenavn.
-- Filen rensen med klimagass_rens() 
-- Hermetegn rundt navn og duplikater fjernes
-- Nødvendige kolonner blir sjekket
-- Den rensede dataen lagres som data/klimagassutslipp_renset.csv
+### Klimagassdata (Norge og verden)
+Funksjonen `rens_og_lagre_klimagassdata_norge()` renser norske klimagassdata:
+- Leser `data/klimagassutslipp.csv` med `sep=";"` og `skiprows=2`
+- Renser data med `klimagass_rens()`:
+- Lagres som `data/klimagassutslipp_norge_renset.csv`
 
-Siden klimagassdataen kun oppdateres et par ganger i året, og ikke hentes fra et API, er det lagt inn en if-sjekk i scriptet. Dersom den rensede filen allerede eksisterer, blir rensingen ikke kjørt på nytt. Dette sparer tid, og forhindrer unødvendig behandling hver gang scriptet kjøres.
+Funksjonen `rens_og_lagre_klimagass_verden()`:
+- Leser `data/klimagassutslipp_verden.csv`
+- Beholder relevante kolonner (`År`, `Utslipp i CO2 ekvivalenter`)
+- Lagres som `data/klimagassutslipp_verden_renset.csv`
+
+For begge datasett kjøres rensing kun hvis den rensede filen ikke allerede finnes, da dataen sjelden oppdateres.
+
+
+### Luftkvalitet
+Funksjonen `rens_og_lagre_luftkvalitet()`:
+- Leser inn data/historisk_luftkvalitet.csv
+- Renser filen med rens_og_lagre_luftkvalitet():
+- Lagrer renset data som data/gyldig_historisk_luftkvalitet.csv
 
 ------------------------------------------------------------------------ 
 

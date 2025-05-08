@@ -39,15 +39,14 @@ def fjern_duplikater(df):
     return df
 
 def fjern_outliers(df, min_temp=-50, max_temp=50):
-    før = len(df)
     outliers = df[(df['temperatur'] < min_temp) | (df['temperatur'] > max_temp)]
-    # For å se hvilke verdier som er fjernet 
+    antall = len(outliers)
     if not outliers.empty:
-        print("Fjerner outliers:")
-        print(outliers)
+        for idx, row in outliers.iterrows():
+            print(f"Outlier på rad {idx}: temperatur = {row['temperatur']}")
     df = df[(df['temperatur'] >= min_temp) & (df['temperatur'] <= max_temp)]
-    etter = len(df)
-    print(f"Fjernet {før - etter} outliers.")
+    
+    print(f"Fjernet {antall} outliers.")
     return df
 
 def rense_kolonnenavn(df):
@@ -69,4 +68,32 @@ def klimagass_rens(df):
             raise KeyError (f"Mangler nødvendig kolonne: '{kol}'")
         
     df = fjern_duplikater(df)
+    return df
+
+def rense_luftkvalitet(df: pd.DataFrame) -> pd.DataFrame:
+    df.columns = df.columns.str.strip()
+    rader_før = len(df)
+    # Datasettet er veldig mangelfullt, så ekskluderer radene som har for lav dekning
+    df = df[
+        (df["Dekning"] >= 80.0) &
+        (df["Dekning.1"] >= 80.0) &
+        (df["Dekning.2"] >= 80.0)
+    ].copy()
+    rader_etter = len(df)
+    fjernet_rader = rader_før - rader_etter
+    print(f"Fjernet {fjernet_rader} rader pga. lav dekning.")
+
+    # Kolonner som skal konverteres
+    cols = [
+        "Elgeseter NO2 µg/m³ Day",
+        "Elgeseter PM10 µg/m³ Day",
+        "Elgeseter PM2.5 µg/m³ Day",
+    ]
+
+    for col in cols:
+        df[col] = df[col].str.replace(",", ".").astype(float)
+        antall_negative = (df[col] < 0).sum()
+        df[col] = df[col].clip(lower=0)
+        print(f"Fjernet {antall_negative} negative verdier i kolonnen '{col}'.")
+
     return df

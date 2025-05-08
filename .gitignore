@@ -6,8 +6,15 @@ __pycache__/
 *.pyc
 
 # Ignorer midlertidige CSV-filer
-data/temp_gloshaugen_sanntid_*.csv
-data/*inneholder_feil*.csv
+*.csv
+!klimagassutslipp_norge_renset.csv
+!klimagassutslipp_verden_renset.csv
+!temp_gloshaugen_historisk_renset_ 50.csv
+!gyldig_historisk_luftkvalitet.csv
+
+# Ignorer json-filer
+*.json
+!luftkvalitet.json
 
 # Ignorer API-nøkkelfiler eller miljøfiler
 api.env

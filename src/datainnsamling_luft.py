@@ -14,7 +14,13 @@ def hent_siste_reftime():
         raise Exception(f"Feil ved henting av reftime: {response.status_code}")
     
     reftimes = response.json()["reftimes"]
+    for ref in reversed(reftimes):  
+        if ref.startswith(date.today().isoformat()):
+            return ref
+        
+    print("Fant ikke reftime for i dag, bruker siste tilgjengelige.")
     return reftimes[-1]
+
 
 def hent_sanntids_luftkvalitet():
     load_dotenv('api.env')

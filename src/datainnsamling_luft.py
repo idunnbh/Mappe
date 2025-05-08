@@ -5,11 +5,6 @@ import os
 import pandas as pd
 from datetime import date
 
-def lagre_json(data, filnavn: str):
-    with open(filnavn, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
-    print(f"JSON-data lagret til {filnavn}")
-
 def hent_siste_reftime():
     headers = {"User-Agent": os.getenv("USER_AGENT")}
     url = "https://api.met.no/weatherapi/airqualityforecast/0.1/reftimes"
@@ -37,10 +32,6 @@ def hent_sanntids_luftkvalitet():
         raise Exception(f"Feil ved henting av data: {response.status_code}")
     
     data = response.json()
-    today = date.today().isoformat()
-    json_filnavn = f"data/luftkvalitet{today}.json"
-    lagre_json(data, json_filnavn)
-
     df = pd.json_normalize(data, record_path=["data", "time"])
 
     selected_columns = [
@@ -50,7 +41,9 @@ def hent_sanntids_luftkvalitet():
         "variables.pm25_concentration.value",
         "variables.no2_concentration.value",
     ]
-    return df[selected_columns].copy()
+    df = df[selected_columns].copy()
+    df["from"] = pd.to_datetime(df["from"]) 
+    return df
 
 
 def hent_historisk_luftkvalitet(filsti: str) -> pd.DataFrame:

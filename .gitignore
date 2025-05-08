@@ -12,6 +12,10 @@ __pycache__/
 !temp_gloshaugen_historisk_renset_ 50.csv
 !gyldig_historisk_luftkvalitet.csv
 
+# Ignorer json-filer
+*.json
+!luftkvalitet.json
+
 # Ignorer API-nøkkelfiler eller miljøfiler
 api.env
 .env

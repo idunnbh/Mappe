@@ -15,13 +15,13 @@ Denne mappen inneholder enhetstester som verifiserer at funksjonene for datarens
 
 ## test_temperatur.py
 [Åpne fil ->](test_temperatur.py)
-Denne filen inneholder enhetstester for funksjoner knyttet til henting og rensing ac temperaturdata fra MET og Frost API. Testene er organisert i tre klasser, som fokuserer på ulike deler av temperaturbehandlingen.
+Denne filen inneholder enhetstester for funksjoner knyttet til henting og rensing ac temperaturdata fra MET og Frost API. Testene er laget i tre testklasser, som har fokus på ulike deler av temperaturbehandlingen.
 
-TestTemperaturHenting tester funksjoner knyttet til innhenting av sanntids- og historiske temperaturdata. Den sjekker at sanntidsdata returneres i riktig format (en ordbok med nøkkelen properties). Det blir også kontrolert at API-nøkler (USER_AGENT og FROST_API_KEY) finnes i miljøvariabler, og at evt. feil blir håndtert riktig. Det testes også at dataen som hentes faktisk inneholder temperaturmålinger i form av tidspunkt og temperatur.
+**TestTemperaturHenting** tester funksjoner knyttet til innhenting av sanntids- og historiske temperaturdata. Den sjekker at sanntidsdata returneres i riktig format (en ordbok med nøkkelen properties). Det blir også kontrolert at API-nøkler (USER_AGENT og FROST_API_KEY) finnes i miljøvariabler, og at evt. feil blir håndtert riktig. Det testes også at dataen som hentes faktisk inneholder temperaturmålinger i form av tidspunkt og temperatur.
 
-TestTemperaturParsing tester om funksjonen hent_temperaturer() tolker JSON-strukturen fra MET API. I testen brukes eksempeldata (dummydata) med samme form som værdata fra API-et vanligvis har. Dette gjør at man kan teste funksjonen uten å være koblet til API-et. Testen kontrollerer at hent_temperaturer() klarer å hente ut riktig informasjon, og at resultatet blir en liste der hvert element er et par med tidspunkt og temperatur.
+**TestTemperaturParsing**tester om funksjonen hent_temperaturer() tolker JSON-strukturen fra MET API. I testen brukes eksempeldata (dummydata) med samme form som værdata fra API-et vanligvis har. Dette gjør at man kan teste funksjonen uten å være koblet til API-et. Testen kontrollerer at hent_temperaturer() klarer å hente ut riktig informasjon, og at resultatet blir en liste der hvert element er et par med tidspunkt og temperatur.
 
-TestTemperaturRensing tester funksjonen temperatur_rens, som fjerner duplikater, outliers og manglende verdier fra et datasett. Det brukes et eksempel på et datasett som inneholder duplikater og manglende verdier for å kontrollere at funksjonen gjør som forventet.
+**TestTemperaturRensing** tester funksjonen temperatur_rens, som fjerner duplikater, outliers og manglende verdier fra et datasett. Det brukes et eksempel på et datasett som inneholder duplikater og manglende verdier for å kontrollere at funksjonen gjør som forventet.
 
 **Eksempel på output når koden kjøres:**
 
@@ -66,16 +66,27 @@ Ran 4 tests in 0.054s
 
 ## test_luftkvalitet
 [Åpne fil ->](test_luftkvalitet.py)
-Vi har laget enhetstester for funksjonene som renser luftkvalitetdata, for å sikre at de fungerer som forventet. Testene sjekker følgende:
-- test_fetch_success: Verifiserer at fetch_air_quality_data returnerer en ordbok (dict) ved et vellykket API-kall.
-- test_fetch_failure: Sjekker at funksjonen kaster en Exception dersom en ugyldig URL brukes.
+
+Denne filen inneholder enhetstester for funksjoner i datainnsamling_luft. Dette er for å sikre at henting av data fungerer som forventet. 
+
+### Testede funksjoner
+
+- hent_siste_reftime()
+    Testen sjekker at verdien ser ut som en gyldig ISO-dato.
+- hent_sanntids_luftkvalitet()    
+    Testen sjekker at returverdien er en DataFrame som ikke er tom og med forventede kolonner.
+- hent_historisk_luftkvalitet()
+    Testen sjekker at filen finnes, at DataFrame-en ikke er tom, og at riktige kolonner finnes.
+- lagre_til_csv():  
+    Tester at en DataFrame kan lagres korrekt til en CSV (filen blir slettet etter testen).
 
 
 **Eksempel på output når koden kjøres:**
 
-...
+...Data lagret til data/test_luft.csv
+.
 ----------------------------------------------------------------------
-Ran 2 tests in 0.015s
+Ran 4 tests in 0.492s
 
 OK
 
@@ -90,16 +101,24 @@ Testene sjekker følgene funksjoner:
 - fjern_duplikater: Tester at duplikate rader basert på tidspunkt fjernes
 - håndter_manglende_verdier: Tester at manglende verdier erstattes med gjennomsnitt
 - rense_kolonnenavn(): Tester at hermetegn og unødvendige mellomrom fjernes fra kolonnenavn
+- rense_luftkvalitet(): Tester at rader med lav dekning fjernes, og at negative verdier i luftkvalitetsmålinger settes til 0.  
 
 **Eksempel på output når testene kjøres:**
 
 Fjernet 1 duplikater.
-.Fjernet 1 outliers.
-.Fjernet 1 outliers.
-.Manglende verdier=1. Disser er nå fylt med gjennomsnittet:15.0
-..
+.Outlier på rad 0: temperatur = 1000
+Fjernet 1 outliers.
+.Outlier på rad 2: temperatur = 100
+Fjernet 1 outliers.
+.Manglende verdier = 1
+Fylte inn gjennomsnitt: 15.0, (mellom 10.0 og 20.0)
+..Fjernet 1 rader pga. lav dekning.
+Fjernet 1 negative verdier i kolonnen 'Elgeseter NO2 µg/m³ Day'.
+Fjernet 0 negative verdier i kolonnen 'Elgeseter PM10 µg/m³ Day'.
+Fjernet 0 negative verdier i kolonnen 'Elgeseter PM2.5 µg/m³ Day'.
+.
 ----------------------------------------------------------------------
-Ran 5 tests in 0.052s
+Ran 6 tests in 0.010s
 
 OK
 

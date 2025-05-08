@@ -1,34 +1,47 @@
 import unittest
-import os
-import json
-import sys
+import os, sys 
+import pandas as pd
+from pathlib import Path 
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from dotenv import load_dotenv
 load_dotenv()
 
-from datainnsamling_luftkvalitet import fetch_air_quality_data
+from datainnsamling_luft import (
+    hent_siste_reftime,
+    hent_sanntids_luftkvalitet,
+    hent_historisk_luftkvalitet,
+    lagre_til_csv
+)
+
+class TestDatainnsamlingLuftEkte(unittest.TestCase):
+
+    def test_hent_siste_reftime_ekte(self):
+        ref = hent_siste_reftime()
+        self.assertTrue(ref.startswith("202"), "Reftime ser ikke ut som en dato")
+
+    def test_hent_sanntids_luftkvalitet_ekte(self):
+        df = hent_sanntids_luftkvalitet()
+        self.assertIsInstance(df, pd.DataFrame)
+        self.assertIn("from", df.columns)
+        self.assertFalse(df.empty, "DataFrame er tom")
+
+    def test_hent_historisk_luftkvalitet(self):
+        path = Path("data/historisk_luftkvalitet.csv")
+        self.assertTrue(path.exists(), "Filen for historisk luftkvalitet mangler")
+        df = hent_historisk_luftkvalitet(str(path))
+        self.assertFalse(df.empty, "Historisk data er tom")
+        self.assertIn("Elgeseter NO2 µg/m³ Day", df.columns)
 
 
-class TestFetchAirQualityData(unittest.TestCase):
-    def setUp(self):
-        #Setter opp konstanter for testene, som API-URL, params og headers
-        self.api_url = "https://api.met.no/weatherapi/airqualityforecast/0.1/"
-        self.params = {"lat": "63.4195", "lon": "10.4065"}
-        self.headers = {
-            "User-Agent": os.getenv("IDUNN_USER_AGENT", "DefaultUserAgent/1.0")
-        }
-    
-    def test_fetch_success(self):
-        #Tester at funksjonen returnerer en dict når forespørselen lykkes
-        data = fetch_air_quality_data(self.api_url, self.params, self.headers)
-        self.assertIsInstance(data, dict)
+    def test_lagre_til_csv(self):
+        df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+        filnavn = "data/test_luft.csv"
+        lagre_til_csv(df, filnavn)
+        self.assertTrue(Path(filnavn).exists())
+        Path(filnavn).unlink()
 
-    def test_fetch_failure(self):
-        #Tester at funksjonen kaster en Exception hvis URL-en er feil
-        with self.assertRaises(Exception):
-            fetch_air_quality_data("https://api.met.no/feilurl", self.params, self.headers)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
+

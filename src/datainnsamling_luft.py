@@ -51,30 +51,8 @@ def hent_sanntids_luftkvalitet():
     df["from"] = pd.to_datetime(df["from"]) 
     return df
 
-
 def hent_historisk_luftkvalitet(filsti: str) -> pd.DataFrame:
     df = pd.read_csv(filsti, sep=",")
-    df.columns = df.columns.str.strip()  
-    
-    # Datasettet er veldig mangelfullt, så ekskluderer radene som har for lav dekning
-    df = df[
-    (df["Dekning"] >= 80.0) &
-    (df["Dekning.1"] >= 80.0) &
-    (df["Dekning.2"] >= 80.0)
-    ].copy()
-    
-    # Kolonner som skal konverteres
-    cols = [
-    "Elgeseter NO2 µg/m³ Day",
-    "Elgeseter PM10 µg/m³ Day",
-    "Elgeseter PM2.5 µg/m³ Day",
-    ]
-
-    for col in cols:
-        df[col] = df[col].str.replace(",", ".").astype(float)
-        # Sett alle negative verdier i disse kolonnene til 0
-        df[col] = df[col].clip(lower=0)
-    
     return df
 
 def lagre_til_csv(df: pd.DataFrame, filnavn: str):

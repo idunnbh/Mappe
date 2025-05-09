@@ -367,7 +367,9 @@ Denne filen inneholder funksjoner for å visualisere tempraturdata.
 - plot_sanntids_temperatur
     Viser temperatur for kommende dager basert på sanntidsdata fra MET.
     Funksjonen varsler også dersom det er meldt veldig varmt (over 25°C) eller veldig kaldt (under 0°C).
-
+- plot_temp_heatmap()
+    Visualiserer månedsgjennomsnittet av temperaturen de siste 50 årene med tydelige 
+    farger i et heatmap ved hjelp av Matplotlib og Seaborn.
 ------------------------------------------------------------------------ 
 
 ## luftkvalitet_visualisering.py
@@ -471,6 +473,8 @@ Temperaturdata:
 Klimagassutslipp:
 3) Statistisk sentralbyrå (SSB). Utslipp av klimagasser etter kilde og type. Tabell 13931. Hentet fra: https://www.ssb.no/statbank/table/13931
 4) https://ourworldindata.org/co2-and-greenhouse-gas-emissions#all-charts
+5) Meterologisk institutt. Airqualityforecast API. Hentet fra: https://api.met.no/weatherapi/airqualityforecast/0.1/documentation
+6) NILU. Historiske data hentet som CSV. Hentet fra: https://luftkvalitet.nilu.no/historikk 
 
 
 ## Miljøvariabler og API-nøkler:

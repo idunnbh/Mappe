@@ -113,35 +113,46 @@ Det originale datasettet var ryddig og strukturert, men overskriftene var på en
 
 ------------------------------------------------------------------------ 
 
-## datainnsamling_luftkvalitet.py 
-[Åpne fil->](datainnsamling_luftkvalitet.py)
-For å hente inn, rense og kombinere luftkvalitetsdata, er det brukt både API (Meterologisk institutt) og et historisk datasett (CSV-fil fra Norsk institutt for luftforskning, NILU). Dataen fra API-et er sanntidsdata 48 timer fram i tid, og det historiske datasettet er registrerte målinger hver time i 2024. Dette fordi vi tok en vurdering på at vi burde ha mer data å jobbe med.Hovedstrukturen i koden er:
-- Hente data fra API-et ved å bruke miljøvariabler for konfigurasjon.
-- Lagre rådata som JSON for senere bruk eller feilsøking.
-- Normalisere JSON-strukturen til en Pandas DataFrame for videre analyse.
-- Hente et historisk datasett (CSV) med luftkvalitetsmålinger og filtrere ut mangelfulle rader.
+## datainnsamling_luft.py 
+[Åpne fil->](datainnsamling_luft.py)
+Denne filen henter og lagrer både sanntids- og historiske luftkvalitetsdata. Det benyttes to kilder:
+- Sanntidsdata fra Meteorologisk institutt (MET) via deres åpne API
+- Historiske data fra Norsk institutt for luftforskning (NILU), lastet manuelt ned som en CSV-fil fra en portal for historiske luftmålinger.
 
-### Funksjoner i datainnsamling_luftkvalitet.py 
-- get_air_quality_data(url, params, headers):
-    Sender en GET-forespørsel til API-et med de spesifiserte parametrene. Får vi statuskode 200, returneres JSON-svaret. Ellers kastes en exception.
+### Om datakildene og vurdering av pålitelighet
 
-- save_json_data(data, filename):
-    Skriver JSON-data til en fil.
+#### MET, sanntidsdata
+Sanntidsdataene hentes fra METs offisielle API for luftkvalitet. Dette er et offentlig  API og tilgjengelig for alle. Det er utviklet i samarbeid med norske miljømyndigheter. MET er nasjonal fagmyndighet og oppgir metadata som referansetidspunkt, oppløsning og komponentverdier. Denne kilden regnes derfor som pålitelig og en godt dokumentert kilde. Dataene er for 48 timer frem i tid.
 
-- process_air_quality_data(data):
-    pd.json_normalize flater ut den nestede JSON-strukturen (under "data" → "time") til en Pandas DataFrame.
+#### NILU, historiske målinger
+Det historiske datasettet ble lastet ned manuelt fra NILUs nettbaserte "Historical air quality data"-portal. Der er det mulig lage en csv filtrert  på by, stasjon, komponent og aggregert tid (time, døgn, måned osv.).
 
-- Lese historisk CSV-data:
-    Leser et lokalt CSV-datasett (eksportert fra Excel) med semikolon som delimiter, hopper over de 3 første radene som bare var tekst. Deretter lagres en kopi av DataFrame-en i data/historisk_luftkvalitet.csv.
+Vi valgte:
+- Stasjon: Elgeseter i Trondheim
+- Komponenter: NO₂, PM10 og PM2.5 (vanlige indikatorer på luftforurensning)
+- Periode: Forsøk på å hente 50 år (1975–2025), men data fantes først fra 2003
+- Aggregering: Døgnmiddel, for å redusere filstørrelse og sikre nedlasting
+Filene ble lagret og lastet inn som data/historisk_luftkvalitet.csv.
 
-- Filtrere ut rader med 100% dekning:
-    Datasettet er mangelfullt, så beholder kun de radene der alle kolonner for dekning er 100.0 for å kun jobbe med rader der alle målingene er fullstendige. .copy() brukes for å unngå SettingWithCopyWarning.
+NILU er en anerkjent institusjon og har i dag et nasjonalt referanselaboratorium for luftmålinger i Norge. Dataene vurderes derfor som pålitelige i utgangspunktet. 
+Vi fant derimot flere svakheter i det historiske datasettet. I perioden 2003–2012 mangler det til tider mye data, med enkelte perioder uten målinger i opptil to måneder. Hele perioden fra midten av 2012 til slutten av 2014 mangler fullstendig. Mange rader hadde også for lav måledekningsgrad (<80 %) og ble derfor filtrert bort i renseprosessen. Det er først fra 2016 og utover datasettet blir mer komplett. Noen målinger inneholdt negative verdier, noe som ikke er fysisk mulig. 
+Dette gjør at dataene, spesielt fra tidlige år, ikke bør legges for stor vekt på.
 
-- Konvertere strenger til flyt:
-    I Excel-eksporten brukes komma som desimalskille. Vi erstatter komma med punktum og konverterer til float, for at Pandas skal kunne behandle dataene numerisk.
+### Funksjoner i datainnsamling_luft.py 
+- hent_siste_reftime()
+    Henter siste gyldige referansetidspunkt fra MET sitt API. Returnerer reftime for datoen koden kjøres hvis den finnes. Hvis den ikke finnes returnerer den nyeste reftime som er tilgjengelige.
 
-- Sette negative verdier til 0:
-    Negative verdier er satt til null, siden vi anser det som sensorstøy eller ugyldig data.
+- hent_sanntids_luftkvalitet()
+    Bruker API-nøkkel fra .env for å hente sanntids luftkvalitetsdata (PM10, PM2.5 og NO2) og returnerer en df med kolonnene from, to, og konsentrasjonsverdiene.
+
+- hent_historisk_luftkvalitet(filsti)
+    Leser inn det lokale CSV-datasett med historiske luftkvalitetsmålinger og returnerer en df.
+
+- lagre_til_csv(df, filnavn)
+    Lagre en df til en CSV-fil med UTF-8-koding.
+
+- lagre_luftkvalitetsdata(filsti)
+    Sanntidsdata lagres som data/luftkvalitet_sanntid_{dato}.csv og historisk data lagres som data/luftkvalitet_historisk.csv (men bare hvis den ikke finnes fra før)
 
 ------------------------------------------------------------------------ 
 
@@ -156,13 +167,15 @@ Dette scriptet inneholder funksjoner som skal rense temperatur- og klimagassdata
 **Temperatur-spesifikke funksjoner:**
 - finn_gjennomsnittstemperatur(df):  Henter ut gjennomsnittet av kolonnen temperatur ved hjelp av SQL (pandasq)
 - håndter_manglende_verdier(df, kolonne='temperatur')`: Fyller inn manglende temperaturer med gjennomsnitt.
-- fjern_outliers(df, kolonne='temperatur'):Fjerner urealistiske temperaturer (under -50°C eller over 50°C).
+- fjern_outliers(df, kolonne='temperatur'): Fjerner urealistiske temperaturer (under -50°C eller over 50°C).
 
 **Klimagass-spesifikke funksjoner:**
 - rense_kolonnenavn(df): Fjerner hermetegn og ekstra mellomrom fra kolonnenavn i det norske klimagass-settet.
 
 **Luftkvalitet-spesifikke funksjoner:**
-- rense_luftkvalitet(): fjerner rader med lav dekning og setter negative verdier til 0. 
+- rense_luftkvalitet(): fjerner rader med lav dekning og setter negative verdier til 0.
+    Det ble bevisst valgt ikke å erstatte manglende verdier med f.eks gjennomsnitt, da datasettet har store hull, spsielt for eldre måleperioder.
+    Dette kunne ført til store feilkilder.  
 
 **Kombinerte funksjoner:**
 - temperatur_rens(df): Brukes for temperaturdata. Den fjerner duplikater, outliers og manglende verdier.
@@ -470,7 +483,10 @@ Temperaturdata:
 2) Meteorologisk institutt. Frost API. Hentet fra: https://frost.met.no/
 Klimagassutslipp:
 3) Statistisk sentralbyrå (SSB). Utslipp av klimagasser etter kilde og type. Tabell 13931. Hentet fra: https://www.ssb.no/statbank/table/13931
-4) https://ourworldindata.org/co2-and-greenhouse-gas-emissions#all-charts
+4) Our World in Data. CO₂ and Greenhouse Gas Emissions. Hentet fra: https://ourworldindata.org/co2-and-greenhouse-gas-emissions#all-charts
+Luftkvalitet:
+6) Meteorologisk institutt. Air Quality Forecast API. Hentet fra: https://api.met.no/weatherapi/airqualityforecast/0.1/
+7) Norsk institutt for luftforskning (NILU). Historical air quality data portal. Hentet fra: https://www.nilu.no/luftkvalitet/historiske-data/
 
 
 ## Miljøvariabler og API-nøkler:

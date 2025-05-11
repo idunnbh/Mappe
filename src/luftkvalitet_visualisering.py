@@ -37,6 +37,38 @@ def plot_sanntids_luftkvalitet():
         df["from"] = pd.to_datetime(df["from"])
         df.set_index("from", inplace=True)
 
+        max_no2 = df["variables.no2_concentration.value"].max()
+        max_pm10 = df["variables.pm10_concentration.value"].max()
+        max_pm25 = df["variables.pm25_concentration.value"].max()
+
+        varsler = []
+
+        if max_no2 > 200:
+            tidspunkt_no2 = df["variables.no2_concentration.value"].idxmax()
+            dato_no2 = tidspunkt_no2.date()
+            varsler.append(f"Det kan bli høye NO₂-nivåer ({max_no2:.0f} µg/m³) den {dato_no2}. Ikke vær for mye ute.")
+
+        if max_pm10 > 50:
+            tidspunkt_pm10 = df["variables.pm10_concentration.value"].idxmax()
+            dato_pm10 = tidspunkt_pm10.date()
+            varsler.append(f"Det kan bli høye PM10-nivåer ({max_pm10:.0f} µg/m³) den {dato_pm10}. Hold deg inne! Dette kan påvirke luftveiene.")
+
+        if max_pm25 > 25:
+            tidspunkt_pm25 = df["variables.pm25_concentration.value"].idxmax()
+            dato_pm25 = tidspunkt_pm25.date()
+            varsler.append(f" Det kan bli høy PM2.5-nivåer ({max_pm25:.0f} µg/m³) den {dato_pm25}. Dette er over anbefalt grense og er spesielt farlig for barn og eldre.")
+        
+        if varsler:
+            melding = "<b>Varsel om dårlig luftkvalitet:</b><br>" + "<br>".join(varsler)
+            display(HTML(f"""
+                <div style='
+                border: 1px solid red;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 15px;
+            '>{melding}</div>
+        """))
+
         plt.figure(figsize=(10, 6))
         plt.plot(df.index, df["variables.no2_concentration.value"], label="NO2")
         plt.plot(df.index, df["variables.pm10_concentration.value"], label="PM10")
@@ -65,6 +97,39 @@ def plot_demo_luftkvalitet(filnavn="../data/luftkvalitet_sanntid_demo.csv"):
         df = pd.read_csv(filnavn)
         df["from"] = pd.to_datetime(df["from"])
         df.set_index("from", inplace=True)
+
+        max_no2 = df["variables.no2_concentration.value"].max()
+        max_pm10 = df["variables.pm10_concentration.value"].max()
+        max_pm25 = df["variables.pm25_concentration.value"].max()
+
+        varsler = []
+
+        if max_no2 > 200:
+            tidspunkt_no2 = df["variables.no2_concentration.value"].idxmax()
+            dato_no2 = tidspunkt_no2.date()
+            varsler.append(f"Det kan bli høye NO₂-nivåer ({max_no2:.0f} µg/m³) den {dato_no2}! Ikke vær for mye ute.")
+
+        if max_pm10 > 50:
+            tidspunkt_pm10 = df["variables.pm10_concentration.value"].idxmax()
+            dato_pm10 = tidspunkt_pm10.date()
+            varsler.append(f"Det kan bli høye PM10-nivåer ({max_pm10:.0f} µg/m³) den {dato_pm10}! Hold deg inne! Dette kan påvirke luftveiene.")
+
+        if max_pm25 > 25:
+            tidspunkt_pm25 = df["variables.pm25_concentration.value"].idxmax()
+            dato_pm25 = tidspunkt_pm25.date()
+            varsler.append(f" Det kan bli høy PM2.5-nivåer ({max_pm25:.0f} µg/m³) den {dato_pm25}. Dette er over anbefalt grense og er spesielt farlig for barn og eldre.")
+        
+        if varsler:
+            melding = "<b>Varsel om dårlig luftkvalitet:</b><br>" + "<br>".join(varsler)
+            display(HTML(f"""
+                <div style='
+                border: 1px solid red;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 15px;
+            '>{melding}</div>
+        """))
+
 
         plt.figure(figsize=(10, 6))
         plt.plot(df.index, df["variables.no2_concentration.value"], label="NO2")

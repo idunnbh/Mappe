@@ -125,10 +125,12 @@ def vis_temperatur_plot(endring):
                     print("Fant ikke temperaturfil.")
                     return
                 tegn_endring_sol(temp_fil)
-
         elif datatype_widget.value == "Sanntidsdata":
-            plot_sanntids_temperatur()
-
+            valgt_plott = temp_sanntid_plott_valg.value
+            if valgt_plott == "Temperatur neste dager (krever at du har API-nøkkel)":
+                plot_sanntids_temperatur()
+            elif valgt_plott == "Temperatur (demo-data)":
+                plot_demo_temperatur() 
         display(ny_graf_knapp)
 
         
@@ -151,8 +153,11 @@ def vis_luft_plot(endring=None):
                 plott_månedsnitt(luftdata[stoff]["månedlig"], stoff)
 
         elif datatype_widget.value == "Sanntidsdata":
-            if luft_sanntid_plott_valg.value == "Sanntid søylediagram":
+            valgt_plot=luft_sanntid_plott_valg.value
+            if  valgt_plot== "Luftkvalitet de neste dagene (krever API-nøkkel)":
                 plot_sanntids_luftkvalitet()
+            elif valgt_plot == "Luftkvalitet sanntid (demo-data)":
+                plot_demo_luftkvalitet()
 
         display(ny_graf_knapp)
 

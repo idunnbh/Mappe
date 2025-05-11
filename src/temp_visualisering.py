@@ -4,11 +4,10 @@ import pandas as pd
 from bokeh.plotting import figure, output_notebook, show
 from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus, Label
 from datetime import datetime
-from statistikk import analyser_fil
-import calendar
 from statistikk import beregn_avvik, analyser_temperatur, beregn_endring_totalt
 from datainnsamling_temperatur import hent_temperaturer, hent_sanntidsdata
 import numpy as np
+from IPython.display import display, HTML
 
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
@@ -121,7 +120,6 @@ def plot_interactive_bokeh(årlig_df):
     show(p)
 
 
-
 # Søylediagram av årlig snittemperatur per tiår
 def plot_by_decade(tiårs_df):
     plt.figure(figsize=(10,5))
@@ -148,7 +146,6 @@ def plot_temp_heatmap(df, årskolonne='år', månedskolonne='måned', verdikolon
     # Sørger for at radene ligger i rekkefølge 1–12
     pivot = pivot.reindex(range(1, 13))
     
-    # Plotter
     plt.figure(figsize=(14, 4))
     sns.heatmap(
         pivot,
@@ -159,7 +156,6 @@ def plot_temp_heatmap(df, årskolonne='år', månedskolonne='måned', verdikolon
         #fmt=".1f",              # én desimal
         linecolor='white' 
     )
-    # Label aksene med månednavn
     plt.title("Gjennomsnittstemperatur per måned og år")
     plt.xlabel("År")
     plt.ylabel("Måned")
@@ -168,6 +164,7 @@ def plot_temp_heatmap(df, årskolonne='år', månedskolonne='måned', verdikolon
         labels=['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'],
         rotation=0
     )
+
 def plot_temperatur_år(df):
     plt.figure(figsize=(10, 5))
     plt.plot(df["år"], df["gjennomsnitt"], marker="o")
@@ -223,46 +220,90 @@ def tegn_endring_sol(filsti):
     plt.show()
 
 
-
-
 def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
-    data = hent_sanntidsdata(lat, lon)
-    if not data:
-        print("Klarte ikke hente sanntidsdata.")
-        return
-    temperaturer = hent_temperaturer(data)
-    if not temperaturer:
-        print("Ingen temperaturer funnet.")
-        return
+    try:
+        data = hent_sanntidsdata(lat, lon)
+        if not data:
+            raise("Klarte ikke hente sanntidsdata.")
+        temperaturer = hent_temperaturer(data)
+        if not temperaturer:
+            raise("Ingen temperaturer funnet.")
 
-    df = pd.DataFrame(temperaturer, columns=["tid", "temperatur"])
-    df["tid"] = pd.to_datetime(df["tid"])
+        df = pd.DataFrame(temperaturer, columns=["tid", "temperatur"])
+        df["tid"] = pd.to_datetime(df["tid"])
 
     
-    varm_grense = 25
-    kald_grense = 0
-    varme_dager = df[df["temperatur"] >= varm_grense]
-    kalde_dager = df[df["temperatur"] <= kald_grense]
+        varm_grense = 25
+        kald_grense = 0
+        varme_dager = df[df["temperatur"] >= varm_grense]
+        kalde_dager = df[df["temperatur"] <= kald_grense]
 
-    if not varme_dager.empty:
-        maks_temp = varme_dager["temperatur"].max()
-        tid = varme_dager.loc[varme_dager["temperatur"].idxmax(), "tid"]
-        print(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}!")
-        print("Husk å drikke mye vann!")
+        if not varme_dager.empty:
+            maks_temp = varme_dager["temperatur"].max()
+            tid = varme_dager.loc[varme_dager["temperatur"].idxmax(), "tid"]
+            print(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}!")
+            print("Husk å drikke mye vann!")
 
-    if not kalde_dager.empty:
-        min_temp = kalde_dager["temperatur"].min()
-        tid = kalde_dager.loc[kalde_dager["temperatur"].idxmin(), "tid"]
-        print(f"Varsel: Det er er meldt {min_temp:.1f}°C den {tid.date()}!")
-        print ("Ta på mye klær!")
+        if not kalde_dager.empty:
+            min_temp = kalde_dager["temperatur"].min()
+            tid = kalde_dager.loc[kalde_dager["temperatur"].idxmin(), "tid"]
+            print(f"Varsel: Det er er meldt {min_temp:.1f}°C den {tid.date()}!")
+            print ("Ta på mye klær!")
+            
 
-    plt.figure(figsize=(10, 5))
-    plt.plot(df["tid"], df["temperatur"], marker="o")
-    plt.title("Sanntidstemperatur (Værvarsel for kommende dager)")
-    plt.xlabel("Tid")
-    plt.ylabel("Temperatur (°C)")
-    plt.xticks(rotation=45)
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
+        plt.figure(figsize=(10, 5))
+        plt.plot(df["tid"], df["temperatur"], marker="o")
+        plt.title("Sanntidstemperatur (Værvarsel for kommende dager)")
+        plt.xlabel("Tid")
+        plt.ylabel("Temperatur (°C)")
+        plt.xticks(rotation=45)
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
 
+    except Exception as e:
+        display(HTML("""
+        <div style='color:red; font-weight:bold; font-size:18px;'>
+        Klarte ikke hente sanntidstemperatur. Har du API-nøkkel?
+        </div>
+        <div style='color:gray; font-size:16px;'>
+        Viser demo-data i stedet.
+        </div>
+        """))
+        plot_demo_temperatur()
+
+def plot_demo_temperatur(filnavn="../data/temp_gloshaugen_sanntid_demo.csv"):
+    try:
+
+        display(HTML("<span style='color:red; font-size:18px; font-weight:bold;'>Dette er kun en demo! Dette gjør at du kan bruke appen uten API-nøkkel</span>"))
+
+        
+        df = pd.read_csv(filnavn)
+        df["tidspunkt"] = pd.to_datetime(df["tidspunkt"])
+
+        varm_grense = 25
+        kald_grense = 0
+        varme_dager = df[df["temperatur"] >= varm_grense]
+        kalde_dager = df[df["temperatur"] <= kald_grense]
+
+        if not varme_dager.empty:
+            maks_temp = varme_dager["temperatur"].max()
+            tid = varme_dager.loc[varme_dager["temperatur"].idxmax(), "tidspunkt"]
+            print(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}! Husk å drikke mye vann!")
+
+        if not kalde_dager.empty:
+            min_temp = kalde_dager["temperatur"].min()
+            tid = kalde_dager.loc[kalde_dager["temperatur"].idxmin(), "tidspunkt"]
+            print(f"Varsel: Det er meldt {min_temp:.1f}°C den {tid.date()}! Ta på mye klær!")
+
+        plt.figure(figsize=(10, 5))
+        plt.plot(df["tidspunkt"], df["temperatur"], marker="o")
+        plt.title("Temperatur (demo-data fra CSV)")
+        plt.xlabel("Tid")
+        plt.ylabel("Temperatur (°C)")
+        plt.xticks(rotation=45)
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
+    except Exception as e:
+        print(f"Feil ved lesing av demo-data: {e}")

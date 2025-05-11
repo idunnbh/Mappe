@@ -60,7 +60,7 @@ temp_plott_valg = widgets.Dropdown(
     value="Trykk her for å velge", description="Temperatur:" )
 
 temp_sanntid_plott_valg = widgets.Dropdown(
-    options=["Trykk her for å velge", "Temperatur neste dager"],
+    options=["Trykk her for å velge", "Temperatur neste dager (krever at du har API-nøkkel)", "Temperatur (demo-data)"],
     value="Trykk her for å velge",
       description="Plott:")
 
@@ -76,7 +76,7 @@ luft_plott_valg = widgets.Dropdown(
 )
 
 luft_sanntid_plott_valg = widgets.Dropdown(
-    options=["Trykk her for å velge", "Sanntid søylediagram"],
+    options=["Trykk her for å velge", "Luftkvalitet de neste dagene (krever API-nøkkel)", "Luftkvalitet sanntid (demo-data)"],
     value="Trykk her for å velge",
     description="Plott:"
 )

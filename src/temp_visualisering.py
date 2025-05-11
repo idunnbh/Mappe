@@ -238,17 +238,28 @@ def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
         varme_dager = df[df["temperatur"] >= varm_grense]
         kalde_dager = df[df["temperatur"] <= kald_grense]
 
+        varsler=[]
+
         if not varme_dager.empty:
             maks_temp = varme_dager["temperatur"].max()
             tid = varme_dager.loc[varme_dager["temperatur"].idxmax(), "tid"]
-            print(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}!")
-            print("Husk å drikke mye vann!")
+            varsler.append(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}. Husk å drikke mye vann!")
 
         if not kalde_dager.empty:
             min_temp = kalde_dager["temperatur"].min()
             tid = kalde_dager.loc[kalde_dager["temperatur"].idxmin(), "tid"]
-            print(f"Varsel: Det er er meldt {min_temp:.1f}°C den {tid.date()}!")
-            print ("Ta på mye klær!")
+            varsler.append(f"Varsel: Det er er meldt {min_temp:.1f}°C den {tid.date()}. Ta på mye klær!")
+
+        if varsler:
+            melding = "<b>Varsel om 'ekstreme' tempraturer:</b><br>" + "<br>".join(varsler)
+            display(HTML(f"""
+                <div style='
+                border: 1px solid red;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 15px;
+            '>{melding}</div>
+        """))
             
 
         plt.figure(figsize=(10, 5))
@@ -286,15 +297,28 @@ def plot_demo_temperatur(filnavn="../data/temp_gloshaugen_sanntid_demo.csv"):
         varme_dager = df[df["temperatur"] >= varm_grense]
         kalde_dager = df[df["temperatur"] <= kald_grense]
 
+        varsler=[]
+
         if not varme_dager.empty:
             maks_temp = varme_dager["temperatur"].max()
             tid = varme_dager.loc[varme_dager["temperatur"].idxmax(), "tidspunkt"]
-            print(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}! Husk å drikke mye vann!")
+            varsler.append(f"Varsel: Det er meldt opptil {maks_temp:.1f}°C den {tid.date()}! Husk å drikke mye vann!")
 
         if not kalde_dager.empty:
             min_temp = kalde_dager["temperatur"].min()
             tid = kalde_dager.loc[kalde_dager["temperatur"].idxmin(), "tidspunkt"]
-            print(f"Varsel: Det er meldt {min_temp:.1f}°C den {tid.date()}! Ta på mye klær!")
+            varsler.append(f"Varsel: Det er meldt {min_temp:.1f}°C den {tid.date()}! Ta på mye klær!")
+            
+        if varsler:
+            melding = "<b>Varsel om 'ekstreme' tempraturer:</b><br>" + "<br>".join(varsler)
+            display(HTML(f"""
+                <div style='
+                border: 1px solid red;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 15px;
+            '>{melding}</div>
+        """))
 
         plt.figure(figsize=(10, 5))
         plt.plot(df["tidspunkt"], df["temperatur"], marker="o")

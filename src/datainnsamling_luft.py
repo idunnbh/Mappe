@@ -68,7 +68,7 @@ def lagre_luftkvalitetsdata(filsti):
     df_api.to_csv(f"data/{filnavn_sanntid}", index=False, encoding="utf-8")
     print(f"Sanntidsdata lagret som data/{filnavn_sanntid}")
 
-    filnavn_hist = f"luftkvalitet_historisk.csv"
+    filnavn_hist = f"historisk_luftkvalitet.csv"
     full_filsti = f"data/{filnavn_hist}"
 
     if not os.path.exists(full_filsti):

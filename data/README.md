@@ -5,22 +5,16 @@ Denne mappen inneholder originale datasett, rensede versjoner og testfiler med f
 ## Klimagassutslipp.csv
 Dette er en original CSV-fil eksportert manuelt fra SSB. Den inneholder informasjon om klimagassutslippet i Norge fra 1990 til 2023. Den oppdateres to ganger i året og vil oppdateres manuelt. 
 
-**Filstruktur:**
-- Første linje: Metadata
-- Andre linje: Kolonnenavn
-- Separator: Semikolon (;)
-- Tekstverdier omgitt av doble anførselstegn ("")
-
 Det er denne filen som brukes som input for rensingsscript.
 
-## Klimagassutslipp_renset.csv
+## Klimagassutslipp_norge_renset.csv
 Dette er den rensede versjonen av klimagassutslipp.csv. Den genereres automatisk via script i run_rensing.py. Den lagres alltid som klimagassutslipp_renset.csv og lages kun om det ikke finnes en i data/ fra tidligere.
 
-**Filstruktur:**
-- Første linje: Kolonnenavn
-- Seperator: Komma (,)
-- Har fjernet anførselstegn rundt navn ("")
-- Har fjernet eventuelle duplikater
+## Klimagassutslipp_verden.csv
+Dette er en original CSV-fil henter fra OWID, Our World In Data. Datasettet inneholder kolonner for land, kode, år og det totale årlige klimagassutslipper i CO2-ekvivalenter.
+
+## Klimagassutslipp_verden_renset.csv
+Dette er den rensede versjonen av klimagassutslipp_verden.csv. Den er strippet ned og har kun to kolonner: år og det totale årlige klimagassutslipper i CO2-ekvivalenter.
 
 ## Historisk_luftkvalitet.csv
 Dette er en original CSV-fil hentet fra NILU, Norsk institutt for luftforskning. Målingene er gjort på Elgeseter og har verdier for NO2-, PM10-, og PM2.5-nivå. Det er registrert en gang i timen i 2024.

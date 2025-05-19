@@ -2,14 +2,14 @@
 Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet inn, bearbeidet, analysert og visualisert data.
 
 ## Innholdsfortegnelse
-- [datainnsamling_tempratur.py](#datainnsamling_tempraturpy)
-- [databehandling_klimagassutslipp.py og datainnsamling_klimagassutslipp_verden.py](#datainnsamling_klimagassutslipppy-og-datainnsamling_klimagassutslipp_verdenpy)
+- [datainnsamling_temperatur.py](#datainnsamling_temperaturpy)
+- [databehandling_klimagass.py og datainnsamling_klimagass_verden.py](#databehandling_klimagassutslipppy-og-datainnsamling_klimagass_verdenpy)
 - [datainnsamling_luftkvalitet.py](#datainnsamling_luftkvalitetpy)
 - [rensing.py](#rensingpy)
 - [run_rensing.py](#run_rensingpy)
 - [generer_feil_i_data.py](#generer_feil_i_datapy)
 - [statistikk.py](#statistikkpy)
-- [kilmagass_visualisering.py](#kilmagass_visualiseringpy)
+- [klimagass_visualisering.py](#klimagass_visualiseringpy)
 - [temp_visualisering.py](#temp_visualiseringpy)
 - [luftkvalitet_visualisering.py](#luftkvalitet_visualiseringpy)
 - [prediksjon_visualisering.py](#prediksjon_visualiseringpy)
@@ -21,10 +21,10 @@ Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet in
 
 ------------------------------------------------------------------------ 
 
-## datainnsamling_tempratur.py
-[Åpne fil->](datainnsamling_tempratur.py)
+## datainnsamling_temperatur.py
+[Åpne fil->](datainnsamling_temperatur.py)
 
-I datainnsamling_tempratur.py blir det hentet og lagrer temperaturdata fra MET og Frost API
+I datainnsamling_temperatur.py blir det hentet og lagrer temperaturdata fra MET og Frost API
 Her samles det inn og lagres temperaturdata fra to ulike kilder:
 1) Sanntidsdata fra MET sitt Locationforecast API (48 timer framover)
 2) Historiske data fra Frost API (hver time for x antall år, her 50år)
@@ -59,11 +59,24 @@ Scriptet bruker miljøvariabler fra api.env for å hente:
 
 ------------------------------------------------------------------------ 
 
-## datainnsamling_klimagassutslipp.py og datainnsamling_klimagassutslipp_verden.py 
+## databehandling_klimagass.py og datainnsamling_klimagass_verden.py 
 
-### datainnsamling_klimagassutslipp.py 
-[Åpne fil->](datainnsamling_klimagassutslipp.py)
-Datasettet som brukes er hentet fra Statistisk sentralbyrå og inneholder data om klimagassutslipp i Norge fra 1990 til 2023. Rådataen ble hentet ut i CSV-fil og hadde små utfordringer knyttet til struktur og format. Filen inneholdt både metadata, kolonnenavn og data i samme fil.
+### databehandling_klimagass.py 
+[Åpne fil->](databehandling_klimagass.py)
+Datasettet som brukes er hentet fra Statistisk sentralbyrå og inneholder data om klimagassutslipp i Norge fra 1990 til 2023. Rådataen ble hentet ut i CSV-fil og hadde små utfordringer knyttet til struktur og format. Filen inneholdt både metadata, kolonnenavn og data i samme fil. Slik ser det originale datasettet ut:
+
+-----
+
+"13931: Klimagasser AR5, etter kilde (aktivitet), komponent, år og statistikkvariabel"
+
+"kilde (aktivitet)";"komponent";"år";"Utslipp til luft (1 000 tonn CO2-ekvivalenter, AR5)"
+"0 Alle kilder";"Klimagasser i alt";"1990";51348
+"0 Alle kilder";"Klimagasser i alt";"1991";48987
+"0 Alle kilder";"Klimagasser i alt";"1992";47450
+"0 Alle kilder";"Klimagasser i alt";"1993";49379
+"0 Alle kilder";"Klimagasser i alt";"1994";51331
+
+-----
 
 For å arbeide med dataen har vi brukt Pandas til å lese inn og bearbeide CSV-filen. Ved hjelp av os, base_path og filepath finner koden filen relativt i arbeidet, uavhengig hvor den kjøres fra. Deretter filterer vi datatsettet til å kun vise aktivitet "0 Alle kilder" og komponent "Klimagasser i alt", slik at vi får et mer oversiktig datasett å jobbe med videre.
 
@@ -83,8 +96,8 @@ For å bekrefte at koden fungerer har vi brukt print(df.head()) for å printe ut
 
 ------ 
 
-### datainnsamling_klimagassutslipp_verden.py 
-[Åpne fil->](datainnsamling_klimagassutslipp_verden.py)
+### datainnsamling_klimagass_verden.py
+[Åpne fil->](datainnsamling_klimagass_verden.py)
 Datasettet som brukes her er hentet fra nettstedet Our World in Data (OWID). Dataen inneholder globale klimagassutslipp fra 1973 til 2023, målt i CO2-ekvivalenter, lik som det norske datasettet. Dataen blir hentet ved hjelp av en åpen Data API (CSV-lenke) fra OWID, som gir oss tilgang til oppdaterte datasett direkte, uten behov for API-nøkkel.
 
 Vi bruker pandas.read_csv() med en tilpasset User-Agent for å hente fila direkte fra nettstedet. Slik så de 5 første linjene ut i et originale datasettet:

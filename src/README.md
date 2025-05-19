@@ -22,7 +22,7 @@ Denne mappen inneholder forklaringer og beskrivelser av hvordan vi har hentet in
 ------------------------------------------------------------------------ 
 
 ## datainnsamling_temperatur.py
-[Åpne fil->](datainnsamling_temperatur.py)
+[Åpne fil](datainnsamling_temperatur.py)
 
 I datainnsamling_temperatur.py blir det hentet og lagrer temperaturdata fra MET og Frost API
 Her samles det inn og lagres temperaturdata fra to ulike kilder:
@@ -62,7 +62,8 @@ Scriptet bruker miljøvariabler fra api.env for å hente:
 ## databehandling_klimagass.py og datainnsamling_klimagass_verden.py 
 
 ### databehandling_klimagass.py 
-[Åpne fil->](databehandling_klimagass.py)
+[Åpne fil](databehandling_klimagass.py)
+
 Datasettet som brukes er hentet fra Statistisk sentralbyrå og inneholder data om klimagassutslipp i Norge fra 1990 til 2023. Rådataen ble hentet ut i CSV-fil og hadde små utfordringer knyttet til struktur og format. Filen inneholdt både metadata, kolonnenavn og data i samme fil. Slik ser det originale datasettet ut:
 
 -----
@@ -70,6 +71,7 @@ Datasettet som brukes er hentet fra Statistisk sentralbyrå og inneholder data o
 "13931: Klimagasser AR5, etter kilde (aktivitet), komponent, år og statistikkvariabel"
 
 "kilde (aktivitet)";"komponent";"år";"Utslipp til luft (1 000 tonn CO2-ekvivalenter, AR5)"
+
 "0 Alle kilder";"Klimagasser i alt";"1990";51348
 "0 Alle kilder";"Klimagasser i alt";"1991";48987
 "0 Alle kilder";"Klimagasser i alt";"1992";47450
@@ -78,7 +80,7 @@ Datasettet som brukes er hentet fra Statistisk sentralbyrå og inneholder data o
 
 -----
 
-For å arbeide med dataen har vi brukt Pandas til å lese inn og bearbeide CSV-filen. Ved hjelp av os, base_path og filepath finner koden filen relativt i arbeidet, uavhengig hvor den kjøres fra. Deretter filterer vi datatsettet til å kun vise aktivitet "0 Alle kilder" og komponent "Klimagasser i alt", slik at vi får et mer oversiktig datasett å jobbe med videre.
+For å jobbe med dataen har vi brukt Pandas til å lese inn og bearbeide CSV-filen. Ved hjelp av os, base_path og filepath finner koden filen relativt i arbeidet, uavhengig hvor den kjøres fra. Deretter filterer vi datatsettet til å kun vise aktivitet "0 Alle kilder" og komponent "Klimagasser i alt", slik at vi får et mer oversiktig datasett å jobbe med videre.
 
 Vi filtrerer så datasettet til å kun vise "0 Alle kilder" og "Klimagasser i alt", slik at vi får et mer oversiktlig datasett å jobbe videre med. Deretter konverterer vi tallverdier fra CSV-filen fra en streng til interger, slik at de vil bli forstått riktig av pandas og matplotlib i framtidig analyse. Om verdiere ikke lar deg konvertere vil de bli satt til NaN (Not a number).
 
@@ -97,7 +99,8 @@ For å bekrefte at koden fungerer har vi brukt print(df.head()) for å printe ut
 ------ 
 
 ### datainnsamling_klimagass_verden.py
-[Åpne fil->](datainnsamling_klimagass_verden.py)
+[Åpne fil](datainnsamling_klimagass_verden.py)
+
 Datasettet som brukes her er hentet fra nettstedet Our World in Data (OWID). Dataen inneholder globale klimagassutslipp fra 1973 til 2023, målt i CO2-ekvivalenter, lik som det norske datasettet. Dataen blir hentet ved hjelp av en åpen Data API (CSV-lenke) fra OWID, som gir oss tilgang til oppdaterte datasett direkte, uten behov for API-nøkkel.
 
 Vi bruker pandas.read_csv() med en tilpasset User-Agent for å hente fila direkte fra nettstedet. Slik så de 5 første linjene ut i et originale datasettet:
@@ -105,6 +108,7 @@ Vi bruker pandas.read_csv() med en tilpasset User-Agent for å hente fila direkt
 -----
 
 Entity,Code,Year,Annual greenhouse gas emissions in CO₂ equivalents
+
 World,OWID_WRL,1973,30340880000
 World,OWID_WRL,1974,30245190000
 World,OWID_WRL,1975,30411125000
@@ -117,6 +121,7 @@ Det originale datasettet var ryddig og strukturert, men overskriftene var på en
 -----
 
 År,Utslipp i CO2 ekvivalenter
+
 1973,30340880000
 1974,30245190000
 1975,30411125000
@@ -127,7 +132,8 @@ Det originale datasettet var ryddig og strukturert, men overskriftene var på en
 ------------------------------------------------------------------------ 
 
 ## datainnsamling_luft.py 
-[Åpne fil->](datainnsamling_luft.py)
+[Åpne fil](datainnsamling_luft.py)
+
 Denne filen henter og lagrer både sanntids- og historiske luftkvalitetsdata. Det benyttes to kilder:
 - Sanntidsdata fra Meteorologisk institutt (MET) via deres åpne API
 - Historiske data fra Norsk institutt for luftforskning (NILU), lastet manuelt ned som en CSV-fil fra en portal for historiske luftmålinger.
@@ -170,7 +176,8 @@ Dette gjør at dataene, spesielt fra tidlige år, ikke bør legges for stor vekt
 ------------------------------------------------------------------------ 
 
 ## rensing.py
-[Åpne fil->](rensing.py) 
+[Åpne fil](rensing.py) 
+
 Dette scriptet inneholder funksjoner som skal rense temperatur- og klimagassdata før videre analyse.
 
 **Generelle funksjoner:**
@@ -200,7 +207,8 @@ I finn_gjennomsnittstemperatur(df) brukers pandasql for å kjøre en SQL-spørri
 ------------------------------------------------------------------------ 
 
 ## run_rensing.py 
-[Åpne fil->](run_rensing.py)
+[Åpne fil](run_rensing.py)
+
 I scriptet blir data renset ved at de ulike rensefunksjonene kjøres og den rensete dataen blir lagret som nye CSV-filer.
 
 ### Temperaturdata
@@ -239,7 +247,8 @@ Funksjonen `rens_og_lagre_luftkvalitet()`:
 ------------------------------------------------------------------------ 
 
 ## generer_feil_i_data.py 
-[Åpne fil->](generer_feil_i_data.py)
+[Åpne fil](generer_feil_i_data.py)
+
 For sjekke og vise at funksjonene våre for rensing av data fungerer, har vi laget en versjon av den historiske temperaturdataene som inneholder feil. Vi tok utgangspunkt i data/temp_gloshaugen_historisk.csv og lagde en ny fil som heter data/temp_gloshaugen_historisk_inneholder_feil.csv
 
 **Feilene ble lagt inn med kode på denne måten:**
@@ -274,7 +283,8 @@ Altså fungerer rensingen som forventet!! YEY
 ------------------------------------------------------------------------ 
 
 ## statistikk.py
-[Åpne fil->](statistikk.py)
+[Åpne fil](statistikk.py)
+
 statistikk.py inneholder funksjoner for å analysere de ulik datasettene.
 
 ### Funksjoner i statistikk.py
@@ -282,14 +292,14 @@ statistikk.py inneholder funksjoner for å analysere de ulik datasettene.
 **Hjelpefunksjoner**
 
 rens_kolonnenavn(df)
--Renser kolonnenavn ved å fjerner mellomrom og spesialtegn og gjør alt til små bokstaver.
+- Renser kolonnenavn ved å fjerner mellomrom og spesialtegn og gjør alt til små bokstaver.
 
 legg_til_tid(df, tidkolonne="tid", groupby=None)
 - Legger til kolonner for dato, år, måned og time basert på en tid-kolonne.
 - Hvis tidkolonnen bare inneholder årstall (heltall), legges kun år til og hvis groupby er lik "år", fjernes måned og time 
 
 finn_kildekolonne(df)
--Finner kolonnen som inneholder ordet "kilde", som brukes til senere.
+- Finner kolonnen som inneholder ordet "kilde", som brukes til senere.
 
 **Analysefunksjoner**
 
@@ -302,8 +312,9 @@ analyser_fil(filsti, sep=',', datokolonne=None, groupby='måned')
     - df = hele det ferdig ryddede datasettet (Alle kolonner fra datasettet, rensede kolonnenavn, tid-kolonnen konvertert til datetime-format)
 
 analyser_temperatur(filsti, dataanalysemodul, datokolonne="tidspunkt", groupby="måned")
-Bygger vidrer på analyser_fil. Siden temperaturdata inneholder målinger for de første månedene av 2025 vil dette gi misvisende statistikk.
-For tempraturdata må det derfor gjøres en ekstra kontroll slik at kun år med fullstendig data (alle 12 måneder) tas med i beregningene.
+Bygger videre på analyser_fil. Siden temperaturdata inneholder målinger for de første månedene av 2025 vil dette gi misvisende statistikk.
+
+For temperaturdata må det derfor gjøres en ekstra kontroll slik at kun år med fullstendig data (alle 12 måneder) tas med i beregningene.
 - Bygger videre på analyser_fil.
 - Brukes for temperaturdata, hvor man må filtrere ut år som ikke har data for alle 12 måneder.
 - Returnerer samlet statistikk (gjennomsnitt, median, standaravik) og årlige gjennomsnitt for hele år.
@@ -318,7 +329,7 @@ ekstremverdier(df, årskolonne='år', verdikolonne='gjennomsnitt')
 - Finner året med høyest og året med lavest verdi.
 
 tiår_snitt(df, årskolonne='år', verdikolonne='gjennomsnitt')
--Grupperer dataen i tiårsperioder og regner ut gjennomsnitt av disse perioden.
+- Grupperer dataen i tiårsperioder og regner ut gjennomsnitt av disse perioden.
 
 beregn_avvik(df, årskolonne='år', verdikolonne='årsgjennomsnitt')
 - Legger til en ny kolonne som viser avviket fra totalgjennomsnittet for hver rad i datasettet. Dette er nyttig for å finne unormale år.
@@ -341,7 +352,8 @@ analyser_luftkvalitet(df_luft, målinger)
 ------------------------------------------------------------------------ 
 
 ## kilmagass_visualisering.py
-[Åpne fil->](klimagass_visualisering.py)
+[Åpne fil](klimagass_visualisering.py)
+
 Denne filen inneholder funksjoner for å visualisere klimagassutslipp. 
 
 ### Funksjoner i  kilmagass_visualisering.py:
@@ -370,7 +382,8 @@ def plot_heatmap_per_kilde(df):
 -----------------------------------------------------------------------
 
 ## temp_visualisering.py
-[Åpne fil->](temp_visualisering.py)
+[Åpne fil](temp_visualisering.py)
+
 Denne filen inneholder funksjoner for å visualisere tempraturdata. 
 
 ### Funksjoner i  temp_visualisering.py:
@@ -399,7 +412,8 @@ Denne filen inneholder funksjoner for å visualisere tempraturdata.
 ------------------------------------------------------------------------ 
 
 ## luftkvalitet_visualisering.py
-[Åpne fil->](luftkvalitet_visualisering.py)
+[Åpne fil](luftkvalitet_visualisering.py)
+
 Denne filen inneholder funksjoner for å visualisere luftkvalitetsdata fra Elgeseter, basert på stoffene NO₂, PM10 og PM2.5.
 
 ### Funksjoner i luftkvalitet_visualisering.py:
@@ -412,7 +426,8 @@ Denne filen inneholder funksjoner for å visualisere luftkvalitetsdata fra Elges
 
 ------------------------------------------------------------------------ 
 ## Prediksjon_visualisering.py
-[Åpne fil->](prediksjon_visualisering.py)
+[Åpne fil](prediksjon_visualisering.py)
+
 Denne filen inneholder funksjoner for å koble sammen temperaturdata i forhold til både globale CO₂-utslipp og lokal luftforurensning.
 
 ### Funksjoner i prediksjon_visualisering.py:
@@ -437,7 +452,8 @@ Denne filen inneholder funksjoner for å koble sammen temperaturdata i forhold t
 
 ------------------------------------------------------------------------ 
 ## app_funksjoner.py
-[Åpne fil →](app_funksjoner.py)  
+[Åpne fil](app_funksjoner.py)  
+
 Denne filen inneholder logikken for den interaktive data-appen. Den kobler widgets fra `widgets_app.py` med funksjoner fra ulike visualiseringsmoduler, og styrer visningen basert på brukerens valg.
 
 ### Funksjoner i app_funksjoner.py:
@@ -468,7 +484,8 @@ Denne filen inneholder logikken for den interaktive data-appen. Den kobler widge
 
 ------------------------------------------------------------------------ 
 ## widgets_app.py
-[Åpne fil →](widgets_app.py)  
+[Åpne fil](widgets_app.py)  
+
 Denne filen inneholder alle widgets som brukes i data-appen. Den inneholder også innlasting og behandling av data. Den gjør data og widgets  tilgjengelig for `app_funksjoner.py`.
 
 ### Widgets i widgets_app.py:

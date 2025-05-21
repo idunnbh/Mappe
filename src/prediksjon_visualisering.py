@@ -1,9 +1,11 @@
-import pandas as pd
-from sklearn.linear_model import LinearRegression
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
-from statistikk import analyser_temperatur, analyser_fil, legg_til_tid, analyser_luftkvalitet
+from sklearn.linear_model import LinearRegression
+
+from statistikk import analyser_temperatur, analyser_fil, legg_til_tid
+
 
 # Kobler temperaturdata og CO₂-utslippsdata basert på år
 def last_og_koble_data(temp_fil, klima_fil):

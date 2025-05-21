@@ -1,11 +1,11 @@
-import requests
 import csv
 import os
 from datetime import datetime
-import pytz
+
 import pandas as pd
+import pytz
+import requests
 from dotenv import load_dotenv
-from datetime import date
 
 #Hente API-nøkler fra .env 
 load_dotenv('api.env')
@@ -104,7 +104,7 @@ def lagre_til_csv(data, filnavn):
 
 def main():
     lat, lon = 63.4195, 10.4065  # Gløshaugen, Trondheim
-    today = date.today().isoformat()
+    today = datetime.today().isoformat()
     antall_år=50
 
     # Sanntidsdata, 48 neste timene. Genererer ny hver gang

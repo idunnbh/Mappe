@@ -1,7 +1,9 @@
-import pandas as pd
+import os
+import sys
+
 import matplotlib.pyplot as plt
 import seaborn as sns
-import sys, os
+
 
 sys.path.append(os.path.abspath("../src"))
 

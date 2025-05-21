@@ -1,11 +1,15 @@
+import os
+import sys
+from pathlib import Path
 import unittest
-import os, sys 
-import pandas as pd
-from pathlib import Path 
 
+import pandas as pd
+from dotenv import load_dotenv
+
+# Legg til src-mappa i system path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from dotenv import load_dotenv
+# Last inn miljøvariabler
 load_dotenv()
 
 from datainnsamling_luft import (

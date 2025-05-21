@@ -1,10 +1,12 @@
+import os
+import sys
 import unittest
-import os, sys 
+
 import pandas as pd
+from dotenv import load_dotenv
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from dotenv import load_dotenv
 load_dotenv()
 
 from datainnsamling_temperatur import hent_sanntidsdata, hent_temperaturer, hent_historiske_temperaturer

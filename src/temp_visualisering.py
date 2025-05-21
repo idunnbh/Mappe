@@ -1,15 +1,25 @@
+import os
+import sys
+from datetime import datetime
+
+import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pandas as pd
-from bokeh.plotting import figure, output_notebook, show
-from bokeh.models import ColumnDataSource, HoverTool, Arrow, NormalHead, Annulus, Label
-from datetime import datetime
-from statistikk import beregn_avvik, analyser_temperatur, beregn_endring_totalt
-from datainnsamling_temperatur import hent_temperaturer, hent_sanntidsdata
-import numpy as np
 from IPython.display import display, HTML
+from bokeh.models import (
+    Annulus,
+    Arrow,
+    ColumnDataSource,
+    HoverTool,
+    Label,
+    NormalHead,
+)
+from bokeh.plotting import figure, output_notebook, show
 
-import sys, os
+from datainnsamling_temperatur import hent_sanntidsdata, hent_temperaturer
+from statistikk import analyser_temperatur, beregn_avvik, beregn_endring_totalt
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 
@@ -19,7 +29,7 @@ def load_and_compute(path, datokolonne="tidspunkt"):
     df = pd.read_csv(path)
     df[datokolonne] = pd.to_datetime(
         df[datokolonne],
-        format="%Y-%m-%d %H:%M:%S%z",  # riktig rekkefølge: år-måned-dag
+        format="%Y-%m-%d %H:%M:%S%z", 
         utc=True
     )
 
@@ -282,6 +292,9 @@ def plot_sanntids_temperatur(lat=63.4195, lon=10.4065):
         </div>
         """))
         plot_demo_temperatur()
+
+# Kun en demo. Denne blir kjørt om brukeren ikke har api-nøkkel slik at det ikke går å hente sanntidsdata om temperatur 
+# Koden ellers er svært lik funksjonen over som blir kjørt om brukeren har api-nøkkel
 
 def plot_demo_temperatur(filnavn="../data/temp_gloshaugen_sanntid_demo.csv"):
     try:

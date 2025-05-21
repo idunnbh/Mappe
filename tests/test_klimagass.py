@@ -1,11 +1,14 @@
-import unittest
-import pandas as pd
-import sys, os
-from io import StringIO
+import os
+import sys
 import tempfile
 from contextlib import redirect_stdout
+from io import StringIO
+import unittest
+
+import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+
 import rensing
 import run_rensing
 

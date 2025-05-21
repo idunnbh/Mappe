@@ -1,8 +1,10 @@
-import pandas as pd
-from datetime import date
 import os
-from rensing import temperatur_rens, klimagass_rens, rense_luftkvalitet
+from datetime import date
+
+import pandas as pd
+
 from datainnsamling_temperatur import main as hent_temperaturdata_main
+from rensing import temperatur_rens, klimagass_rens, rense_luftkvalitet
 
 
 def rens_og_lagre_temperaturdata():

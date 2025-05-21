@@ -1,13 +1,15 @@
+import os
+import sys
 
-import ipywidgets as widgets
+from dotenv import load_dotenv
 from IPython.display import display
+import ipywidgets as widgets
+
 from statistikk import analyser_fil, analyser_luftkvalitet, legg_til_tid
 from temp_visualisering import load_and_compute
 
-from dotenv import load_dotenv
 load_dotenv("../api.env")
 
-import os, sys
 sys.path.append(os.path.abspath("../src"))
 
 # Henter data

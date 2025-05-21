@@ -1,10 +1,11 @@
+import sys
+import os
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from IPython.display import display, HTML
 
-import sys
-import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 def plott_årssnitt(df, stoffnavn):

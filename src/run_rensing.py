@@ -106,7 +106,13 @@ def rens_og_lagre_luftkvalitet():
     print(f"Renset luftkvalitetsdata lagret i {renset_csv}")
 
 if __name__ == "__main__":
-    hent_temperaturdata_main()
+    try:
+        hent_temperaturdata_main()
+    except ValueError as e:
+        if "USER_AGENT" in str(e):
+            print("USER_AGENT mangler. Henter ikke sanntidsdata for temperatur.")
+        else:
+            raise
     rens_og_lagre_temperaturdata()
     rens_og_lagre_klimagassdata_norge()
     rens_og_lagre_klimagass_verden()
